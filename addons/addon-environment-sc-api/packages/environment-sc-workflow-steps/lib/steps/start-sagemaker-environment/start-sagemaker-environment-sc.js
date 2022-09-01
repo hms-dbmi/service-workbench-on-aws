@@ -58,7 +58,7 @@ class StartSagemakerEnvironmentSc extends StepBase {
     await this.updateEnvironment({ status: 'STARTING', inWorkflow: 'true' });
     this.state.setKey('STATE_NOTEBOOK_INSTANCE_NAME', NotebookInstanceName);
 
-    return this.wait(5)
+    return this.wait(10)
       .maxAttempts(120)
       .until('checkNotebookStarted')
       .thenCall('updateEnvironmentStatusToCompleted');

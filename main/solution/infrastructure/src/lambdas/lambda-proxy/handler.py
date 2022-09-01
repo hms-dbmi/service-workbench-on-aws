@@ -4,7 +4,6 @@ import json
 import os
 
 def handler(event, context):
-    
     URL = os.environ['APIGW_URL'] + event['path']
     HTTP_METHOD='';
     
@@ -15,11 +14,13 @@ def handler(event, context):
     
     if "authorization" in event['headers']:
         headers['authorization'] = event['headers']['authorization']
-        
 
     if "content-type" in event['headers']:
         headers['content-type'] = event['headers']['content-type']
-        
+
+    # Fix to allow port forward header, needed for ipAddress and CIDR range values
+    if "x-forwarded-for" in event['headers']:
+        headers['x-forwarded-for'] = event['headers']['x-forwarded-for']
         
     if "body" in event and len(event['body']) != 0:
         body=json.loads(event['body'])
@@ -27,7 +28,6 @@ def handler(event, context):
     
     if "queryStringParameters" in event:
         params = event['queryStringParameters']   
-        
     
     if "httpMethod" in event:
         HTTP_METHOD = event['httpMethod']
@@ -42,7 +42,6 @@ def handler(event, context):
         
 
     if HTTP_METHOD == 'POST':
-        
         r = requests.post(url = URL, headers=headers, json=body, params=params)
         response["statusCode"] = 200
         response["isBase64Encoded"] = False
@@ -68,4 +67,3 @@ def handler(event, context):
         
     return response;
   
- 

@@ -28,7 +28,7 @@ async function configure(context) {
       const requestContext = res.locals.requestContext;
       const { category } = req.query;
 
-      const result = await studyService.list(requestContext, category);
+      const result = await studyService.list(requestContext, decodeURI(category));
       res.status(200).json(result);
     }),
   );
