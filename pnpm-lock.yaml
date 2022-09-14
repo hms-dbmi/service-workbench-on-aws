@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 importers:
 
@@ -2024,6 +2024,111 @@ importers:
   addons/addon-raas-s3-copy/packages/s3-synchronizer:
     specifiers: {}
 
+  addons/addon-register/packages/register:
+    specifiers:
+      '@aws-ee/base-controllers': workspace:*
+      '@aws-ee/base-raas-ui': workspace:*
+      '@aws-ee/base-serverless-settings-helper': workspace:*
+      '@aws-ee/base-serverless-ui-tools': workspace:*
+      '@aws-ee/base-service': workspace:*
+      '@aws-ee/base-services-container': workspace:*
+      '@aws-ee/base-ui': workspace:*
+      '@babel/cli': ^7.8.4
+      '@babel/core': ^7.8.6
+      '@babel/plugin-proposal-class-properties': ^7.8.3
+      '@babel/plugin-transform-react-jsx': ^7.8.3
+      '@babel/preset-env': ^7.8.6
+      '@babel/preset-react': ^7.8.3
+      aws-sdk: ^2.1000.0
+      babel-eslint: ^10.0.3
+      enzyme: ^3.11.0
+      enzyme-adapter-react-16: ^1.15.2
+      eslint: ^6.8.0
+      eslint-config-airbnb: ^18.0.1
+      eslint-config-airbnb-base: ^14.0.0
+      eslint-config-prettier: ^6.10.0
+      eslint-import-resolver-node: ^0.3.3
+      eslint-plugin-import: ^2.20.1
+      eslint-plugin-jest: ^22.21.0
+      eslint-plugin-jsx-a11y: ^6.2.3
+      eslint-plugin-prettier: ^3.1.2
+      eslint-plugin-react: ^7.18.3
+      eslint-plugin-react-hooks: ^1.7.0
+      husky: ^3.1.0
+      jest: ^24.9.0
+      jest-junit: ^10.0.0
+      lodash: ^4.17.21
+      mobx: ^5.15.4
+      mobx-react: ^6.1.7
+      mobx-react-form: ^2.0.9
+      mobx-state-tree: ^3.15.0
+      prettier: ^1.19.1
+      pretty-quick: ^1.11.1
+      prop-types: ^15.7.2
+      react: ^16.12.0
+      react-dom: ^16.12.0
+      react-router-dom: ^5.2.0
+      regenerator-runtime: ^0.13.5
+      semantic-ui-react: ^0.88.2
+      serverless: ^1.63.0
+      serverless-deployment-bucket: ^1.1.0
+      source-map-support: ^0.5.16
+      typescript: ^3.7.5
+      validatorjs: ^3.18.1
+      webpack: 4.41.2
+    dependencies:
+      '@aws-ee/base-raas-ui': link:../../../addon-base-raas-ui/packages/base-raas-ui
+      '@aws-ee/base-ui': link:../../../addon-base-ui/packages/base-ui
+      '@aws-ee/base-service': link:../../../addon-base/packages/services
+      '@aws-ee/base-controllers': link:../../../addon-base-rest-api/packages/base-controllers
+      '@aws-ee/base-services-container': link:../../../addon-base/packages/services-container
+      aws-sdk: 2.1015.0
+      lodash: 4.17.21
+      mobx: 5.15.4
+      mobx-react: 6.2.2_mobx@5.15.4+react@16.13.1
+      mobx-react-form: 2.0.8_mobx@5.15.4
+      mobx-state-tree: 3.15.0_mobx@5.15.4
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+      react-router-dom: 5.1.2_react@16.13.1
+      semantic-ui-react: 0.88.2_react-dom@16.13.1+react@16.13.1
+      validatorjs: 3.18.1
+    devDependencies:
+      '@aws-ee/base-serverless-settings-helper': link:../../../addon-base/packages/serverless-settings-helper
+      '@aws-ee/base-serverless-ui-tools': link:../../../addon-base-ui/packages/serverless-ui-tools
+      '@babel/cli': 7.8.4_@babel+core@7.9.0
+      '@babel/core': 7.12.9
+      '@babel/plugin-proposal-class-properties': 7.8.3_@babel+core@7.9.0
+      '@babel/plugin-transform-react-jsx': 7.9.4_@babel+core@7.9.0
+      '@babel/preset-env': 7.9.5_@babel+core@7.9.0
+      '@babel/preset-react': 7.9.4_@babel+core@7.9.0
+      babel-eslint: 10.1.0_eslint@6.8.0
+      enzyme: 3.11.0
+      enzyme-adapter-react-16: 1.15.2_df2dc313d8031f8c2dbd009d86ca7fc7
+      eslint: 6.8.0
+      eslint-config-airbnb: 18.1.0_7221e9efc3e1df952f9031babfc371af
+      eslint-config-airbnb-base: 14.1.0_8cdb6d8c18c3319a1365bd5afa0063a3
+      eslint-config-prettier: 6.15.0_eslint@6.8.0
+      eslint-import-resolver-node: 0.3.4
+      eslint-plugin-import: 2.23.4_eslint@6.8.0
+      eslint-plugin-jest: 22.21.0_eslint@6.8.0
+      eslint-plugin-jsx-a11y: 6.4.1_eslint@6.8.0
+      eslint-plugin-prettier: 3.1.2_eslint@6.8.0+prettier@1.19.1
+      eslint-plugin-react: 7.21.5_eslint@6.8.0
+      eslint-plugin-react-hooks: 1.7.0_eslint@6.8.0
+      husky: 3.1.0
+      jest: 24.9.0
+      jest-junit: 10.0.0
+      prettier: 1.19.1
+      pretty-quick: 1.11.1_prettier@1.19.1
+      prop-types: 15.7.2
+      regenerator-runtime: 0.13.7
+      serverless: 1.83.2
+      serverless-deployment-bucket: 1.5.1
+      source-map-support: 0.5.16
+      typescript: 3.8.3
+      webpack: 4.41.2
+
   addons/addon-stack-policy/packages/stack-policy:
     specifiers:
       '@aws-ee/base-api-handler': workspace:*
@@ -2385,6 +2490,7 @@ importers:
       '@aws-ee/environment-type-mgmt-services': workspace:*
       '@aws-ee/key-pair-mgmt-api': workspace:*
       '@aws-ee/key-pair-mgmt-services': workspace:*
+      '@aws-ee/register': workspace:*
       '@babel/core': ^7.8.4
       '@babel/plugin-transform-runtime': ^7.8.3
       '@babel/preset-env': ^7.8.4
@@ -2446,6 +2552,7 @@ importers:
       '@aws-ee/environment-type-mgmt-services': link:../../../addons/addon-environment-sc-api/packages/environment-type-mgmt-services
       '@aws-ee/key-pair-mgmt-api': link:../../../addons/addon-key-pair-mgmt-api/packages/key-pair-mgmt-api
       '@aws-ee/key-pair-mgmt-services': link:../../../addons/addon-key-pair-mgmt-api/packages/key-pair-mgmt-services
+      '@aws-ee/register': link:../../../addons/addon-register/packages/register
       aws-sdk: 2.1015.0
       controllers: link:../../packages/controllers
       js-yaml: 3.13.1
@@ -2753,6 +2860,7 @@ importers:
       '@aws-ee/base-workflow-ui': workspace:*
       '@aws-ee/environment-type-mgmt-ui': workspace:*
       '@aws-ee/key-pair-mgmt-ui': workspace:*
+      '@aws-ee/register': workspace:*
       animate.css: 3.7.0
       aws-sdk: ^2.1000.0
       babel-eslint: ^10.1.0
@@ -2796,6 +2904,7 @@ importers:
       '@aws-ee/base-workflow-ui': link:../../../addons/addon-base-workflow-ui/packages/base-workflow-ui
       '@aws-ee/environment-type-mgmt-ui': link:../../../addons/addon-environment-sc-ui/packages/environment-type-mgmt-ui
       '@aws-ee/key-pair-mgmt-ui': link:../../../addons/addon-key-pair-mgmt-ui/packages/key-pair-mgmt-ui
+      '@aws-ee/register': link:../../../addons/addon-register/packages/register
       animate.css: 3.7.0
       aws-sdk: 2.1015.0
       classnames: 2.2.6

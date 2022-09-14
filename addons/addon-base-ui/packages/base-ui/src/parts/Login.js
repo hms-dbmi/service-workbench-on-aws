@@ -47,6 +47,8 @@ class Login extends React.Component {
       authentication.setSelectedAuthenticationProviderId(
         _.get(this.getStore().authenticationProviderOptions, '[0].key', ''),
       );
+
+      console.log('base login construct - idp', _.get(this.getStore(), 'authenticationProviderOptions.[0]', ''));
     });
   }
 
@@ -159,6 +161,7 @@ class Login extends React.Component {
       return '';
     };
 
+    const additionalLoginComponents = this.props.AdditionalLoginComponents || (() => <></>);
     const collectUserNamePassword = this.props.authentication.shouldCollectUserNamePassword;
     const renderBrandingLogo = <Image centered src={this.props.assets.images.loginImage} />;
     return (
@@ -234,6 +237,7 @@ class Login extends React.Component {
                 >
                   Login
                 </Button>
+                {additionalLoginComponents(this)}
               </Segment>
             </Form>
           </Grid.Column>

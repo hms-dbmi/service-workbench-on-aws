@@ -58,6 +58,8 @@ class UserService extends Service {
 
     const { username, password } = user;
     delete user.password;
+    user.username = user.username.toLowerCase();
+    user.email = user.email.toLowerCase();
 
     // ensure that an internal user is not created in this request
     if (_.isUndefined(user.authenticationProviderId) || user.authenticationProviderId === 'internal') {
@@ -293,7 +295,7 @@ class UserService extends Service {
 
   async findUserByPrincipal({ username, authenticationProviderId, identityProviderName, fields = [] }) {
     const ns = toUserNamespace(authenticationProviderId, identityProviderName);
-    return this.getUserByPrincipal({ username, ns, fields });
+    return this.getUserByPrincipal({ username: username.toLowerCase(), ns, fields });
   }
 
   async mustFindUserByPrincipal({ username, authenticationProviderId, identityProviderName, fields = [] }) {

@@ -19,6 +19,7 @@
     "@aws-ee/base-workflow-ui": "workspace:*",
     "@aws-ee/environment-type-mgmt-ui": "workspace:*",
     "@aws-ee/key-pair-mgmt-ui": "workspace:*",
+    "@aws-ee/register": "workspace:*",
     "animate.css": "3.7.0",
     "aws-sdk": "^2.1000.0",
     "classnames": "^2.2.6",

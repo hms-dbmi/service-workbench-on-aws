@@ -12,21 +12,21 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-
 import React from 'react';
+import { Switch, Redirect, withRouter } from 'react-router-dom';
 import { decorate, computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { getEnv } from 'mobx-state-tree';
-import { Switch, Redirect, withRouter } from 'react-router-dom';
 
-import withAuth from './withAuth';
-import { getRoutes, getMenuItems, getDefaultRouteLocation } from './helpers/plugins-util';
-import MainLayout from './parts/MainLayout';
+import { getRoutes, getMenuItems, getDefaultRouteLocation } from '@aws-ee/base-ui/dist/helpers/plugins-util';
+import MainLayout from '@aws-ee/base-ui/dist/parts/MainLayout';
+
+import withAuth from '../extend/withAuth';
 
 // expected props
 // - app model (via injection)
 // - location (from react router)
-class App extends React.Component {
+class RegisterApp extends React.Component {
   get appContext() {
     return getEnv(this.props.app) || {};
   }
@@ -69,10 +69,6 @@ class App extends React.Component {
 }
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
-decorate(App, {
-  appContext: computed,
-});
+const AppComponent = decorate(RegisterApp, { appContext: computed });
 
-export default withAuth(inject('app', 'userStore')(withRouter(observer(App))));
-
-export { App };
+export default withAuth(inject('app')(withRouter(observer(AppComponent))));

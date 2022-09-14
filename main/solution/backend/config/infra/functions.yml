@@ -104,6 +104,10 @@ apiHandler:
         path: /api/authentication/id-tokens
         method: POST
         cors: true
+    - http:
+        path: /api/register
+        method: POST
+        cors: true
     # Protected APIs
     - http:
         authorizer: authenticationLayerHandler
