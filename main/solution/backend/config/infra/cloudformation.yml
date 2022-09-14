@@ -1238,8 +1238,6 @@ Resources:
               KeyType: 'RANGE'
           Projection:
             ProjectionType: ALL
-      StreamSpecification:
-        StreamViewType: NEW_AND_OLD_IMAGES
 
   AuthenticationProviderTypesDb:
     Type: AWS::DynamoDB::Table
