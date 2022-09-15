@@ -25,8 +25,14 @@ async function configure(context) {
       '/',
       wrap(async (req, res) => {
         const requestContext = res.locals.requestContext;
-        const registeredUser = await registerUserService.register(requestContext, req.body);
-        res.status(200).json(registeredUser);
+        try {
+          const registeredUser = await registerUserService.register(requestContext, req.body);
+          res.status(200).json(`Registered user ${registeredUser.uid}`);
+        } catch(error){
+          console.error({ ...error });
+          const message = error.code === 'alreadyExists' ? 'Email address is already registered' : 'Unknown error';
+          res.status(500).json({ message, code: error.code });
+        }
       }),
     );
   

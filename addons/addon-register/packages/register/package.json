@@ -77,6 +77,9 @@
     "LICENSE",
     "README.md",
     "dist/",
+    "images/",
+    "css/",
+    "lib/",
     "src/"
   ],
   "husky": {

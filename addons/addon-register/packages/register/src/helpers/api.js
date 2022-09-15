@@ -25,9 +25,7 @@ function registerUser(user){
     _.clone(user),
     'firstName',
     'lastName',
-    'email',
-    'identityProviderName',
-    'authenticationProviderId'
+    'email'
   );
   return httpApiPost('api/register', { data, params });
 }

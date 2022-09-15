@@ -35,49 +35,39 @@ class AppContainer extends Component {
 
   render() {
     const { location, pluginRegistry, app } = this.props;
+    let plugins = _.reverse(pluginRegistry.getPluginsWithMethod('app-component', 'getAppComponent') || []);
+    let App = this.renderError();
 
-    // let plugins = _.reverse(pluginRegistry.getPluginsWithMethod('app-component', 'getAppComponent') || []);
-    // let App = this.renderError();
+    // We ask each plugin in reverse order if they have the App component
+    _.forEach(plugins, plugin => {
+      const result = plugin.getAppComponent({ location, appContext: getEnv(app) });
+      if (_.isUndefined(result)) return;
+      App = result;
+      // eslint-disable-next-line consistent-return
+      return false; // This will stop lodash from continuing the forEach loop
+    });
 
-    // // We ask each plugin in reverse order if they have the App component
-    // _.forEach(plugins, plugin => {
-    //   const result = plugin.getAppComponent({ location, appContext: getEnv(app) });
-    //   if (_.isUndefined(result)) return;
-    //   App = result;
-    //   // eslint-disable-next-line consistent-return
-    //   return false; // This will stop lodash from continuing the forEach loop
-    // });
+    plugins = _.reverse(pluginRegistry.getPluginsWithMethod('app-component', 'getAutoLogoutComponent') || []);
+    let AutoLogout = () => <></>;
+    // We ask each plugin in reverse order if they have the AutoLogout component
+    _.forEach(plugins, plugin => {
+      const result = plugin.getAutoLogoutComponent({ location, appContext: getEnv(app) });
+      if (_.isUndefined(result)) return;
+      AutoLogout = result;
+      // eslint-disable-next-line consistent-return
+      return false; // This will stop lodash from continuing the forEach loop
+    });
 
-    // plugins = _.reverse(pluginRegistry.getPluginsWithMethod('app-component', 'getAutoLogoutComponent') || []);
-    // let AutoLogout = () => <></>;
-    // // We ask each plugin in reverse order if they have the AutoLogout component
-    // _.forEach(plugins, plugin => {
-    //   const result = plugin.getAutoLogoutComponent({ location, appContext: getEnv(app) });
-    //   if (_.isUndefined(result)) return;
-    //   AutoLogout = result;
-    //   // eslint-disable-next-line consistent-return
-    //   return false; // This will stop lodash from continuing the forEach loop
-    // });
-
-    // plugins = _.reverse(pluginRegistry.getPluginsWithMethod('app-component', 'getForceLogoutComponent') || []);
-    // let ForceLogout = () => <></>;
-    // // We ask each plugin in reverse order if they have the ForceLogout component
-    // _.forEach(plugins, plugin => {
-    //   const result = plugin.getForceLogoutComponent({ location, appContext: getEnv(app) });
-    //   if (_.isUndefined(result)) return;
-    //   ForceLogout = result;
-    //   // eslint-disable-next-line consistent-return
-    //   return false; // This will stop lodash from continuing the forEach loop
-    // });
-
-    // We ask each plugin in reverse order if they have a specific method, and return that component via that method if true, undefined if false
-    const getComponent = componentMethod => _.reverse(pluginRegistry.getPluginsWithMethod('app-component', componentMethod) || [])
-      .map(plugin => plugin[componentMethod]({ location, appContext: getEnv(app) }))
-      .find(plugin => !_.isUndefined(plugin));
-    
-    const App = getComponent('getAppComponent') || this.renderError();
-    const AutoLogout = getComponent('getAutoLogoutComponent') || this.renderEmptyComponent();
-    const ForceLogout = getComponent('getForceLogoutComponent') || this.renderEmptyComponent();
+    plugins = _.reverse(pluginRegistry.getPluginsWithMethod('app-component', 'getForceLogoutComponent') || []);
+    let ForceLogout = () => <></>;
+    // We ask each plugin in reverse order if they have the ForceLogout component
+    _.forEach(plugins, plugin => {
+      const result = plugin.getForceLogoutComponent({ location, appContext: getEnv(app) });
+      if (_.isUndefined(result)) return;
+      ForceLogout = result;
+      // eslint-disable-next-line consistent-return
+      return false; // This will stop lodash from continuing the forEach loop
+    });
 
     return (
       <>
@@ -86,10 +76,6 @@ class AppContainer extends Component {
         <App />
       </>
     );
-  }
-
-  renderEmptyComponent() {
-    return (<></>);
   }
 
   renderError() {

@@ -11,6 +11,11 @@ import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { getRegisterForm, getRegisterFormFields } from '../models/RegisterForm';
 import { registerUser } from '../helpers/api';
 
+const styles = {
+  header: { fontFamily: 'Handel Gothic,Futura,Trebuchet MS,Arial,sans-serif' },
+  bodyText: { fontFamily: 'Futura,Trebuchet MS,Arial,sans-serif' }
+}
+
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -18,7 +23,7 @@ class Register extends React.Component {
       this.formProcessing = false;
       this.errors = {
         validation: new Map(),
-        formFields: ''
+        form: ''
       }
       this.user = {};
     });
@@ -30,7 +35,7 @@ class Register extends React.Component {
 
   processing(state) {
     runInAction(() => {
-      this.errors.formFields = '';
+      this.errors.form = '';
       this.formProcessing = state;
     });
   }
@@ -53,28 +58,14 @@ class Register extends React.Component {
     return false;
   }
 
-  renderButtons() {
-    return (
-      <div>
-        <Form.Field>
-          {this.errors.formFields && (<div className="mb1"><Label prompt>{this.errors.formFields}</Label></div>)}
-          <Button  type='submit' style={{ backgroundColor: 'rgb(105, 190, 90)', color: 'white' }}>
-            Create a new Service Workbench on AWS account
-          </Button>
-        </Form.Field>
-      </div>
-    );
-  }
-
   renderCheckbox(name) {
     const error = !_.isEmpty(this.errors.validation.get(name));
 
     const handleChange = action((event, { checked }) => {
-      event.preventDefault();
       this.user[name] = checked;
     });
     return (
-      <Form.Checkbox 
+      <Form.Checkbox
         error={error}
         label={this.registerFormFields[name].label}
         defaultValue={this.user[name]}
@@ -89,7 +80,6 @@ class Register extends React.Component {
     const error = !_.isEmpty(this.errors.validation.get(name));
 
     const handleChange = action(event => {
-      event.preventDefault();
       this.user[name] = event.target.value;
     });
     return (
@@ -106,55 +96,57 @@ class Register extends React.Component {
   renderRegisterationForm() {
     return (
       <Form
-        size="small"
+        size="large"
         loading={this.loading}
         onSubmit={this.handleSubmit}
       >
-        <div style={{ fontFamily: 'Futura,Trebuchet MS,Arial,sans-serif' }}>
-          <Header as="h2" textAlign="center" style={{ fontFamily: 'Handel Gothic,Futura,Trebuchet MS,Arial,sans-serif' }}>
-            WELCOME TO AIM-AHEAD's SERVICE WORKBENCH ON AWS
-          </Header>
-          <p>AIM-AHEAD's Service Workbench on AWS provides a self-service, three-click, on-demand service 
-            for researchers to build research environments in minutes without needing cloud infrastructure 
-            knowledge. Fill out the form below to create your account on Service Workbench on AWS.</p>
-          <Segment basic className="ui fluid form">
-            <Dimmer active={this.formProcessing} inverted>
-              <Loader inverted>Submitting registration</Loader>
-            </Dimmer>
-            <div style={{ maxWidth: 450, margin: '0 auto' }}>
-              {this.renderField('firstName')}
+        <Header as="h2" textAlign="center" style={styles.header}>
+          WELCOME TO AIM-AHEAD's SERVICE WORKBENCH ON AWS
+        </Header>
+        <p>AIM-AHEAD's Service Workbench on AWS provides a self-service, three-click, on-demand service 
+          for researchers to build research environments in minutes without needing cloud infrastructure 
+          knowledge. Fill out the form below to create your account on Service Workbench on AWS.</p>
+        <Segment basic className="ui fluid form">
+          <Dimmer active={this.formProcessing} inverted>
+            <Loader inverted>Submitting registration</Loader>
+          </Dimmer>
+          <div style={{ maxWidth: 450, margin: '0 auto' }}>
+            {this.renderField('firstName')}
 
-              {this.renderField('lastName')}
+            {this.renderField('lastName')}
 
-              {this.renderField('email')}
+            {this.renderField('email')}
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            {this.renderCheckbox('terms')}
+          </div>
+          <div className="mt3" style={{ textAlign: 'center' }}>
+            <div>
+              <Form.Field>
+                {this.errors.form && (<div className="mb1"><Label prompt>{this.errors.form}</Label></div>)}
+                <Button type="submit" color="green">
+                  Create a new Service Workbench on AWS account
+                </Button>
+              </Form.Field>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              {this.renderCheckbox('terms')}
-            </div>
-            <div className="mt3" style={{ textAlign: 'center' }}>
-              {this.renderButtons()}
-            </div>
-          </Segment>
-        </div>
+          </div>
+        </Segment>
       </Form>
     );
   }
 
   renderConfirmation(){
     return (
-      <div style={{ fontFamily: 'Futura,Trebuchet MS,Arial,sans-serif' }}>
-        <Header as="h2" textAlign="center" style={{ fontFamily: 'Handel Gothic,Futura,Trebuchet MS,Arial,sans-serif' }}>
-          SUCCESS!
-        </Header>
-        <p>
-          Your AIM-AHEAD Service Workbench on AWS account has been successfully created. What you should expect next:
-        </p>
+      <div>
+        <Header as="h2" textAlign="center" style={styles.header}>SUCCESS!</Header>
+        <p>Your AIM-AHEAD Service Workbench on AWS account has been successfully created. What you should expect next:</p>
         <ol>
           <li>The AIM-AHEAD Service Workbench on AWS administrator will review your account.</li> 
           <li>You will receive an email sent from Okta to create a password.</li>
           <li>Login to Service Workbench on AWS and start your research.</li>
         </ol>
-        <p>You can access the AIM-AHEAD Service Workbench on AWS User Guide <a href="https://docs.google.com/document/d/1nrpLLpmm66-G7Mo-BOBUkGu-DN7fD8YCK3SL9CrPhp0/edit">here</a>.</p>
+        <p>You can access the AIM-AHEAD Service Workbench on AWS User Guide 
+          <a href="https://docs.google.com/document/d/1nrpLLpmm66-G7Mo-BOBUkGu-DN7fD8YCK3SL9CrPhp0/edit">here</a>.</p>
       </div>
     )
   }
@@ -163,14 +155,13 @@ class Register extends React.Component {
     const { location } = this.props;
 
     return (
-      
         <Grid verticalAlign="middle" className="animated fadeIn" style={{ height: '100%', maxWidth: '800px', margin: '0 auto' }}>
           <Grid.Row columns={2}>
             <Grid.Column><Image fluid src={this.props.assets.images.registerLogo} /></Grid.Column>
             <Grid.Column><Image fluid src={this.props.assets.images.registerAws} /></Grid.Column>
           </Grid.Row>
           <Grid.Row columns={1}>
-            <Grid.Column>
+            <Grid.Column style={styles.bodyText}>
               {location.pathname === '/register' && this.renderRegisterationForm()}
               {location.pathname === '/register-confirmation' && this.renderConfirmation()}
             </Grid.Column>
@@ -190,19 +181,19 @@ class Register extends React.Component {
       if (validationResult.fails()) {
         runInAction(() => {
           this.errors.validation = validationResult.errors;
-          this.errors.formFields = this.populateErrors(validationResult.errors);
+          this.errors.form = this.populateErrors(validationResult.errors);
           this.formProcessing = false;
         });
-      } else {
+      } else { // otherwise, send the api call
         await registerUser({
           firstName: this.user.firstName,
           lastName: this.user.lastName,
           email: this.user.email
         });
-        // reset form and page state
+        // reset form and page state in case the user hits their back button
         runInAction(() => {
           this.errors.validation = new Map();
-          this.errors.formFields = '';
+          this.errors.form = '';
           this.formProcessing = false;
           this.user = {};
         });
@@ -212,7 +203,7 @@ class Register extends React.Component {
       console.error(error);
       runInAction(() => {
         this.errors.validation = new Map();
-        this.errors.formFields = 'ERROR: There was an unexpected error while processing your request. Please review your information and try again.';
+        this.errors.form = 'ERROR: There was an unexpected error while processing your request. Please review your information and try again.';
         this.formProcessing = false;
       });
     }

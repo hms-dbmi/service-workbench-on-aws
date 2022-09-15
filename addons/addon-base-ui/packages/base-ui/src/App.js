@@ -74,5 +74,3 @@ decorate(App, {
 });
 
 export default withAuth(inject('app', 'userStore')(withRouter(observer(App))));
-
-export { App };

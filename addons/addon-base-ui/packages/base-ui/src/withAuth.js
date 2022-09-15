@@ -19,12 +19,10 @@ import DefaultLoginScreen from './parts/Login';
 
 class Wrapper extends React.Component {
   renderLogin() {
-    console.log('base withAuth - renderLogin')
     return this.props.loginComp;
   }
 
   renderAuthenticated() {
-    console.log('base withAuth - renderLogin')
     const Comp = this.props.Comp;
     const props = this.getWrappedCompProps({ authenticated: true });
     return <Comp {...props} />;
@@ -52,7 +50,6 @@ class Wrapper extends React.Component {
   }
 }
 
-
 const WrapperComp = inject('app', 'assets')(observer(Wrapper));
 
 function withAuth(Comp, { loginComp } = { loginComp: <DefaultLoginScreen /> }) {
@@ -62,4 +59,3 @@ function withAuth(Comp, { loginComp } = { loginComp: <DefaultLoginScreen /> }) {
 }
 
 export default withAuth;
-export { Wrapper };

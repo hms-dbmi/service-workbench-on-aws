@@ -35,6 +35,8 @@ class RegisterUserService extends Service {
   }
 
   async register(requestContext, user){
+    // throws an error on validation that is caught in the controller
+    // ../controllers/register-controller.js
     await this.validateUser(user);
   
     const userData = await this.formatUser(user);
@@ -106,12 +108,8 @@ class RegisterUserService extends Service {
   }
 
   async validateUser(input){
-    try {
-      const jsonSchemaValidationService = await this.service('jsonSchemaValidationService');
-      await jsonSchemaValidationService.ensureValid(input, jsonSchema);
-    } catch(error){
-      console.error(error.payload);
-    }
+    const jsonSchemaValidationService = await this.service('jsonSchemaValidationService');
+    await jsonSchemaValidationService.ensureValid(input, jsonSchema);
   }
 
   async audit(requestContext, auditEvent) {

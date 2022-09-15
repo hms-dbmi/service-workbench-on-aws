@@ -47,8 +47,6 @@ class Login extends React.Component {
       authentication.setSelectedAuthenticationProviderId(
         _.get(this.getStore().authenticationProviderOptions, '[0].key', ''),
       );
-
-      console.log('base login construct - idp', _.get(this.getStore(), 'authenticationProviderOptions.[0]', ''));
     });
   }
 

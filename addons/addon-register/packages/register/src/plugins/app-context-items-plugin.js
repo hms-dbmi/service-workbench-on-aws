@@ -14,7 +14,7 @@
  */
 
 import awsImage from '../../images/SWB.png';
-import logoImage from '../../images/AIM_Ahead_60x474.png';
+import logoImage from '../../images/logo.png';
 
 /**
  * Registers base stores to the appContext object
