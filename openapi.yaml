@@ -815,6 +815,24 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterStudy'
 
+  /api/register:
+    post:
+      tags:
+        - guests
+      summary: Register a new research user
+      operationId: CreateUser
+      description: |
+        Register a new research user
+      requestBody:
+        description: User information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserRequest'
+      responses:
+        '200':
+          description: User added
+
   /api/workspace-type-candidates:
     get:
       tags:
@@ -2900,6 +2918,32 @@ components:
         accountId:
           $ref: '#/components/schemas/AwsAccountId'
 
+    RegisterUserRequest:
+      required:
+        - firstName
+        - lastName
+        - email
+      type: object
+      properties:
+        email:
+          type: string
+          pattern: "^([^.%+!$&*=^|~#%{}]+)[a-zA-Z0-9\\._%+!$&*=^|~#%{}/\\-]+([^.!]+)@([^-.!](([a-zA-Z0-9\\-]+\\.){1,}([a-zA-Z]{2,63})))"
+          minLength: 6
+          maxLength: 512
+          example: 'someone@example.com'
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 500
+          pattern: '^[A-Za-z0-9 .-]+$'
+          example: 'Test'
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 500
+          pattern: '^[A-Za-z0-9 .-]+$'
+          example: 'User'
+
     ProvisionAccountRequest:
       required:
         - accountName
@@ -3297,38 +3341,38 @@ components:
         params:
           type: array
           example: [
-          {
-            "key":"InstanceType",
-            "value":"ml.t3.xlarge"
-          },
-          {
-            "key": "EncryptionKeyArn",
-            "value": "${encryptionKeyArn}"
-          },
-          {
-            "key": "IamPolicyDocument",
-            "value": "${iamPolicyDocument}"
-          },
-          {
-            "key": "VPC",
-            "value": "${vpcId}"
-          },
-          {
-            "key": "EnvironmentInstanceFiles",
-            "value": "${environmentInstanceFiles}"
-          },
-          {
-            "key": "Subnet",
-            "value": "${subnetId}"
-          },
-          {
-            "key": "S3Mounts",
-            "value": "${s3Mounts}"
-          },
-          {
-            "key": "Namespace",
-            "value": "${namespace}"
-          }
+            {
+              "key":"InstanceType",
+              "value":"ml.t3.xlarge"
+            },
+            {
+              "key": "EncryptionKeyArn",
+              "value": "${encryptionKeyArn}"
+            },
+            {
+              "key": "IamPolicyDocument",
+              "value": "${iamPolicyDocument}"
+            },
+            {
+              "key": "VPC",
+              "value": "${vpcId}"
+            },
+            {
+              "key": "EnvironmentInstanceFiles",
+              "value": "${environmentInstanceFiles}"
+            },
+            {
+              "key": "Subnet",
+              "value": "${subnetId}"
+            },
+            {
+              "key": "S3Mounts",
+              "value": "${s3Mounts}"
+            },
+            {
+              "key": "Namespace",
+              "value": "${namespace}"
+            }
           ]
           items:
             type: object
@@ -3429,7 +3473,7 @@ components:
         resources:
           type: array
           example: [
-          {"arn": "arn:aws:s3:::123456789101-studydata/studies/Organization/org-study-2/"}
+            {"arn": "arn:aws:s3:::123456789101-studydata/studies/Organization/org-study-2/"}
           ]
           items:
             type: object
@@ -3479,7 +3523,7 @@ components:
         resources:
           type: array
           example: [
-          {"arn": "arn:aws:s3:::123456789101-studydata/studies/Organization/org-study-2/"}
+            {"arn": "arn:aws:s3:::123456789101-studydata/studies/Organization/org-study-2/"}
           ]
           items:
             type: object
