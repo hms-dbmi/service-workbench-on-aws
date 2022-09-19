@@ -12,42 +12,65 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-
-import dvr from 'mobx-react-form/lib/validators/DVR';
-import Validator from 'validatorjs';
-import MobxReactForm from 'mobx-react-form';
+import _ from 'lodash';
+import validate from '@aws-ee/base-ui/dist/models/forms/Validate';
 
 const registerUserFormFields = {
   email: {
     label: 'Email',
     placeholder: 'Email',
-    // The regex check for email must be the same as the one applied for native pool presignup lambda 
-    rules: [ 'string', 'required', 'regex:/^([^.%+!$&*=^|~#%{}]+)[a-zA-Z0-9\\._%+!$&*=^|~#%{}/\\-]+([^.!]+)@([^-.!](([a-zA-Z0-9\\-]+\\.){1,}([a-zA-Z]{2,63})))/' ]
+    rules: [
+      'string',
+      'required',
+      // The regex check for email must be the same as the one applied for native pool presignup lambda
+      'regex:/^([^.%+!$&*=^|~#%{}]+)[a-zA-Z0-9\\._%+!$&*=^|~#%{}/\\-]+([^.!]+)@([^-.!](([a-zA-Z0-9\\-]+\\.){1,}([a-zA-Z]{2,63})))/',
+    ],
   },
   firstName: {
     label: 'First Name',
     placeholder: 'First Name',
-    rules: 'string|required|between:1,500'
+    rules: 'string|required|between:1,500',
   },
   lastName: {
     label: 'Last Name',
     placeholder: 'Last Name',
-    rules: 'string|required|between:1,500'
+    rules: 'string|required|between:1,500',
   },
   terms: {
-    label: 'I am 18 years or older and agree to the {TBD with FISMA Government agreement}',
+    label: 'I am 18 years or older.',
     placeholder: 'Terms & Conditions',
-    rules: 'boolean|accepted'
-  }
+    rules: 'boolean|accepted',
+  },
 };
 
 function getRegisterFormFields() {
   return registerUserFormFields;
 }
 
-function getRegisterForm() {
-  const plugins = { dvr: dvr(Validator) }; // , vjf: validator };
-  return new MobxReactForm({ fields: registerUserFormFields }, { plugins });
+async function formValidationErrors(data) {
+  const fields = getRegisterFormFields();
+  const validationResult = await validate(data, fields);
+  const validation = {
+    message: '',
+    errors: validationResult.errors,
+    failed: validationResult.fails(),
+  };
+
+  const fieldErrors = ['firstName', 'lastName', 'email']
+    .filter(field => !_.isEmpty(validation.errors.get(field)))
+    .map(field => fields[field].placeholder);
+
+  // Return a user friendly message with fields that have not passed validation
+  if (fieldErrors.length > 0) {
+    const finalField = fieldErrors.pop();
+    const fieldString = fieldErrors.length > 0 ? `${fieldErrors.join(', ')} and ${finalField}` : finalField;
+
+    validation.message = `Please populate ${fieldString}.`;
+  } else if (!data.terms) {
+    // return 'You must be 18 years or older and agree to the terms of service to register.';
+    validation.message = 'You must be 18 years or older to register.';
+  }
+  return validation;
 }
 
-export { getRegisterFormFields, getRegisterForm };
+export { getRegisterFormFields, formValidationErrors };

@@ -35,10 +35,7 @@ const registerController = require('../controllers/register-controller');
  */
 // eslint-disable-next-line no-unused-vars
 async function getRoutes(routesMap, pluginRegistry) {
-  const routes = new Map([
-    ...routesMap,
-    ['/api/register', [setupAuthContext, prepareContext, registerController]]
-  ]);
+  const routes = new Map([...routesMap, ['/api/register', [setupAuthContext, prepareContext, registerController]]]);
   return routes;
 }
 

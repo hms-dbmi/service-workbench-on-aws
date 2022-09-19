@@ -14,30 +14,35 @@
  */
 
 async function configure(context) {
-    const router = context.router();
-    const wrap = context.wrap;
-    const [ registerUserService ] = await context.service(['registerUserService']);
-  
-    // ===============================================================
-    //  POST / (mounted to /api/register)
-    // ===============================================================
-    router.post(
-      '/',
-      wrap(async (req, res) => {
+  const router = context.router();
+  const wrap = context.wrap;
+  const [registerUserService] = await context.service(['registerUserService']);
+
+  // ===============================================================
+  //  POST / (mounted to /api/register)
+  // ===============================================================
+  router.post(
+    '/',
+    wrap(async (req, res) => {
+      let body = {};
+      try {
         const requestContext = res.locals.requestContext;
-        try {
-          const registeredUser = await registerUserService.register(requestContext, req.body);
-          res.status(200).json(`Registered user ${registeredUser.uid}`);
-        } catch(error){
-          console.error({ ...error });
-          const message = error.code === 'alreadyExists' ? 'Email address is already registered' : 'Unknown error';
-          res.status(500).json({ message, code: error.code });
-        }
-      }),
-    );
-  
-    return router;
-  }
-  
-  module.exports = configure;
-  
+        const registeredUser = await registerUserService.register(requestContext, req.body);
+        body = {
+          message: `Registered user ${registeredUser.uid}`,
+          code: 'sucess',
+        };
+      } catch (error) {
+        body = {
+          message: error.message,
+          code: error.code,
+        };
+      }
+      res.status(200).json(body);
+    }),
+  );
+
+  return router;
+}
+
+module.exports = configure;

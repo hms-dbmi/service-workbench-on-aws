@@ -71,10 +71,10 @@ const extensionPoints = {
   'initialization': [
     baseInitializationPlugin, // @aws-ee/base-ui
     raasInitializationPlugin, // @aws-ee/base-raas-ui
-    initializationPlugin // ./initialization-plugin
+    initializationPlugin, // ./initialization-plugin
   ],
   'authentication': [
-    baseAuthenticationPlugin // @aws-ee/base-ui
+    baseAuthenticationPlugin, // @aws-ee/base-ui
   ],
   'app-component': [
     baseAppComponentPlugin, // @aws-ee/base-ui
@@ -99,8 +99,8 @@ const extensionPoints = {
     routesPlugin, // ./routes-plugin
   ],
   'env-type-management': [
-    raasEnvTypeMgmtPlugin // @aws-ee/base-raas-ui
-  ]
+    raasEnvTypeMgmtPlugin, // @aws-ee/base-raas-ui
+  ],
 };
 
 function getPlugins(extensionPoint) {

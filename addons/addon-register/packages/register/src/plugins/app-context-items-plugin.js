@@ -28,6 +28,6 @@ function registerAppContextItems(appContext) {
 }
 
 const plugin = {
-  registerAppContextItems
+  registerAppContextItems,
 };
 export default plugin;

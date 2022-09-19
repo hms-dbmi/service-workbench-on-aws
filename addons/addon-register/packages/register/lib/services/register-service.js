@@ -12,13 +12,11 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-const _ = require('lodash');
-
 const Service = require('@aws-ee/base-services-container/lib/service');
 const { toUserNamespace } = require('@aws-ee/base-service/lib/user/helpers/user-namespace');
 const { generateId } = require('@aws-ee/base-service/lib/helpers/utils');
 
-const jsonSchema = require('../schemas/register-user');
+const jsonSchema = require('../schemas/register-user.json');
 
 const settingKeys = { tableName: 'dbUsers' };
 
@@ -30,20 +28,27 @@ class RegisterUserService extends Service {
       'authenticationProviderConfigService',
       'dbService',
       'jsonSchemaValidationService',
-      'userService'
+      'userService',
     ]);
   }
 
-  async register(requestContext, user){
+  async register(requestContext, user) {
     // throws an error on validation that is caught in the controller
     // ../controllers/register-controller.js
     await this.validateUser(user);
-  
+
     const userData = await this.formatUser(user);
 
     const existingUser = await this.getUserByPrincipal(userData);
     if (existingUser) {
-      throw this.boom.alreadyExists('Cannot add user. The user already exists.', true);
+      throw this.boom.alreadyExists(
+        `A user account with this email address is ${
+          existingUser.status === 'active'
+            ? 'already active.'
+            : 'registered but not yet activated-- an administrator will review and activate the account.'
+        }`,
+        true,
+      );
     }
 
     const dbService = await this.service('dbService');
@@ -60,15 +65,16 @@ class RegisterUserService extends Service {
     return result;
   }
 
-  async formatUser(user){
+  async formatUser(user) {
     const authConfigService = await this.service('authenticationProviderConfigService');
     const authProviders = await authConfigService.getAuthenticationProviderConfigs();
     const providerConfig = authProviders[0].config;
-    
+
     const { lastName, firstName, email } = user;
-    const identityProviderName = providerConfig.federatedIdentityProviders.length == 0
-      ? providerConfig.title
-      : providerConfig.federatedIdentityProviders[0].name;
+    const identityProviderName =
+      providerConfig.federatedIdentityProviders.length === 0
+        ? providerConfig.title
+        : providerConfig.federatedIdentityProviders[0].name;
     const authenticationProviderId = providerConfig.id;
     const ns = toUserNamespace(authenticationProviderId, identityProviderName);
     const uid = await generateId('u-');
@@ -94,7 +100,7 @@ class RegisterUserService extends Service {
       projectId: [],
       rev: 0,
       status: 'pending',
-      userRole: 'researcher'
+      userRole: 'researcher',
     };
   }
 
@@ -107,7 +113,7 @@ class RegisterUserService extends Service {
     });
   }
 
-  async validateUser(input){
+  async validateUser(input) {
     const jsonSchemaValidationService = await this.service('jsonSchemaValidationService');
     await jsonSchemaValidationService.ensureValid(input, jsonSchema);
   }

@@ -28,11 +28,8 @@ import Register from '../parts/Register';
  */
 // eslint-disable-next-line no-unused-vars
 function registerRoutes(routesMap, { location, appContext }) {
-  const routes = new Map([
-    ...routesMap,
-    ['/register', withAuth(Register)]
-  ]);
-return routes;
+  const routes = new Map([...routesMap, ['/register', withAuth(Register)]]);
+  return routes;
 }
 
 const plugin = { registerRoutes };

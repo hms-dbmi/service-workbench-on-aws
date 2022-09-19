@@ -5,4 +5,4 @@ function getAppComponent({ location, appContext }) {
   return App;
 }
 
-export default { getAppComponent }
+export default { getAppComponent };
