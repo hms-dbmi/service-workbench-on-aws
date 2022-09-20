@@ -53,7 +53,6 @@ custom:
         postDeployment:
           environment:
             APP_LOCAL_ROLE_ARN: ${cfnOutput('PostDeploymentRoleArn')} # When running locally, run under this role
-
   s3Sync:
     - bucketName: ${self:custom.settings.deploymentBucketName}
       bucketPrefix: saml-metadata/
@@ -69,12 +68,17 @@ custom:
     - If: '"${file(./bool-to-str.js)}" == "false"'
       Exclude:
         - functions.egressStoreObjectsHandler
+  registrationWAF:
+    albExportName: "${self:custom.settings.awsRegionShortName}-${self:custom.settings.solutionName}-LoadBalancerFullName"
+    name: "${self:custom.settings.awsRegionShortName}-${self:custom.settings.solutionName}-WAF"
+    rateLimit: 1000
 
 functions: ${file(./config/infra/functions.yml)}
 
 resources:
   - Description: Service-Workbench-on-AWS ${self:custom.settings.version} ${self:custom.settings.solutionName} ${self:custom.settings.envName} Post-Deployment
   - ${file(./config/infra/cloudformation.yml)}
+  - ${file(./config/infra/registrationWAF.yml)}
 
 plugins:
   - serverless-webpack

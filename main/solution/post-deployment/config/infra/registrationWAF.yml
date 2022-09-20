@@ -1,0 +1,51 @@
+Resources:
+  WAFRegionalWebACL:
+    Type: "AWS::WAFv2::WebACL"
+    Properties:
+      Name: ${self:custom.registrationWAF.name, "${self:custom.settings.awsRegionShortName}-${self:custom.settings.solutionName}-WAF"}
+      Scope: REGIONAL
+      Description: WAF regional web ACL to prevent HTTP flood DDos attacks and control bots.
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        SampledRequestsEnabled: true
+        CloudWatchMetricsEnabled: true
+        MetricName: "ApiGateway-HTTP-Flood-Prevent-Metric"
+      Rules:
+        - Name: "HTTP-Flood-Prevent-Rule"
+          Priority: 0
+          Action:
+            Block: {}
+          Statement:
+            RateBasedStatement:
+              AggregateKeyType: IP
+              Limit: ${self:custom.registrationWAF.rateLimit, 500}
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: "HTTP-Flood-Prevent-Rule-Metric"
+        - Name: "AWS-BotControl"
+          Priority: 1
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: "AWS"
+              Name: "AWSManagedRulesBotControlRuleSet"
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: "AWS-BotControl-Metric"
+  WAFRegionalWebACLAssoc:
+    Type: "AWS::WAFv2::WebACLAssociation"
+    Properties:
+      ResourceArn: !Join [
+        '',
+        [
+          "arn:aws:elasticloadbalancing:",
+          "${self:custom.settings.awsRegion}:${self:custom.settings.awsAccountInfo.awsAccountId}",
+          ":loadbalancer/",
+          !ImportValue "${self:custom.registrationWAF.albExportName}"
+        ]
+      ]
+      WebACLArn: !GetAtt "WAFRegionalWebACL.Arn"

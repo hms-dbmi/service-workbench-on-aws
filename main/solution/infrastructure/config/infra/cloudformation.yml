@@ -565,6 +565,12 @@ Outputs:
       - https://${self:custom.settings.domainName}
       - !Join ['', ['https://', !GetAtt LoadBalancer.DNSName]]
 
+  LoadBalancerFullName:
+    Description: The load balancers full name
+    Value: !GetAtt "LoadBalancer.LoadBalancerFullName"
+    Export:
+      Name: !Sub "${self:custom.settings.awsRegionShortName}-${self:custom.settings.solutionName}-LoadBalancerFullName"
+
   WebsiteBucket:
     Description: The bucket name of the static website
     Value: !Ref WebsiteBucket
