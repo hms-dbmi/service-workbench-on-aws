@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { observable, action, decorate, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label } from 'semantic-ui-react';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
@@ -15,6 +15,9 @@ const styles = {
   bodyText: { fontFamily: 'Futura,Trebuchet MS,Arial,sans-serif' },
 };
 
+const errorText =
+  'ERROR There was an unexpected error while processing your request. Please review your information and try again.';
+
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +27,6 @@ class Register extends React.Component {
         validation: new Map(),
         form: '',
       };
-      this.loginLink = false;
       this.user = {};
     });
     this.registerFormFields = getRegisterFormFields();
@@ -98,14 +100,7 @@ class Register extends React.Component {
               <Form.Field>
                 {this.errors.form && (
                   <div className="mb1">
-                    <Label prompt>
-                      {this.errors.form}{' '}
-                      {this.loginLink && (
-                        <Link to="/" style={{ color: 'blue' }}>
-                          Do you want to login in?
-                        </Link>
-                      )}
-                    </Label>
+                    <Label prompt>{this.errors.form}</Label>
                   </div>
                 )}
                 <Form.Button color="green">Create a new Service Workbench on AWS account</Form.Button>
@@ -177,7 +172,6 @@ class Register extends React.Component {
       if (validationResult.failed) {
         runInAction(() => {
           this.errors.validation = validationResult.errors;
-          this.loginLink = false;
           this.errors.form = validationResult.message;
           this.formProcessing = false;
         });
@@ -189,12 +183,11 @@ class Register extends React.Component {
         lastName: this.user.lastName,
         email: this.user.email,
       });
-      // if user already exists then don't continue to process and instead display a message
-      if (result.code === 'alreadyExists') {
+      // if we encounter an error then don't continue to process the form and instead display a message
+      if (result.error) {
         runInAction(() => {
           this.errors.validation = new Map();
-          this.errors.form = result.message;
-          this.loginLink = result.message.includes('already active');
+          this.errors.form = errorText;
           this.formProcessing = false;
         });
         return;
@@ -205,7 +198,6 @@ class Register extends React.Component {
         this.errors.validation = new Map();
         this.errors.form = '';
         this.formProcessing = false;
-        this.loginLink = false;
         this.user = {};
       });
       this.goto('/register-confirmation');
@@ -213,8 +205,7 @@ class Register extends React.Component {
       console.error(error);
       runInAction(() => {
         this.errors.validation = new Map();
-        this.errors.form =
-          'ERROR There was an unexpected error while processing your request. Please review your information and try again.';
+        this.errors.form = errorText;
         this.formProcessing = false;
       });
     }
@@ -230,7 +221,6 @@ decorate(Register, {
   formProcessing: observable,
   user: observable,
   errors: observable,
-  loginLink: observable,
 });
 
 export default inject('assets')(withRouter(observer(Register)));

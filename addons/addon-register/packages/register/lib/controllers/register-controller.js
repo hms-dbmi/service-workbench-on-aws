@@ -27,15 +27,15 @@ async function configure(context) {
       let body = {};
       try {
         const requestContext = res.locals.requestContext;
-        const registeredUser = await registerUserService.register(requestContext, req.body);
+        await registerUserService.register(requestContext, req.body);
         body = {
-          message: `Registered user ${registeredUser.uid}`,
-          code: 'sucess',
+          error: false,
+          message: 'User successfully registered',
         };
       } catch (error) {
         body = {
-          message: error.message,
-          code: error.code,
+          error: true,
+          message: 'An error occured while registering this user.',
         };
       }
       res.status(200).json(body);

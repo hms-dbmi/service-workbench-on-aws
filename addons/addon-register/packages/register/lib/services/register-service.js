@@ -41,14 +41,8 @@ class RegisterUserService extends Service {
 
     const existingUser = await this.getUserByPrincipal(userData);
     if (existingUser) {
-      throw this.boom.alreadyExists(
-        `A user account with this email address is ${
-          existingUser.status === 'active'
-            ? 'already active.'
-            : 'registered but not yet activated-- an administrator will review and activate the account.'
-        }`,
-        true,
-      );
+      console.error(`Attempt to register a user who already exists. UID ${existingUser.uid}`);
+      throw this.boom.alreadyExists('An error occured while registering this user', true);
     }
 
     const dbService = await this.service('dbService');
