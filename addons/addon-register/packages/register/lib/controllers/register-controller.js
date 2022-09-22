@@ -30,12 +30,12 @@ async function configure(context) {
         await registerUserService.register(requestContext, req.body);
         body = {
           error: false,
-          message: 'User successfully registered',
+          message: 'User has been registered',
         };
       } catch (error) {
         body = {
           error: true,
-          message: 'An error occured while registering this user.',
+          message: 'An error occured while registering this user',
         };
       }
       res.status(200).json(body);

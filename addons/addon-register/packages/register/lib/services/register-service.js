@@ -41,8 +41,9 @@ class RegisterUserService extends Service {
 
     const existingUser = await this.getUserByPrincipal(userData);
     if (existingUser) {
+      // Do not throw an error, log to console for auditing, and return as if it was a success.
       console.error(`Attempt to register a user who already exists. UID ${existingUser.uid}`);
-      throw this.boom.alreadyExists('An error occured while registering this user', true);
+      return;
     }
 
     const dbService = await this.service('dbService');
@@ -56,7 +57,6 @@ class RegisterUserService extends Service {
       .update();
 
     await this.audit(requestContext, { action: 'register-user', body: result });
-    return result;
   }
 
   async formatUser(user) {
