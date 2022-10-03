@@ -7,7 +7,7 @@
     "@aws-ee/base-raas-ui": "workspace:*",
     "@aws-ee/base-ui": "workspace:*",
     "@aws-ee/base-controllers": "workspace:*",
-    "@aws-ee/base-service": "workspace:*",
+    "@aws-ee/base-services": "workspace:*",
     "@aws-ee/base-services-container": "workspace:*",
     "aws-sdk": "^2.1000.0",
     "lodash": "^4.17.21",

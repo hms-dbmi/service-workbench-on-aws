@@ -2030,7 +2030,7 @@ importers:
       '@aws-ee/base-raas-ui': workspace:*
       '@aws-ee/base-serverless-settings-helper': workspace:*
       '@aws-ee/base-serverless-ui-tools': workspace:*
-      '@aws-ee/base-service': workspace:*
+      '@aws-ee/base-services': workspace:*
       '@aws-ee/base-services-container': workspace:*
       '@aws-ee/base-ui': workspace:*
       '@babel/cli': ^7.8.4
@@ -2079,7 +2079,7 @@ importers:
     dependencies:
       '@aws-ee/base-raas-ui': link:../../../addon-base-raas-ui/packages/base-raas-ui
       '@aws-ee/base-ui': link:../../../addon-base-ui/packages/base-ui
-      '@aws-ee/base-service': link:../../../addon-base/packages/services
+      '@aws-ee/base-services': link:../../../addon-base/packages/services
       '@aws-ee/base-controllers': link:../../../addon-base-rest-api/packages/base-controllers
       '@aws-ee/base-services-container': link:../../../addon-base/packages/services-container
       aws-sdk: 2.1015.0

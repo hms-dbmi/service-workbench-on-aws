@@ -121,6 +121,11 @@ HostedZoneId: 'Z02455261RJ9QQPVHFZGA'
 # Stack policies are applied here: addons/addon-stack-policy/packages/stack-policy/lib/steps/update-cfn-stack-policy.js
 #enableEgressStore: false
 
+# If a Cognito user pool is setup for the solution, this setting indicates whether native
+# Cognito users should be used or if the Cognito user pool will only be used to federate to other identity providers (listed above)
+# IMPORTANT: We recommend keeping this flag value set to true when installing SWB for the very first time so a root user can log in for user management.
+#enableNativeUserPoolUsers: false
+
 # Determine whether workspace should be accessible only through AppStream
 # NOTE: Once the isAppStremEnabled is set to true, the AppStrem feature will be enabled and can NOT be toggled off.
 # If you toggle the AppStream feature from true to false and redeploy the whole solution, the backend stack deployment should error out with following message:
