@@ -441,17 +441,18 @@ class ProvisionerService extends Service {
         metaDataInfo.MetadataFile = metadata;
       }
 
+      const attributeMap = JSON.parse(idp.attributeMap || "{}");
+
       const params = {
         ProviderDetails: metaDataInfo,
         ProviderName: idp.name /* required */,
         ProviderType: 'SAML' /* required */, // TODO: Add support for other Federation providers
         UserPoolId: providerConfig.userPoolId /* required */,
         AttributeMapping: {
-          // TODO: Add support for configurable attributes mapping
-          name: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
-          given_name: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname',
-          family_name: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname',
-          email: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
+          name: attributeMap.name || 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
+          given_name: attributeMap.given_name || 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname',
+          family_name: attributeMap.family_name || 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname',
+          email: attributeMap.email || 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
         },
         IdpIdentifiers: [idp.id],
       };

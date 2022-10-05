@@ -126,6 +126,12 @@ const inputManifestForCreate = {
           title: 'Identity Provider SAML Metadata XML',
           desc: 'Enter identity provider SAML metadata XML document for setting up trust.',
         },
+        {
+          name: 'federatedIdentityProviders[0].attributeMap',
+          type: 'textAreaInput',
+          title: 'JSON custom SAML attribute mapping',
+          desc: 'Enter a custom SAML mapping for name, given_name, family_name, or email.',
+        },
       ],
     },
   ],

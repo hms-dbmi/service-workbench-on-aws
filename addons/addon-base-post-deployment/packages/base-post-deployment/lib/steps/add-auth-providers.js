@@ -28,6 +28,7 @@ const settingKeys = {
   fedIdpNames: 'fedIdpNames',
   fedIdpDisplayNames: 'fedIdpDisplayNames',
   fedIdpMetadatas: 'fedIdpMetadatas',
+  fedIdpAttributeMap: 'fedIdpAttributeMap',
   defaultAuthNProviderTitle: 'defaultAuthNProviderTitle',
   cognitoAuthNProviderTitle: 'cognitoAuthNProviderTitle',
   cognitoUserPoolDomainPrefix: 'cognitoUserPoolDomainPrefix',
@@ -64,6 +65,7 @@ class AddAuthProviders extends Service {
     const fedIdpNames = this.settings.optionalObject(settingKeys.fedIdpNames, []);
     const fedIdpDisplayNames = this.settings.optionalObject(settingKeys.fedIdpDisplayNames, []);
     const fedIdpMetadatas = this.settings.optionalObject(settingKeys.fedIdpMetadatas, []);
+    const fedIdpAttributeMap = this.settings.optionalObject(settingKeys.fedIdpAttributeMap, []);
 
     // If user pools aren't enabled and no IdPs are configured, skip user pool creation
     const idpsNotConfigured = [fedIdpIds, fedIdpNames, fedIdpDisplayNames, fedIdpMetadatas].some(
@@ -82,6 +84,7 @@ class AddAuthProviders extends Service {
           name: fedIdpNames[idx],
           displayName: fedIdpDisplayNames[idx],
           metadata: fedIdpMetadatas[idx],
+          attributeMap: fedIdpAttributeMap[idx] || "{}",
         };
       }),
     );

@@ -114,6 +114,22 @@ HostedZoneId: 'Z02455261RJ9QQPVHFZGA'
 # TODO: Remove saml-metadata/datalake-example-idp-metadata.xml file and replace this setting to use sample file
 #fedIdpMetadatas: '["s3://${self:custom.settings.deploymentBucketName}/saml-metadata/datalake-example-idp-metadata.xml"]'
 
+# Array of identity provider SAML mappings. This array should be in same order as the "fedIdpIds".
+# The array should contain a stringified json object with any of the following attributes:
+# name, given_name, family_name, or email. If any of these are missing, or a default of "{}" is given,
+# then the default mappings below are used:
+#   name: http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name
+#   given_name: http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname
+#   family_name: http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname
+#   email: http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress
+#
+# An example of replacing only the mapping for the name attribute of one idp to an email attribute would look like this,
+#  fedIdpAttributeMap: '["{\"name\": \"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/email\"}"]'
+#
+# If you do not want to connect to Active Directory then leave this setting as empty array as follows.
+#
+# fedIdpAttributeMap: '[]'
+
 # If a Cognito user pool is setup for the solution, this setting indicates whether native
 # Cognito users should be used or if the Cognito user pool will only be used to federate to other identity providers (listed above)
 # IMPORTANT: We recommend keeping this flag value set to true when installing SWB for the very first time so a root user can log in for user management.

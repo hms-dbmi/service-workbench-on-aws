@@ -70,6 +70,10 @@
           "metadata": {
             "$id": "#/properties/federatedIdentityProviders/properties/metadata",
             "type": "string"
+          },
+          "attributeMap": {
+            "$id": "#/properties/federatedIdentityProviders/properties/attributeMap",
+            "type": "string"
           }
         }
       }

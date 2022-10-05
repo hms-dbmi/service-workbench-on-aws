@@ -134,6 +134,7 @@ class EnvBasedSettingsService extends Service {
     try {
       value = JSON.parse(value);
     } catch (e) {
+      console.error('JSON Parse error', e);
       throw error();
     }
 
