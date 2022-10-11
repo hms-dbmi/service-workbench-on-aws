@@ -14,6 +14,7 @@
  */
 import _ from 'lodash';
 import validate from '@aws-ee/base-ui/dist/models/forms/Validate';
+import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
 const registerUserFormFields = {
   email: {
@@ -37,7 +38,7 @@ const registerUserFormFields = {
     rules: 'string|required|between:1,500',
   },
   terms: {
-    label: 'I am 18 years or older.',
+    label: branding.register.tos,
     placeholder: 'Terms & Conditions',
     rules: 'boolean|accepted',
   },
@@ -67,8 +68,7 @@ async function formValidationErrors(data) {
 
     validation.message = `Please populate ${fieldString}.`;
   } else if (!data.terms) {
-    // return 'You must be 18 years or older and agree to the terms of service to register.';
-    validation.message = 'You must be 18 years or older to register.';
+    validation.message = 'You must accept the terms of service to register.';
   }
   return validation;
 }

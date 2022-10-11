@@ -58,6 +58,7 @@ async function configure(context) {
             userPoolId: provider.config.userPoolId,
             clientId: provider.config.clientId,
             enableNativeUserPoolUsers: provider.config.enableNativeUserPoolUsers,
+            customRegister: provider.config.customRegister || false,
           };
 
           if (cognitoPublicInfo.enableNativeUserPoolUsers) {

@@ -24,6 +24,7 @@ const settingKeys = {
   envName: 'envName',
   solutionName: 'solutionName',
   enableNativeUserPoolUsers: 'enableNativeUserPoolUsers',
+  enableCustomRegistration: 'enableCustomRegistration',
   fedIdpIds: 'fedIdpIds',
   fedIdpNames: 'fedIdpNames',
   fedIdpDisplayNames: 'fedIdpDisplayNames',
@@ -60,6 +61,7 @@ class AddAuthProviders extends Service {
     const cognitoUserPoolDomainPrefix = this.settings.get(settingKeys.cognitoUserPoolDomainPrefix);
 
     const enableNativeUserPoolUsers = this.settings.getBoolean(settingKeys.enableNativeUserPoolUsers);
+    const enableCustomRegistration = this.settings.getBoolean(settingKeys.enableCustomRegistration);
 
     const fedIdpIds = this.settings.optionalObject(settingKeys.fedIdpIds, []);
     const fedIdpNames = this.settings.optionalObject(settingKeys.fedIdpNames, []);
@@ -96,6 +98,7 @@ class AddAuthProviders extends Service {
       clientName: `${envName}-${solutionName}-client`,
       userPoolDomain: cognitoUserPoolDomainPrefix,
       enableNativeUserPoolUsers,
+      customRegister: enableCustomRegistration || false,
       federatedIdentityProviders,
     };
 

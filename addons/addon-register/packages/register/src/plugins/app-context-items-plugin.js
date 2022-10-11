@@ -14,7 +14,7 @@
  */
 
 import awsImage from '../../images/SWB.png';
-import logoImage from '../../images/logo.png';
+import logoImage from '@aws-ee/base-ui/images/login-image.gif'
 
 /**
  * Registers base stores to the appContext object

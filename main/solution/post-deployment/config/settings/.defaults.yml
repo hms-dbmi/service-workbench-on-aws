@@ -32,6 +32,10 @@ autoConfirmNativeUsers: true
 # These users still need to be activated by a Service Workbench administrator prior to accessing the application
 enableUserSignUps: true
 
+# Enable the user registration package Registration page.
+# Please also include the registration parameters to customize the registration page.
+enableCustomRegistration: false
+
 # Cognito domain prefix. Note random string will be padded at the end if specified domain is not available
 cognitoUserPoolDomainPrefix: ${self:custom.settings.envName}-${self:custom.settings.solutionName}
 

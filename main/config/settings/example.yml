@@ -148,3 +148,14 @@ HostedZoneId: 'Z02455261RJ9QQPVHFZGA'
 # Error validating existing stack policy: Unknown logical id 'LogicalResourceId/AppStream*' in statement {} - stack policies can only be applied to logical ids referenced in the template
 # Stack policies are applied here: addons/addon-stack-policy/packages/stack-policy/lib/steps/update-cfn-stack-policy.js
 #isAppStreamEnabled: false
+
+#--- Custom User Registration
+# Enable the custom user registration page.
+#enableCustomRegistration: false
+
+# Customize the parameters below to customize the registration page.
+#userRegistrationTitle: "WELCOME TO SERVICE WORKBENCH"
+#userRegistrationSummary: "<p>Service Workbench provides a self-service, three-click, on-demand service for researchers to build research environments in minutes without needing cloud infrastructure knowledge. Fill out the form below to create your account on Service Workbench hosted on AWS.</p>"
+#userRegistrationTOS: "I am 18 years or older"
+#userRegistrationSuccess: "<p>Your Service Workbench account has been successfully created. What you should expect next:</p><ol><li>The Service Workbench administrator will review your account.</li><li>Once your account is activated, you can login to Service Workbench and start your research.</li></ol>"
+#userRegistrationLoginWarning: "WARNING: You are entering a secure environment."

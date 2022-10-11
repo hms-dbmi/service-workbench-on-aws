@@ -41,6 +41,7 @@ postDeployment:
     APP_ENVIRONMENTS_BOOTSTRAP_BUCKET_NAME: ${self:custom.settings.environmentsBootstrapBucketName}
     APP_STUDY_DATA_BUCKET_NAME: ${self:custom.settings.studyDataBucketName}
     APP_ENABLE_NATIVE_USER_POOL_USERS: ${self:custom.settings.enableNativeUserPoolUsers}
+    APP_ENABLE_CUSTOM_REGISTRATION: ${self:custom.settings.enableCustomRegistration}
     APP_AUTO_CONFIRM_NATIVE_USERS: ${self:custom.settings.autoConfirmNativeUsers}
     APP_NATIVE_ADMIN_PASSWORD_PARAM_NAME: ${self:custom.settings.nativeAdminPasswordParamName}
     APP_ENV_NAME: ${self:custom.settings.envName}

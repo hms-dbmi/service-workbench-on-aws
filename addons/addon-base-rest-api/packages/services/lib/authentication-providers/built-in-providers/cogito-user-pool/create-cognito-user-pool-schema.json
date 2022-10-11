@@ -46,6 +46,10 @@
       "$id": "#/properties/enableNativeUserPoolUsers",
       "type": "boolean"
     },
+    "customRegister": {
+      "$id": "#/properties/customRegister",
+      "type": "boolean"
+    },
     "federatedIdentityProviders": {
       "$id": "#/properties/providerConfig/properties/federatedIdentityProviders",
       "type": "array",

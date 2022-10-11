@@ -60,6 +60,7 @@ const AuthenticationProviderPublicConfig = types
     signInUri: '',
     signOutUri: '',
     enableNativeUserPoolUsers: types.maybeNull(types.boolean),
+    customRegister: types.maybeNull(types.boolean),
   })
   .actions(self => ({
     cleanup() {

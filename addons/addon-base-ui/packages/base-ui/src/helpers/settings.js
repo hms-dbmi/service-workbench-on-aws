@@ -26,6 +26,13 @@ const branding = {
     title: process.env.REACT_APP_BRAND_LOGIN_TITLE,
     subtitle: process.env.REACT_APP_BRAND_LOGIN_SUBTITLE,
   },
+  register: {
+    title: process.env.REACT_APP_USER_REGISTRATION_TITLE,
+    summary: process.env.REACT_APP_USER_REGISTRATION_SUMMARY,
+    tos: process.env.REACT_APP_USER_REGISTRATION_TOS,
+    success: process.env.REACT_APP_USER_REGISTRATION_SUCCESS,
+    loginWarning: process.env.REACT_APP_USER_REGISTRATION_LOGIN_WARNING,
+  },
   main: {
     title: process.env.REACT_APP_BRAND_MAIN_TITLE,
   },
