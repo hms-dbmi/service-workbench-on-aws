@@ -7,9 +7,9 @@ import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label } 
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 
+import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 import { getRegisterFormFields, formValidationErrors } from '../models/RegisterForm';
 import { registerUser } from '../helpers/api';
-import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
 const styles = {
   header: { fontFamily: 'Handel Gothic,Futura,Trebuchet MS,Arial,sans-serif' },
@@ -77,13 +77,16 @@ class Register extends React.Component {
     // This method sets html from a string. Because we're pulling this from the config file made by
     // an approved admin, we know the value is safe so there is no danger in using it directly below.
     // https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
-    return <div dangerouslySetInnerHTML={{__html: content}} />
+    // eslint-disable-next-line react/no-danger
+    return <div dangerouslySetInnerHTML={{ __html: content }} />;
   }
 
   renderRegisterationForm() {
     return (
       <Form size="large" loading={this.loading} onSubmit={this.handleSubmit}>
-        <Header as="h2" textAlign="center" style={styles.header}>{branding.register.title}</Header>
+        <Header as="h2" textAlign="center" style={styles.header}>
+          {branding.register.title}
+        </Header>
         {this.renderHTML(branding.register.summary)}
         <Segment basic className="ui fluid form">
           <Dimmer active={this.formProcessing} inverted>
@@ -117,7 +120,9 @@ class Register extends React.Component {
   renderConfirmation() {
     return (
       <div>
-        <Header as="h2" textAlign="center" style={styles.header}>SUCCESS!</Header>
+        <Header as="h2" textAlign="center" style={styles.header}>
+          SUCCESS!
+        </Header>
         {this.renderHTML(branding.register.success)}
       </div>
     );

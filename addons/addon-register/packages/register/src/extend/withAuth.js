@@ -12,7 +12,7 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-import React, { Fragment } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
@@ -31,7 +31,7 @@ function RegisterLogin() {
     }
 
     return (
-      <Fragment>
+      <>
         <Button
           data-testid="login"
           type="submit"
@@ -45,7 +45,7 @@ function RegisterLogin() {
           Register
         </Button>
         {branding.register.loginWarning}
-      </Fragment>
+      </>
     );
   }
   return <Login AdditionalLoginComponents={RegisterButton} />;

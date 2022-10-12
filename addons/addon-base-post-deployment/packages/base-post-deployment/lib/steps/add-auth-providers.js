@@ -86,7 +86,7 @@ class AddAuthProviders extends Service {
           name: fedIdpNames[idx],
           displayName: fedIdpDisplayNames[idx],
           metadata: fedIdpMetadatas[idx],
-          attributeMap: fedIdpAttributeMap[idx] || "{}",
+          attributeMap: fedIdpAttributeMap[idx] || '{}',
         };
       }),
     );

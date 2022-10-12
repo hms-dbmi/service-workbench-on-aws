@@ -441,7 +441,7 @@ class ProvisionerService extends Service {
         metaDataInfo.MetadataFile = metadata;
       }
 
-      const attributeMap = JSON.parse(idp.attributeMap || "{}");
+      const attributeMap = JSON.parse(idp.attributeMap || '{}');
 
       const params = {
         ProviderDetails: metaDataInfo,
