@@ -76,7 +76,6 @@ class RegisterUserService extends Service {
 
     return {
       uid,
-      applyReason: 'AIM-AHEAD participation.',
       createdAt,
       createdBy: '_system_',
       email: email.toLowerCase(),
