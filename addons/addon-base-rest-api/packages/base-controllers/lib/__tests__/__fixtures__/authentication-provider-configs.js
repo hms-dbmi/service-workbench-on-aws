@@ -232,8 +232,8 @@ const cognitoType = {
           type: 'boolean',
         },
         customRegister: {
-          $id: "#/properties/customRegister",
-          type: "boolean",
+          $id: '#/properties/customRegister',
+          type: 'boolean',
         },
         federatedIdentityProviders: {
           $id: '#/properties/providerConfig/properties/federatedIdentityProviders',
@@ -261,8 +261,8 @@ const cognitoType = {
                 type: 'string',
               },
               attributeMap: {
-                $id: "#/properties/federatedIdentityProviders/properties/attributeMap",
-                type: "string"
+                $id: '#/properties/federatedIdentityProviders/properties/attributeMap',
+                type: 'string',
               },
             },
           },
