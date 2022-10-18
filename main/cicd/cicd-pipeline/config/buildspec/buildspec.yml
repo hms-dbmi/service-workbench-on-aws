@@ -20,13 +20,13 @@ phases:
       - printf "\n\n"
       - echo "Downloading environment config"
       - ./scripts/download-env-config.sh "$DEPLOYMENT_BUCKET" "$ENV_NAME"
-      - $(jq -r 'keys[] as $k | "export \($k)=\(.[$k])"' <<<$(curl http://169.254.169.254/latest/meta-data/iam/security-credentials/$(curl http://169.254.169.254/latest/meta-data/iam/security-credentials/) | jq '. | { "AWS_SESSION_TOKEN": .["Token"], "AWS_ACCESS_KEY_ID": .["AccessKeyId"], "AWS_SECRET_ACCESS_KEY": .["SecretAccessKey"] }'))
       - printf "\n\n"
       
   build:
     commands:
       - echo "Profile - ${AWS_PROFILE} or ${AWS_DEFAULT_PROFILE} or $(grep '\[' -C 1 ~/.aws/credentials)"
       - echo "Access Key - ${AWS_ACCESS_KEY_ID} or ${AWS_ACCESS_KEY} or ${EC2_ACCESS_KEY}"
+      - printenv
       - echo "Running static code analysis"
       - ./scripts/run-static-code-analysis.sh
       - printf "\n\n"
