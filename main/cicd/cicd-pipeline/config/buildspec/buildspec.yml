@@ -24,6 +24,7 @@ phases:
       
   build:
     commands:
+      - echo "Profile - ${AWS_PROFILE} $(grep '\[default\]' -C 1 ~/.aws/credentials)"
       - echo "Running static code analysis"
       - ./scripts/run-static-code-analysis.sh
       - printf "\n\n"
