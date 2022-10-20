@@ -24,22 +24,13 @@ phases:
       
   build:
     commands:
-      # - echo $(aws sts get-caller-identity)
-      # - cat ~/.aws/config # no file
-      # - cat ~/.aws/credentials # no file
+      - echo "Running static code analysis"
+      - ./scripts/run-static-code-analysis.sh
+      - printf "\n\n"
 
-      - AppDeployerRoleARN=$(aws sts get-caller-identity | jq '.Arn')
-      - mkdir ~/.aws
-      - echo "[profile AppDeployerRole] \nrole_arn = ${AppDeployerRoleARN} \ncredential_source = Ec2InstanceMetadata \nregion = ${AWS_REGION}" > ~/.aws/config
-      - export AWS_PROFILE="AppDeployerRole"
-       
-      # - echo "Running static code analysis"
-      # - ./scripts/run-static-code-analysis.sh
-      # - printf "\n\n"
-
-      # - echo "Running unit tests"
-      # - ./scripts/run-unit-tests.sh
-      # - printf "\n\n"
+      - echo "Running unit tests"
+      - ./scripts/run-unit-tests.sh
+      - printf "\n\n"
 
       - echo "Building and deploying $ENV_NAME"
       - ./scripts/environment-deploy.sh "$ENV_NAME"
