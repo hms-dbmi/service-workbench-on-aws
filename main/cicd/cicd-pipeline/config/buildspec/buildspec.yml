@@ -24,7 +24,8 @@ phases:
       
   build:
     commands:
-      - echo $(aws sts get-caller-identity)
+      # - echo $(aws sts get-caller-identity)
+      - cat ~/.aws/config
       
       - echo "Running static code analysis"
       - ./scripts/run-static-code-analysis.sh
