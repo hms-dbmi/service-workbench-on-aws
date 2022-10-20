@@ -30,7 +30,7 @@ phases:
 
       - AppDeployerRoleARN=$(aws sts get-caller-identity | jq '.Arn')
       - mkdir ~/.aws
-      - echo "[profile AppDeployerRole] \nrole_arn = ${} \ncredential_source = Ec2InstanceMetadata \nregion = ${AWS_REGION}" > ~/.aws/config
+      - echo "[profile AppDeployerRole] \nrole_arn = ${AppDeployerRoleARN} \ncredential_source = Ec2InstanceMetadata \nregion = ${AWS_REGION}" > ~/.aws/config
       - export AWS_PROFILE="AppDeployerRole"
        
       # - echo "Running static code analysis"
