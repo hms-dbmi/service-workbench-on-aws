@@ -108,7 +108,7 @@ class Register extends React.Component {
                     <Label prompt>{this.errors.form}</Label>
                   </div>
                 )}
-                <Form.Button color="green">Create a new Service Workbench on AWS account</Form.Button>
+                <Form.Button color="green">Create a new Service Workbench account</Form.Button>
               </Form.Field>
             </div>
           </div>
