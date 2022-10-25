@@ -185,7 +185,6 @@ module.exports = {
       );
       Object.assign(mergedSettingsObj, crossRegionSettings);
     }
-    console.log('DEBUG', mergedSettingsObj);
 
     return mergedSettingsObj;
   },
