@@ -157,7 +157,7 @@ describe('StartSageMakerEnvironmentStep', () => {
           counter: 120,
           max: 120,
           otherwise: undefined,
-          seconds: 5,
+          seconds: 10,
           thenCall: { methodName: 'updateEnvironmentStatusToCompleted', params: '[]' },
           type: 'wait',
         },

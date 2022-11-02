@@ -261,6 +261,7 @@ Resources:
               - elasticloadbalancing:*
               - ec2:*
               - logs:*
+              - waf:*
               - application-autoscaling:*
             Effect: Allow
             Resource: '*'

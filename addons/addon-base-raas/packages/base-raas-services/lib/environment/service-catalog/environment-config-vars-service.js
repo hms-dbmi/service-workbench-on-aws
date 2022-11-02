@@ -392,6 +392,10 @@ class EnvironmentConfigVarsService extends Service {
         Key: 'CreatedBy',
         Value: resolvedVars.username,
       },
+      {
+        Key: 'WorkspaceName',
+        Value: resolvedVars.name,
+      },
     ];
   }
 
