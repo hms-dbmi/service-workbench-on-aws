@@ -424,6 +424,7 @@ Resources:
                 Resource: 'arn:aws:sagemaker:*:*:notebook-instance-lifecycle-config/basicnotebookinstancelifecycleconfig-*'
               - Effect: Allow
                 Action:
+                  - sagemaker:AddTags
                   - sagemaker:DescribeNotebookInstance
                   - sagemaker:CreateNotebookInstance
                   - sagemaker:StopNotebookInstance
