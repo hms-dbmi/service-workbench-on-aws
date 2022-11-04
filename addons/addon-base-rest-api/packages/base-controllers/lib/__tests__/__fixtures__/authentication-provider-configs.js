@@ -115,6 +115,12 @@ const inputManifestForCreateCognito = {
           title: 'Identity Provider SAML Metadata XML',
           desc: 'Enter identity provider SAML metadata XML document for setting up trust.',
         },
+        {
+          name: 'federatedIdentityProviders[0].attributeMap',
+          type: 'textAreaInput',
+          title: 'JSON custom SAML attribute mapping',
+          desc: 'Enter a custom SAML mapping for name, given_name, family_name, or email.',
+        },
       ],
     },
   ],
@@ -187,6 +193,12 @@ const inputManifestForUpdateCognito = {
           title: 'Identity Provider SAML Metadata XML',
           desc: 'Enter identity provider SAML metadata XML document for setting up trust.',
         },
+        {
+          name: 'federatedIdentityProviders|-0-|/attributeMap',
+          type: 'textAreaInput',
+          title: 'JSON custom SAML attribute mapping',
+          desc: 'Enter a custom SAML mapping for name, given_name, family_name, or email.',
+        },
       ],
     },
   ],
@@ -219,6 +231,10 @@ const cognitoType = {
           $id: '#/properties/enableNativeUserPoolUsers',
           type: 'boolean',
         },
+        customRegister: {
+          $id: '#/properties/customRegister',
+          type: 'boolean',
+        },
         federatedIdentityProviders: {
           $id: '#/properties/providerConfig/properties/federatedIdentityProviders',
           type: 'array',
@@ -242,6 +258,10 @@ const cognitoType = {
               },
               metadata: {
                 $id: '#/properties/federatedIdentityProviders/properties/metadata',
+                type: 'string',
+              },
+              attributeMap: {
+                $id: '#/properties/federatedIdentityProviders/properties/attributeMap',
                 type: 'string',
               },
             },
@@ -331,6 +351,7 @@ const publicConfigurations = [
     userPoolId: 'us-east-1_poolId1',
     clientId: '199999999991',
     enableNativeUserPoolUsers: false,
+    customRegister: false,
   },
   {
     id: 'datalake.example.com',
@@ -352,6 +373,7 @@ const publicConfigurations = [
     userPoolId: 'us-east-1_poolId2',
     clientId: '28888888888882',
     enableNativeUserPoolUsers: false,
+    customRegister: false,
   },
   {
     id: 'datalake2.example.com',
