@@ -20,6 +20,16 @@ Resources:
             RateBasedStatement:
               AggregateKeyType: IP
               Limit: ${self:custom.registrationWAF.rateLimit, 500}
+              ScopeDownStatement: # Scope rate limiting to 'api' requests
+                # Documentation: https://docs.aws.amazon.com/waf/latest/developerguide/waf-bot-control-example-scope-down-login.html
+                ByteMatchStatement:
+                  SearchString: "api"
+                  FieldToMatch:
+                    UriPath: {}
+                  TextTransformations:
+                    - Priority: 0
+                      Type: NONE
+                  PositionalConstraint: CONTAINS
           VisibilityConfig:
             SampledRequestsEnabled: true
             CloudWatchMetricsEnabled: true
@@ -33,10 +43,37 @@ Resources:
             ManagedRuleGroupStatement:
               VendorName: "AWS"
               Name: "AWSManagedRulesBotControlRuleSet"
+              ManagedRuleGroupConfigs:
+                - AWSManagedRulesBotControlRuleSet:
+                    InspectionLevel: COMMON
+              RuleActionOverrides:
+                - Name: "SignalNonBrowserUserAgent"
+                  ActionToUse:
+                    Count: {}
           VisibilityConfig:
             SampledRequestsEnabled: true
             CloudWatchMetricsEnabled: true
             MetricName: "AWS-BotControl-Metric"
+        - Name: "Allow-Synthetic_Canary"
+          # Documentation: https://docs.aws.amazon.com/waf/latest/developerguide/waf-bot-control-example-user-agent-exception.html
+          Priority: 2
+          Statement:
+            NotStatement:
+              Statement:
+                RegexMatchStatement:
+                  RegexString: "arn:aws:synthetics:us-east-1:\\d+:canary"
+                  FieldToMatch:
+                    SingleHeader:
+                      Name: "user-agent"
+                  TextTransformations:
+                    - Priority: 0
+                      Type: NONE
+          Action:
+            Block: {}
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: "Allow-Synthetic_Canary"
   WAFRegionalWebACLAssoc:
     Type: "AWS::WAFv2::WebACLAssociation"
     Properties:
