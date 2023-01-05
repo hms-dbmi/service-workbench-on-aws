@@ -37,11 +37,6 @@ const registerUserFormFields = {
     placeholder: 'Last Name',
     rules: 'string|required|between:1,500',
   },
-  terms: {
-    label: branding.register.tos,
-    placeholder: 'Terms & Conditions',
-    rules: 'boolean|accepted',
-  },
 };
 
 function getRegisterFormFields() {
@@ -67,8 +62,6 @@ async function formValidationErrors(data) {
     const fieldString = fieldErrors.length > 0 ? `${fieldErrors.join(', ')} and ${finalField}` : finalField;
 
     validation.message = `Please populate ${fieldString}.`;
-  } else if (!data.terms) {
-    validation.message = 'You must accept the terms of service to register.';
   }
   return validation;
 }

@@ -1,3 +1,14 @@
 .ui.green.button {
-  background-color: rgb(105, 190, 90); 
+  background-color: rgb(105, 190, 90);
+}
+
+.header {
+  font-family: "Handel Gothic", Futura, "Trebuchet MS", Arial, sans-serif !important;
+}
+.bodyText {
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif !important;
+}
+
+#tos ul li {
+  margin-bottom: max(12pt, 1.2rem);
 }
