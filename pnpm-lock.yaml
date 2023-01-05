@@ -2024,7 +2024,7 @@ importers:
   addons/addon-raas-s3-copy/packages/s3-synchronizer:
     specifiers: {}
 
-  addons/addon-register/packages/register:
+  addons/addon-custom/packages/main:
     specifiers:
       '@aws-ee/base-controllers': workspace:*
       '@aws-ee/base-raas-ui': workspace:*
@@ -2490,7 +2490,7 @@ importers:
       '@aws-ee/environment-type-mgmt-services': workspace:*
       '@aws-ee/key-pair-mgmt-api': workspace:*
       '@aws-ee/key-pair-mgmt-services': workspace:*
-      '@aws-ee/register': workspace:*
+      '@aws-ee/custom': workspace:*
       '@babel/core': ^7.8.4
       '@babel/plugin-transform-runtime': ^7.8.3
       '@babel/preset-env': ^7.8.4
@@ -2552,7 +2552,7 @@ importers:
       '@aws-ee/environment-type-mgmt-services': link:../../../addons/addon-environment-sc-api/packages/environment-type-mgmt-services
       '@aws-ee/key-pair-mgmt-api': link:../../../addons/addon-key-pair-mgmt-api/packages/key-pair-mgmt-api
       '@aws-ee/key-pair-mgmt-services': link:../../../addons/addon-key-pair-mgmt-api/packages/key-pair-mgmt-services
-      '@aws-ee/register': link:../../../addons/addon-register/packages/register
+      '@aws-ee/custom': link:../../../addons/addon-custom/packages/main
       aws-sdk: 2.1015.0
       controllers: link:../../packages/controllers
       js-yaml: 3.13.1
@@ -2860,7 +2860,7 @@ importers:
       '@aws-ee/base-workflow-ui': workspace:*
       '@aws-ee/environment-type-mgmt-ui': workspace:*
       '@aws-ee/key-pair-mgmt-ui': workspace:*
-      '@aws-ee/register': workspace:*
+      '@aws-ee/custom': workspace:*
       animate.css: 3.7.0
       aws-sdk: ^2.1000.0
       babel-eslint: ^10.1.0
@@ -2904,7 +2904,7 @@ importers:
       '@aws-ee/base-workflow-ui': link:../../../addons/addon-base-workflow-ui/packages/base-workflow-ui
       '@aws-ee/environment-type-mgmt-ui': link:../../../addons/addon-environment-sc-ui/packages/environment-type-mgmt-ui
       '@aws-ee/key-pair-mgmt-ui': link:../../../addons/addon-key-pair-mgmt-ui/packages/key-pair-mgmt-ui
-      '@aws-ee/register': link:../../../addons/addon-register/packages/register
+      '@aws-ee/custom': link:../../../addons/addon-custom/packages/main
       animate.css: 3.7.0
       aws-sdk: 2.1015.0
       classnames: 2.2.6
