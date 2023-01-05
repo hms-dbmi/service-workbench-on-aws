@@ -1,23 +1,21 @@
 
 import React from 'react';
 import { decorate, observable, runInAction } from 'mobx';
-import { observer } from 'mobx-react';
-import { Button, Modal } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
+import { Button, Modal, Dimmer, Loader } from 'semantic-ui-react';
 
 import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
+import { displayError } from '@aws-ee/base-ui/dist/helpers/notification';
 
 import Terms from './Terms';
 
-{/* <TermsModal
-  acceptAction={() => console.log('accepted tos')}
-  declineAction={() => console.log('declined tos')}
-  /> */}
 class TermsModal extends React.Component {
   constructor(props) {
     super(props);
 
     runInAction(() => {
-      this.modalOpen = false;
+      this.modalOpen = this.props.defaultOpen || false;
+      this.loggingOut = false;
     });
   }
 
@@ -28,27 +26,68 @@ class TermsModal extends React.Component {
     return () => runInAction(() => { this.modalOpen = true; });
   }
 
+  handleLogout(action = () => {}) {
+    return async () => {
+      try {
+        runInAction(() => { this.loggingOut = true; });
+        action();
+        await this.props.authentication.logout();
+      } catch (error) {
+        displayError(error);
+      }
+    }
+  };
+
   render() {
-    const { acceptAction, declineAction, Launcher = Button } = this.props;
+    const {
+      acceptAction, 
+      declineAction, 
+      logoutOnDecline = false,
+      trigger,
+      className = '',
+      closeOnDimmerClick = false,
+      defaultOpen = false,
+      title = `${branding.main.title} Terms of Service`
+    } = this.props;
+    
     return (
-      <Modal
-        centered={false}
-        open={this.modalOpen}
-        onClose={this.closeModal()}
-        onOpen={this.openModel()}
-        trigger={<Launcher>Terms of Service</Launcher>}
-      >
-        <Modal.Header>{branding.main.title} Terms of Service</Modal.Header>
-        <Modal.Content>
-          <Modal.Description>
-            <Terms />
-          </Modal.Description>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button onClick={this.closeModal(acceptAction)}>Accept</Button>
-          <Button onClick={this.closeModal(declineAction)}>Decline</Button>
-        </Modal.Actions>
-      </Modal>
+      <>
+        <Dimmer page active={this.loggingOut}>
+          <Loader>Logging Out</Loader>
+        </Dimmer>
+        <Modal
+          closeOnDimmerClick={closeOnDimmerClick}
+          closeOnEscape={false}
+          defaultOpen={defaultOpen}
+          centered={!this.loggingOut || false}
+          open={this.modalOpen}
+          onClose={this.closeModal()}
+          onOpen={this.openModel()}
+          trigger={trigger}
+          className={className}
+        >
+          <Modal.Header>{title}</Modal.Header>
+          <Modal.Content>
+            <Modal.Description>
+              <Terms />
+            </Modal.Description>
+          </Modal.Content>
+          {
+            (acceptAction && declineAction) 
+              ? (
+                <Modal.Actions>
+                  <Button onClick={this.closeModal(acceptAction)}>Accept</Button>
+                  <Button onClick={logoutOnDecline ? this.handleLogout(declineAction) : this.closeModal(declineAction)}>Decline</Button>
+                </Modal.Actions>
+              )
+              : (
+                <Modal.Actions>
+                  <Button onClick={this.closeModal()}>Close</Button>
+                </Modal.Actions>
+              )
+          }
+        </Modal>
+      </>
     )
   }
 }
@@ -56,6 +95,7 @@ class TermsModal extends React.Component {
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
 decorate(TermsModal, {
   modalOpen: observable,
+  loggingOut: observable
 });
 
-export default observer(TermsModal);
+export default inject('authentication')(observer(TermsModal));

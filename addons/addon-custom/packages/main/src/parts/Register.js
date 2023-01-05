@@ -2,8 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import { observable, action, decorate, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
-import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label, Icon } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label, Icon, Button } from 'semantic-ui-react';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
@@ -92,9 +92,10 @@ class Register extends React.Component {
             <Icon
               name={this.terms.icon}
               color={this.terms.color}
-            />
+            />I have read and accept the &nbsp;
             <TermsModal
-              Launcher={Link}
+              trigger={(<a style={{ 'cursor': 'pointer' }}>Terms of Service</a>)}
+              closeOnDimmerClick={true}
               acceptAction={() => runInAction(() => { this.terms = termsState.accepted; })}
               declineAction={() => runInAction(() => { this.terms = termsState.rejected; })}
             />
