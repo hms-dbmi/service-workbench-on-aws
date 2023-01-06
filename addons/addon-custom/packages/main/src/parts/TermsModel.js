@@ -46,7 +46,6 @@ class TermsModal extends React.Component {
       trigger,
       className = '',
       closeOnDimmerClick = false,
-      defaultOpen = false,
       title = `${branding.main.title} Terms of Service`
     } = this.props;
     
@@ -58,7 +57,6 @@ class TermsModal extends React.Component {
         <Modal
           closeOnDimmerClick={closeOnDimmerClick}
           closeOnEscape={false}
-          defaultOpen={defaultOpen}
           centered={!this.loggingOut || false}
           open={this.modalOpen}
           onClose={this.closeModal()}
@@ -72,20 +70,20 @@ class TermsModal extends React.Component {
               <Terms />
             </Modal.Description>
           </Modal.Content>
-          {
-            (acceptAction && declineAction) 
-              ? (
-                <Modal.Actions>
-                  <Button onClick={this.closeModal(acceptAction)}>Accept</Button>
-                  <Button onClick={logoutOnDecline ? this.handleLogout(declineAction) : this.closeModal(declineAction)}>Decline</Button>
-                </Modal.Actions>
-              )
-              : (
-                <Modal.Actions>
+          <Modal.Actions>
+            {
+              (acceptAction && declineAction) 
+                ? (
+                  <>
+                    <Button onClick={this.closeModal(acceptAction)}>Accept</Button>
+                    <Button onClick={logoutOnDecline ? this.handleLogout(declineAction) : this.closeModal(declineAction)}>Decline</Button>
+                  </>
+                )
+                : (
                   <Button onClick={this.closeModal()}>Close</Button>
-                </Modal.Actions>
-              )
-          }
+                )
+            }
+          </Modal.Actions>
         </Modal>
       </>
     )

@@ -22,6 +22,7 @@ import { Menu } from 'semantic-ui-react';
 
 import { getRoutes, getMenuItems, getDefaultRouteLocation } from '@aws-ee/base-ui/dist/helpers/plugins-util';
 import MainLayout from '@aws-ee/base-ui/dist/parts/MainLayout';
+import { displayError } from '@aws-ee/base-ui/dist/helpers/notification';
 
 import withAuth from '../extend/withAuth';
 import TermsModal from './TermsModel';
@@ -56,20 +57,32 @@ class RegisterApp extends React.Component {
   }
 
   get pendingTOS(){
-    const accepted_terms = new Date(_.get(getEnv(this.props.userStore), 'user.accepted_terms', '1900-01-01T01:00:00.000Z'));
+    const acceptedTerms = new Date(_.get(this.props.userStore, 'user.acceptedTerms', '1900-01-01T01:00:00.000Z'));
     const new_terms = new Date(tos[0].date);
-    console.log(accepted_terms, new_terms, new_terms > accepted_terms)
-    return new_terms > accepted_terms;
+    return new_terms > acceptedTerms;
+  }
+
+  async acceptTerms() {
+    try {
+      const user = this.props.userStore.user;
+      await this.props.usersStore.updateUser({ ...user, acceptedTerms: new Date().toISOString() });
+
+      // reload the current user's store after user updates, in case the currently
+      // logged in user is updated
+      await this.props.userStore.load();
+    } catch (err) {
+      displayError(err);
+    }
   }
 
   renderApp() {
     return (
       <>
         <TermsModal // Terms have changed prompt
-          title="Updated Terms of Service"
+          title="Please review the Updated Terms of Service"
           defaultOpen={this.pendingTOS}
-          acceptAction={() => console.log('terms accepted')}
-          declineAction={() => console.log('terms declined')}
+          acceptAction={() => this.acceptTerms()}
+          declineAction={() => console.log('terms declined, logging out')}
           logoutOnDecline={true}
           className="mt3"
         />
@@ -108,4 +121,4 @@ const AppComponent = decorate(RegisterApp, {
   handleLogout: action,
 });
 
-export default withAuth(inject('app', 'userStore')(withRouter(observer(AppComponent))));
+export default withAuth(inject('app', 'userStore', 'usersStore')(withRouter(observer(AppComponent))));

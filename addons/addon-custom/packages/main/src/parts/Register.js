@@ -17,9 +17,9 @@ const styles = {
   bodyText: { fontFamily: 'Futura,Trebuchet MS,Arial,sans-serif' },
 };
 const termsState = {
-  accepted: { value: 'accepted', icon: 'check circle outline', color: 'green' },
-  rejected: { value: 'rejected', icon: 'times circle outline', color: 'red' },
-  unset: { value: 'unset', icon: 'circle outline', color: 'black'}
+  accepted: { value: 'accepted', icon: 'check circle outline', color: 'green', label: 'I have read and accept the' },
+  declined: { value: 'declined', icon: 'times circle outline', color: 'red', label: 'I have declined the' },
+  unset: { value: 'unset', icon: 'circle outline', color: 'black', label: 'To continue, please review the ' }
 };
 
 const errorText =
@@ -37,6 +37,7 @@ class Register extends React.Component {
       };
       this.user = {};
       this.terms = termsState.unset;
+      this.termsModalButton = { focus: () => {} }
     });
     this.registerFormFields = getRegisterFormFields();
   }
@@ -70,6 +71,13 @@ class Register extends React.Component {
     return <div dangerouslySetInnerHTML={{ __html: content }} />;
   }
 
+  setTerms(terms) {
+    return () => {
+      this.termsModalButton.focus();
+      runInAction(() => { this.terms = terms; });
+    }
+  }
+
   renderRegisterationForm() {
     return (
       <Form size="large" loading={this.loading} onSubmit={this.handleSubmit}>
@@ -88,16 +96,28 @@ class Register extends React.Component {
 
             {this.renderField('email')}
           </div>
-          <div className="center mt2">
-            <Icon
-              name={this.terms.icon}
-              color={this.terms.color}
-            />I have read and accept the &nbsp;
+          <div className="center mt3">
+            {this.terms.value !== termsState.unset.value && (
+              <Icon
+                name={this.terms.icon}
+                color={this.terms.color}
+              />
+            )}
+            {this.terms.label} &nbsp;
             <TermsModal
-              trigger={(<a style={{ 'cursor': 'pointer' }}>Terms of Service</a>)}
+              trigger={(
+                <button 
+                  id="terms-modal"
+                  className="link"
+                  type="button"
+                  ref={ref => this.termsModalButton = ref}
+                >
+                  Terms of Service
+                </button>
+              )}
               closeOnDimmerClick={true}
-              acceptAction={() => runInAction(() => { this.terms = termsState.accepted; })}
-              declineAction={() => runInAction(() => { this.terms = termsState.rejected; })}
+              acceptAction={this.setTerms(termsState.accepted)}
+              declineAction={this.setTerms(termsState.declined)}
             />
           </div>
           <div className="mt3 center">
@@ -108,7 +128,13 @@ class Register extends React.Component {
                     <Label prompt>{this.errors.form}</Label>
                   </div>
                 )}
-                <Form.Button color="green">Create a new Service Workbench account</Form.Button>
+                <Form.Button 
+                  id="register-submit"
+                  disabled={this.terms.value !== termsState.accepted.value} 
+                  color="green"
+                >
+                  Create a new Service Workbench account
+                </Form.Button>
               </Form.Field>
             </div>
           </div>
@@ -133,6 +159,7 @@ class Register extends React.Component {
 
     return (
       <Grid
+        id="register-user"
         verticalAlign="middle"
         className="animated fadeIn"
         style={{ height: '100%', maxWidth: '800px', margin: '0 auto' }}
@@ -156,6 +183,7 @@ class Register extends React.Component {
   }
 
   handleSubmit = action(async event => {
+    console.log(this.terms.value, this.user.firstName, this.errors.validation, this.errors.form, this.formProcessing);
     event.preventDefault();
     event.stopPropagation();
 
@@ -182,7 +210,6 @@ class Register extends React.Component {
       if(this.terms.value !== termsState.accepted.value) {
         runInAction(() => {
           this.errors.form = termsErrorText;
-          this.terms = termsState.rejected
           this.formProcessing = false;
         });
         return;
@@ -192,9 +219,11 @@ class Register extends React.Component {
         firstName: this.user.firstName,
         lastName: this.user.lastName,
         email: this.user.email,
+        acceptedTerms: new Date().toISOString()
       });
       // if we encounter an error then don't continue to process the form and instead display a message
       if (result.error) {
+        console.error(result);
         runInAction(() => {
           this.errors.validation = new Map();
           this.errors.form = errorText;

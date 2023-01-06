@@ -91,10 +91,10 @@ class MainLayout extends React.Component {
           <span style={{ paddingLeft: '20px' }}>{versionAndDate}</span>
         </Menu.Item>
         <Menu.Menu position="right">
-          {appMenuItems}
           <Menu.Item>
             <Icon name="user" /> {displayName}
           </Menu.Item>
+          {appMenuItems}
           <Menu.Item name="logout" onClick={this.handleLogout} />
         </Menu.Menu>
       </Menu>,

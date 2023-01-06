@@ -68,6 +68,7 @@ const UserStore = BaseStore.named('UserStore')
         userRole,
         rev,
         projectId,
+        acceptedTerms,
       } = self.user;
       result = {
         username,
@@ -81,6 +82,7 @@ const UserStore = BaseStore.named('UserStore')
         rev,
         userRole,
         projectId,
+        acceptedTerms,
       };
       return result;
     },

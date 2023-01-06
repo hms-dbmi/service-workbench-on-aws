@@ -22,12 +22,12 @@ class Terms extends React.Component {
     // https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
     // eslint-disable-next-line react/no-danger
     return (
-      <>
+      <div id="tos">
         <Header as="h3" textAlign="center" className='header'>
           Terms as of {date}
         </Header>
-        <div id="tos" dangerouslySetInnerHTML={{ __html: terms }} style={readableStyle} />
-      </>
+        <div dangerouslySetInnerHTML={{ __html: terms }} style={readableStyle} />
+      </div>
     );
   }
 }
