@@ -2063,6 +2063,7 @@ importers:
       react-router-dom: ^5.2.0
       regenerator-runtime: ^0.13.5
       semantic-ui-react: ^0.88.2
+      source-map-support: ^0.5.16
     dependencies:
       '@aws-ee/base-ui': link:../../../addon-base-ui/packages/base-ui
       '@aws-ee/base-services': link:../../../addon-base/packages/services
@@ -2102,6 +2103,7 @@ importers:
       jest-junit: 10.0.0
       prettier: 1.19.1
       regenerator-runtime: 0.13.7
+      source-map-support: 0.5.16
 
   addons/addon-stack-policy/packages/stack-policy:
     specifiers:

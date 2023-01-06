@@ -42,6 +42,7 @@
     "jest": "^24.9.0",
     "jest-junit": "^10.0.0",
     "prettier": "^1.19.1",
+    "source-map-support": "^0.5.16",
     "regenerator-runtime": "^0.13.5"
   },
   "scripts": {

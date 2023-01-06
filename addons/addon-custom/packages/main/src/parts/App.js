@@ -28,9 +28,6 @@ import withAuth from '../extend/withAuth';
 import TermsModal from './TermsModel';
 import tos from '../../data/terms';
 
-// expected props
-// - app model (via injection)
-// - location (from react router)
 class RegisterApp extends React.Component {
   get appContext() {
     return getEnv(this.props.app) || {};
@@ -79,7 +76,7 @@ class RegisterApp extends React.Component {
     return (
       <>
         <TermsModal // Terms have changed prompt
-          title="Please review the Updated Terms of Service"
+          title="Please Review the Updated Terms of Service"
           defaultOpen={this.pendingTOS}
           acceptAction={() => this.acceptTerms()}
           declineAction={() => console.log('terms declined, logging out')}

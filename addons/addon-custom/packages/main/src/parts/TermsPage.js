@@ -31,11 +31,10 @@ class TermsPage extends React.Component {
             </Header>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row columns={1}>
+        <Grid.Row columns={1} className="mb3">
           <Grid.Column>
             <Terms />
             <Link to="/">Back</Link>
-            <br />
           </Grid.Column>
         </Grid.Row>
       </Grid>

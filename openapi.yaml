@@ -2736,7 +2736,7 @@ components:
         applyReason:
           type: string
           example: 'Research'
-        accepted_terms:
+        acceptedTerms:
           type: string
           example: '2022-12-09T12:49:04.706Z'
     UpdateUserPasswordRequest:
