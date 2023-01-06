@@ -88,7 +88,7 @@ class TermsModal extends React.Component {
                 </Button>
               </>
             ) : (
-              <Button onClick={this.closeModal()}>Close</Button>
+              <Button primary onClick={this.closeModal()}>Close</Button>
             )}
           </Modal.Actions>
         </Modal>
