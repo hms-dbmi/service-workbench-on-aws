@@ -89,15 +89,11 @@ class RegisterApp extends React.Component {
         <MainLayout
           menuItems={this.getMenuItems()}
           appMenuItems={
-            this.pendingTOS ? (
-              <></>
-            ) : (
-              <TermsModal // Clickable Terms menu item
-                trigger={<Menu.Item>Terms of Service</Menu.Item>}
-                closeOnDimmerClick
-                className="mt3"
-              />
-            )
+            <TermsModal // Clickable Terms menu item
+              trigger={<Menu.Item>Terms of Service</Menu.Item>}
+              closeOnDimmerClick
+              className="mt3"
+            />
           }
         >
           <Switch>
