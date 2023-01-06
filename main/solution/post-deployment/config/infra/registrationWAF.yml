@@ -58,18 +58,16 @@ Resources:
           # Documentation: https://docs.aws.amazon.com/waf/latest/developerguide/waf-bot-control-example-user-agent-exception.html
           Priority: 2
           Statement:
-            NotStatement:
-              Statement:
-                RegexMatchStatement:
-                  RegexString: "arn:aws:synthetics:us-east-1:\\d+:canary"
-                  FieldToMatch:
-                    SingleHeader:
-                      Name: "user-agent"
-                  TextTransformations:
-                    - Priority: 0
-                      Type: NONE
+            RegexMatchStatement:
+              RegexString: "arn:aws:synthetics:us-east-1:\\d+:canary"
+              FieldToMatch:
+                SingleHeader:
+                  Name: "user-agent"
+              TextTransformations:
+                - Priority: 0
+                  Type: NONE
           Action:
-            Block: {}
+            Allow: {}
           VisibilityConfig:
             SampledRequestsEnabled: true
             CloudWatchMetricsEnabled: true
