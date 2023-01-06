@@ -56,10 +56,10 @@ class RegisterApp extends React.Component {
     return getDefaultRouteLocation({ location, appContext });
   }
 
-  get pendingTOS(){
+  get pendingTOS() {
     const acceptedTerms = new Date(_.get(this.props.userStore, 'user.acceptedTerms', '1900-01-01T01:00:00.000Z'));
-    const new_terms = new Date(tos[0].date);
-    return new_terms > acceptedTerms;
+    const newTerms = new Date(tos[0].date);
+    return newTerms > acceptedTerms;
   }
 
   async acceptTerms() {
@@ -83,21 +83,21 @@ class RegisterApp extends React.Component {
           defaultOpen={this.pendingTOS}
           acceptAction={() => this.acceptTerms()}
           declineAction={() => console.log('terms declined, logging out')}
-          logoutOnDecline={true}
+          logoutOnDecline
           className="mt3"
         />
         <MainLayout
           menuItems={this.getMenuItems()}
           appMenuItems={
-            this.pendingTOS 
-              ? (<></>)
-              : (
-                <TermsModal // Clickable Terms menu item
-                  trigger={(<Menu.Item>Terms of Service</Menu.Item>)}
-                  closeOnDimmerClick={true}
-                  className="mt3"
-                />
-              ) 
+            this.pendingTOS ? (
+              <></>
+            ) : (
+              <TermsModal // Clickable Terms menu item
+                trigger={<Menu.Item>Terms of Service</Menu.Item>}
+                closeOnDimmerClick
+                className="mt3"
+              />
+            )
           }
         >
           <Switch>
@@ -115,7 +115,7 @@ class RegisterApp extends React.Component {
 }
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
-const AppComponent = decorate(RegisterApp, { 
+const AppComponent = decorate(RegisterApp, {
   appContext: computed,
   pendingTOS: computed,
   handleLogout: action,

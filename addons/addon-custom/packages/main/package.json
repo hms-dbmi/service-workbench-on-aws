@@ -53,7 +53,7 @@
     "build": "pnpm run babel",
     "build:watch": "pnpm run babel:watch",
     "lint": "pnpm run lint:eslint && pnpm run lint:prettier",
-    "lint:eslint": "eslint --ignore-path .gitignore . ",
+    "lint:eslint": "eslint --fix --ignore-path .gitignore . ",
     "lint:prettier": "prettier --check --ignore-path .gitignore '**/*.{js,jsx}' ",
     "format": "pnpm run format:eslint && pnpm run format:prettier",
     "format:eslint": "eslint --fix --ignore-path .gitignore . ",

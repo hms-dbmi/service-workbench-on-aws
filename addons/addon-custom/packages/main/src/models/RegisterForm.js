@@ -14,7 +14,6 @@
  */
 import _ from 'lodash';
 import validate from '@aws-ee/base-ui/dist/models/forms/Validate';
-import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
 const registerUserFormFields = {
   email: {

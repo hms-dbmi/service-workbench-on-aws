@@ -59,7 +59,7 @@ class MainLayout extends React.Component {
     const is = value => _.startsWith(pathname, value);
 
     const itemsArr = this.getMenuItems();
-    const { appMenuItems = (<></>) } = this.props;
+    const { appMenuItems = <></> } = this.props;
     return [
       <Menu vertical inverted fixed="left" icon="labeled" key="ml1" style={{ overflowY: 'auto' }}>
         <Menu.Item name=" " style={{ height: '40px' }} />

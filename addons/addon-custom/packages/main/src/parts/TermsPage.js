@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { decorate } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -10,10 +9,6 @@ import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 import Terms from './Terms';
 
 class TermsPage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderContent() {
     return (
       <Grid
@@ -31,7 +26,7 @@ class TermsPage extends React.Component {
         </Grid.Row>
         <Grid.Row columns={1}>
           <Grid.Column>
-            <Header as="h2" textAlign="center" className='header'>
+            <Header as="h2" textAlign="center" className="header">
               {branding.main.title}
             </Header>
           </Grid.Column>
@@ -39,11 +34,12 @@ class TermsPage extends React.Component {
         <Grid.Row columns={1}>
           <Grid.Column>
             <Terms />
-            <Link to="/">Back</Link><br />
+            <Link to="/">Back</Link>
+            <br />
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    )
+    );
   }
 
   render() {

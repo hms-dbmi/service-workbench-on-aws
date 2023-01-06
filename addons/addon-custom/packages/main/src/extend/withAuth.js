@@ -51,7 +51,8 @@ function RegisterLogin() {
         >
           Register
         </Button>
-        <Link to="/legal">Terms of Service</Link><br />
+        <Link to="/legal">Terms of Service</Link>
+        <br />
         {branding.register.loginWarning}
       </>
     );
@@ -77,7 +78,7 @@ class AuthWrapper extends React.Component {
     if (app.userAuthenticated) {
       return this.renderAuthComp(true);
     }
-    const noAuthPath = noAuthPaths.find(o => o.path == location.pathname);
+    const noAuthPath = noAuthPaths.find(o => o.path === location.pathname);
     if (noAuthPath) {
       return this.renderNoAuthComp(noAuthPath.component);
     }

@@ -2,10 +2,11 @@
 export default [
   {
     date: '2023-01-04T18:55:16.243Z',
-    fields: { // Fields that should get replaced in terms template
+    fields: {
+      // Fields that should get replaced in terms template
       organization: 'Harvard Medical School',
-      contact: "Samantha.Piatt@childrens.harvard.edu",
-      xxx: ''
+      contact: 'Samantha.Piatt@childrens.harvard.edu',
+      xxx: '',
     },
     // TODO: Replace {XXX}
     terms: `
@@ -199,7 +200,6 @@ export default [
           and confidential.
         </li>
       </ul>
-    `
-  }
+    `,
+  },
 ];
-
