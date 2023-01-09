@@ -182,7 +182,6 @@ class Register extends React.Component {
   }
 
   handleSubmit = action(async event => {
-    console.log(this.terms.value, this.user.firstName, this.errors.validation, this.errors.form, this.formProcessing);
     event.preventDefault();
     event.stopPropagation();
 
