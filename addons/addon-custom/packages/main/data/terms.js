@@ -1,34 +1,33 @@
 // List of terms, newest to oldest
 export default [
   {
-    date: '2023-01-04T18:55:16.243Z',
+    date: '2023-01-11T16:59:33.080Z',
     fields: {
       // Fields that should get replaced in terms template
-      organization: 'Harvard Medical School',
-      contact: 'aimahead-swb-registration@hms.harvard.edu',
+      contact: 'bch-swb-registration@childrens.harvard.edu',
     },
     terms: `
     <h4>
       These Terms of Service constitute a legally binding agreement made between
-      you, whether personally or on behalf of an entity ("you", "your") and
-      {ORGANIZATION} ("University", "we", "our"), concerning your access to and use
-      of Service Workbench. You agree to access and use Service Workbench for lawful
+      you, whether personally or on behalf of an entity ("you", "your") and Boston
+      Children's Hospital ("BCH", "we", "our"), concerning your access to and use of
+      Service Workbench. You agree to access and use Service Workbench for lawful
       purposes only. By accessing Service Workbench, you expressly consent to the
-      monitoring of your actions, content, data transiting and storage therein
+      monitoring of your actions, content, data transiting and storage therein.
     </h4>
     <h4>By accessing and using Service Workbench, you agree that you must:</h4>
     <ul>
       <li>Conduct only authorized business on the system.</li>
       <li>
         Maintain the confidentiality of your authentication credentials such as your
-        password. Do not reveal your authentication credentials to anyone; an
-        University employee should never ask you to reveal them.
+        password. Do not reveal your authentication credentials to anyone; an BCH,
+        other Hospital, or university employee should never ask you to reveal them.
       </li>
       <li>
-        Follow proper logon/logoff procedures. You must manually logon to your
+        Follow proper logon/logoff procedures. You must manually log on to your
         session; do not store your password locally on your system or utilize any
         automated logon capabilities. You must promptly log off when session access
-        is no longer needed. If a logoff function is unavailable, you must close
+        is no longer needed. If a log off function is unavailable, you must close
         your browser. Never leave your computer unattended while logged into the
         system.
       </li>
@@ -36,10 +35,10 @@ export default [
         Access Service Workbench using only your own individual account. Group or
         shared accounts are NOT permitted. The credentials used for authenticating
         to Service Workbench must belong to a single individual. Your level of
-        access to systems and networks owned by the University is limited to ensure
-        your access is no more than necessary to perform your legitimate tasks or
-        assigned duties. If you believe you are being granted access that you should
-        not have, you must immediately notify
+        access to systems and networks owned by BCHis limited to ensure your access
+        is no more than necessary to perform your legitimate tasks or assigned
+        duties. If you believe you are being granted access that you should not
+        have, you must immediately notify
         <a href="mailto:{CONTACT}" target="_blank">{CONTACT}</a>.
       </li>
       <li>
@@ -49,7 +48,7 @@ export default [
       <li>
         Report all security incidents or suspected incidents (e.g., lost passwords,
         improper or suspicious acts) related to Service Workbench
-        <a href="mailto:{CONTACT}" target="_blank">{CONTACT}</a>
+        <a href="mailto:{CONTACT}" target="_blank">{CONTACT}</a>.
       </li>
       <li>
         Contact
@@ -63,31 +62,31 @@ export default [
     <ul>
       <li>
         <h4>
-          If the University provides links that are maintained or controlled by
-          external organizations, the listing of links are not an endorsement of
-          information, products, or services, and do not imply a direct association
-          between the University and the operators of the outside resource links.
+          If BCH provides links that are maintained or controlled by external
+          organizations, the listing of links is not an endorsement of information,
+          products, or services, and does not imply a direct association between the
+          University and the operators of the outside resource links.
         </h4>
       </li>
       <li>
-        Neither the University nor its employees warrant that Service Workbench will
-        be uninterrupted, problem-free, free of omissions, or error-free; nor do
-        they make any warranty as to the results that may be obtained from Service
+        Neither BCH nor its employees warrant that Service Workbench will be
+        uninterrupted, problem-free, free of omissions, or error-free; nor do they
+        make any warranty as to the results that may be obtained from Service
         Workbench. You expressly understand and agree that your use of Service
         Workbench, or any material available through it, is at your own risk.
       </li>
       <li>
-        In no event will the University, its affiliates or participating
-        institutions, or their respective directors, officers, employees, faculty
-        members or students be liable for any damages, include incidental, indirect,
-        special, punitive, exemplary, or consequential damages, arising out of your
-        use of or inability to use of Service Workbench, including without
-        limitation, loss of revenue or anticipated profits, loss of goodwill, loss
-        of data, computer failure or malfunction, or any and all other damages.
+        In no event will BCH, its affiliates or participating institutions, or their
+        respective directors, officers, employees, faculty members or students be
+        liable for any damages, include incidental, indirect, special, punitive,
+        exemplary, or consequential damages, arising out of your use of or inability
+        to use of Service Workbench, including without limitation, loss of revenue
+        or anticipated profits, loss of goodwill, loss of data, computer failure or
+        malfunction, or any and all other damages.
       </li>
       <li>
-        The University maintains the right to modify these Terms of Service at any
-        time, and may do so by posting notice of such modifications to
+        BCH maintains the right to modify these Terms of Service at any time, and
+        may do so by posting notice of such modifications to
         <a href="https://{HOSTNAME}/legal" target="_blank">https://{HOSTNAME}/legal</a>
       </li>
       <li>
@@ -97,14 +96,14 @@ export default [
       </li>
       <li>
         Upload of any data in your workspace is under your responsibility. Any loss
-        of data will not be the University's responsibility.
+        of data will not be BCH's responsibility.
       </li>
       <li>
-        The University may in our sole discretion suspend/terminate your access to
-        Service Workbench without notification. We reserve the right to delete,
-        move, or edit any data, which we consider to be unacceptable or
-        inappropriate. We may also periodically review and remove accounts for which
-        a user has not logged on.
+        BCH may in our sole discretion suspend/terminate your access to Service
+        Workbench without notification. We reserve the right to delete, move, or
+        edit any data, which we consider to be unacceptable or inappropriate.
+        Accounts may be suspended for unacceptable or inappropriate use. We may also
+        periodically review and remove accounts for which a user has not logged on.
       </li>
     </ul>
     <h4>By accessing and using Service Workbench, you agree that you must NOT:</h4>
@@ -152,14 +151,17 @@ export default [
       </li>
       <li>Name workspaces inappropriately or with sensitive information.</li>
       <li>
-        Download full datasets hosted in the environment (no download of
-        patient-level information)
+        Download datasets from Service Workbench to an external location or device
+      </li>
+      <li>
+        Use Service Workbench for purposes outside the biomedical, and public health
+        domains.
       </li>
     </ul>
     <h3>
-      Service Workbench is hosted on a FISMA (Federal Information Security
-      Management Act) website. You are accessing a secure and restricted system that
-      is provided for FISMA authorized use only.
+      Service Workbench is hosted on a HIPAA and HITRUST website. You are accessing
+      a secure and restricted system that is provided for HIPAA and HITRUST
+      authorized use only.
     </h3>
     <h4>
       By using this System,
@@ -167,27 +169,27 @@ export default [
     </h4>
     <ul>
       <li>
-        {ORGANIZATION}, for their FISMA service, routinely intercepts and monitors
+        BCH, for their HIPAA and HITRUST service, routinely intercepts and monitors
         communications on this System for purposes including, but not limited to,
         penetration testing, COMSEC monitoring, network operations and defense,
         and/or personnel misconduct (PM).
       </li>
       <li>
-        At any time, the {ORGANIZATION} FISMA service and systems may inspect and
+        At any time, the BCH HIPAA and HITRUST service and systems may inspect and
         seize data stored on this platform.
       </li>
       <li>
         Communications using, or data stored on, this platform are not private, are
         subject to routine monitoring, interception, and search, and may be
-        disclosed or used for any {ORGANIZATION} FISMA service authorized purpose.
+        disclosed or used for any BCH HIPAA and HITRUST service authorized purpose.
       </li>
       <li>
-        This {ORGANIZATION} FISMA system includes security measures (e.g.,
-        authentication and Access Controls) to protect {ORGANIZATION} interests--not
-        for your personal benefit or privacy.
+        This BCH HIPAA and HITRUST system includes security measures (e.g.,
+        authentication and Access Controls) to protect BCH interests--not for your
+        personal benefit or privacy.
       </li>
       <li>
-        Notwithstanding the above, using this {ORGANIZATION} FISMA service does not
+        Notwithstanding the above, using this BCH HIPAA and HITRUST service does not
         constitute consent to searching or monitoring of the content of privileged
         communications, or work product, related to personal representation or
         services by attorneys, psychotherapists, or clergy, and their assistants.
