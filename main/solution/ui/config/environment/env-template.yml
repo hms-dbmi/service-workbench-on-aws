@@ -24,7 +24,7 @@ REACT_APP_ENABLE_FLOW_LOGS: ${self:custom.settings.enableFlowLogs}
 REACT_APP_USER_REGISTRATION_TITLE: ${self:custom.settings.userRegistrationTitle}
 REACT_APP_USER_REGISTRATION_SUMMARY: ${self:custom.settings.userRegistrationSummary}
 REACT_APP_USER_REGISTRATION_SUCCESS: ${self:custom.settings.userRegistrationSuccess}
-REACT_APP_USER_REGISTRATION_LOGIN_WARNING: ${self:custom.settings.userRegistrationLoginWarning}
+REACT_APP_LOGIN_WARNING: ${self:custom.settings.loginWarning}
 
 # ========================================================================
 # Overrides for .env.local
