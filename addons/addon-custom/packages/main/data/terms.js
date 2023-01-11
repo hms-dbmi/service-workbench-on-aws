@@ -1,7 +1,7 @@
 // List of terms, newest to oldest
 export default [
   {
-    date: '2023-01-04T18:55:16.243Z',
+    date: '2023-01-11T16:32:36.448Z',
     fields: {
       // Fields that should get replaced in terms template
       organization: 'Harvard Medical School',
@@ -154,44 +154,6 @@ export default [
       <li>
         Download full datasets hosted in the environment (no download of
         patient-level information)
-      </li>
-    </ul>
-    <h3>
-      Service Workbench is hosted on a FISMA (Federal Information Security
-      Management Act) website. You are accessing a secure and restricted system that
-      is provided for FISMA authorized use only.
-    </h3>
-    <h4>
-      By using this System,
-      you consent to the following conditions:
-    </h4>
-    <ul>
-      <li>
-        {ORGANIZATION}, for their FISMA service, routinely intercepts and monitors
-        communications on this System for purposes including, but not limited to,
-        penetration testing, COMSEC monitoring, network operations and defense,
-        and/or personnel misconduct (PM).
-      </li>
-      <li>
-        At any time, the {ORGANIZATION} FISMA service and systems may inspect and
-        seize data stored on this platform.
-      </li>
-      <li>
-        Communications using, or data stored on, this platform are not private, are
-        subject to routine monitoring, interception, and search, and may be
-        disclosed or used for any {ORGANIZATION} FISMA service authorized purpose.
-      </li>
-      <li>
-        This {ORGANIZATION} FISMA system includes security measures (e.g.,
-        authentication and Access Controls) to protect {ORGANIZATION} interests--not
-        for your personal benefit or privacy.
-      </li>
-      <li>
-        Notwithstanding the above, using this {ORGANIZATION} FISMA service does not
-        constitute consent to searching or monitoring of the content of privileged
-        communications, or work product, related to personal representation or
-        services by attorneys, psychotherapists, or clergy, and their assistants.
-        Such communications and work products are private and confidential.
       </li>
     </ul>
     `,
