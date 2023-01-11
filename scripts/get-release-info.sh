@@ -34,12 +34,12 @@ then
     then
         # Yes-->Are they different from above?
         oldVersionNumber="$(cat "$FILE" | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+\|Beta" | head -n 1)"
-        oldVersionDate="$(cat "$FILE" | grep -o "[0-9][0-9][0-9][0-9]\-[0-9][0-9]\-[0-9][0-9]\|Latest Release Version: [0-9]\.[0-9]\.[0-9]")"
+        oldVersionDate="$(sed -nE "s/^versionDate:\s*['\"]?([\d\w :.-]*)['\"]?/\1/p" "$FILE" | sed "s/[\"']//g")"
         if ([ "$oldVersionNumber" != "$versionNumber" ]) || ([ "$oldVersionDate" != "$versionDate" ])
         then
             # Yes-->Replace new with old
-            sed -i -e "s/versionNumber: '$oldVersionNumber/versionNumber: '$versionNumber/" "$FILE"
-            sed -i -e "s/versionDate: '$oldVersionDate/versionDate: '$versionDate/" $FILE
+            sed -i -e "/^versionNumber: /s/.*/versionNumber: '$versionNumber'/" "$FILE"
+            sed -i -e "/^versionDate: /s/.*/versionDate: '$versionDate'/" "$FILE"
         fi
     else
         # No-->Append new

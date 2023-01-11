@@ -35,8 +35,8 @@ const baseRaasAppstreamServicesPlugin = require('@aws-ee/base-raas-appstream-res
 const baseRaasAppstreamEnvTypeVarsPlugin = require('@aws-ee/base-raas-appstream-services/lib/plugins/env-sc-provisioning-plugin');
 const baseRaasAppStreamConnectionUrlPlugin = require('@aws-ee/base-raas-appstream-services/lib/plugins/env-sc-connection-url-plugin');
 const baseRaasAppStreamAwsAccountMgmtPlugin = require('@aws-ee/base-raas-appstream-services/lib/plugins/aws-account-mgmt-plugin');
-const registerRoutesPlugin = require('@aws-ee/register/lib/plugins/routes-plugin');
-const registerServicesPlugin = require('@aws-ee/register/lib/plugins/services-plugin');
+const registerRoutesPlugin = require('@aws-ee/custom/lib/plugins/routes-plugin');
+const registerServicesPlugin = require('@aws-ee/custom/lib/plugins/services-plugin');
 
 const routesPlugin = require('./routes-plugin');
 

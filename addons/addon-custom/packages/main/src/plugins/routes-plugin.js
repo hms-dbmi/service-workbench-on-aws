@@ -15,6 +15,7 @@
 
 import withAuth from '@aws-ee/base-ui/dist/withAuth';
 
+import TermsPage from '../parts/TermsPage';
 import Register from '../parts/Register';
 
 /**
@@ -28,7 +29,11 @@ import Register from '../parts/Register';
  */
 // eslint-disable-next-line no-unused-vars
 function registerRoutes(routesMap, { location, appContext }) {
-  const routes = new Map([...routesMap, ['/register', withAuth(Register)]]);
+  const routes = new Map([
+    ...routesMap,
+    ['/register', withAuth(Register)],
+    ['/legal', withAuth(TermsPage)]
+  ]);
   return routes;
 }
 

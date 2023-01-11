@@ -1,10 +1,9 @@
 {
-  "name": "@aws-ee/register",
+  "name": "@aws-ee/custom",
   "version": "0.1.0",
   "private": true,
   "author": "aws-ee",
   "dependencies": {
-    "@aws-ee/base-raas-ui": "workspace:*",
     "@aws-ee/base-ui": "workspace:*",
     "@aws-ee/base-controllers": "workspace:*",
     "@aws-ee/base-services": "workspace:*",
@@ -13,21 +12,16 @@
     "lodash": "^4.17.21",
     "mobx": "^5.15.4",
     "mobx-react": "^6.1.7",
-    "mobx-react-form": "^2.0.9",
     "mobx-state-tree": "^3.15.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.2.0",
-    "semantic-ui-react": "^0.88.2",
-    "validatorjs": "^3.18.1"
+    "semantic-ui-react": "^0.88.2"
   },
   "devDependencies": {
-    "@aws-ee/base-serverless-settings-helper": "workspace:*",
-    "@aws-ee/base-serverless-ui-tools": "workspace:*",
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-transform-react-jsx": "^7.8.3",
     "@babel/preset-env": "^7.8.6",
     "@babel/preset-react": "^7.8.3",
     "babel-eslint": "^10.0.3",
@@ -48,14 +42,8 @@
     "jest": "^24.9.0",
     "jest-junit": "^10.0.0",
     "prettier": "^1.19.1",
-    "pretty-quick": "^1.11.1",
-    "prop-types": "^15.7.2",
-    "regenerator-runtime": "^0.13.5",
-    "serverless": "^1.63.0",
-    "serverless-deployment-bucket": "^1.1.0",
     "source-map-support": "^0.5.16",
-    "typescript": "^3.7.5",
-    "webpack": "4.41.2"
+    "regenerator-runtime": "^0.13.5"
   },
   "scripts": {
     "coverage": "NODE_ENV=test jest --config jest.config.js --passWithNoTests --verbose --collectCoverage --watchAll=false --coverage && codecov --disable=gcov",
@@ -66,7 +54,7 @@
     "build": "pnpm run babel",
     "build:watch": "pnpm run babel:watch",
     "lint": "pnpm run lint:eslint && pnpm run lint:prettier",
-    "lint:eslint": "eslint --ignore-path .gitignore . ",
+    "lint:eslint": "eslint --fix --ignore-path .gitignore . ",
     "lint:prettier": "prettier --check --ignore-path .gitignore '**/*.{js,jsx}' ",
     "format": "pnpm run format:eslint && pnpm run format:prettier",
     "format:eslint": "eslint --fix --ignore-path .gitignore . ",
@@ -74,13 +62,14 @@
     "prepare": "pnpm run build"
   },
   "files": [
-    "LICENSE",
-    "README.md",
+    "css/",
+    "data/",
     "dist/",
     "images/",
-    "css/",
     "lib/",
-    "src/"
+    "src/",
+    "LICENSE",
+    "README.md"
   ],
   "husky": {
     "hooks": {

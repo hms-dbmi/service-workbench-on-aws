@@ -58,7 +58,12 @@
       "type": "string"
     },
     "applyReason": {
-      "type": "string"
+      "type": "string",
+      "default": "N/A"
+    },
+    "acceptedTerms": {
+      "type": "string",
+      "pattern": "^\\d\\d\\d\\d\\-[0-1]\\d\\-[0-3]\\d[Tt\\s](?:[0-2]\\d:[0-5]\\d:[0-5]\\d|23:59:60)(?:\\.\\d+)?(?:[Zz]|[+-]\\d\\d(?::?\\d\\d)?)?$"
     }
   },
   "required": ["uid", "rev"]

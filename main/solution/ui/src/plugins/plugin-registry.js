@@ -43,10 +43,10 @@ import raasMenuItemsPlugin from '@aws-ee/base-raas-ui/dist/plugins/menu-items-pl
 import raasRoutesPlugin from '@aws-ee/base-raas-ui/dist/plugins/routes-plugin';
 import raasEnvTypeMgmtPlugin from '@aws-ee/base-raas-ui/dist/plugins/env-type-mgmt-plugin';
 
-// @aws-ee/register
-import registerAppContextPlugin from '@aws-ee/register/dist/plugins/app-context-items-plugin';
-import registerAppComponentPlugin from '@aws-ee/register/dist/plugins/app-component-plugin';
-import registerRoutesPlugin from '@aws-ee/register/dist/plugins/routes-plugin';
+// @aws-ee/custom
+import customAppContextPlugin from '@aws-ee/custom/dist/plugins/app-context-items-plugin';
+import customAppComponentPlugin from '@aws-ee/custom/dist/plugins/app-component-plugin';
+import customRoutesPlugin from '@aws-ee/custom/dist/plugins/routes-plugin';
 
 // This repo
 import appContextItemsPlugin from './app-context-items-plugin';
@@ -65,7 +65,7 @@ const extensionPoints = {
     envMgmtAppContextItemsPlugin, // @aws-ee/environment-type-mgmt-ui
     keyPairAppContextItemsPlugin, // @aws-ee/key-pair-mgmt-ui
     raasAppContextItemsPlugin, // @aws-ee/base-raas-ui
-    registerAppContextPlugin, // @aws-ee/register
+    customAppContextPlugin, // @aws-ee/custom
     appContextItemsPlugin, // ./app-context-items-plugin
   ],
   'initialization': [
@@ -79,7 +79,7 @@ const extensionPoints = {
   'app-component': [
     baseAppComponentPlugin, // @aws-ee/base-ui
     raasAppComponentPlugin, // @aws-ee/base-raas-ui
-    registerAppComponentPlugin, // @aws-ee/register
+    customAppComponentPlugin, // @aws-ee/custom
   ],
   'menu-items': [
     baseMenuItemsPlugin, // @aws-ee/base-ui
@@ -95,7 +95,7 @@ const extensionPoints = {
     envMgmtRoutesPlugin, // @aws-ee/environment-type-mgmt-ui
     keyPairRoutesPlugin, // @aws-ee/key-pair-mgmt-ui
     raasRoutesPlugin, // @aws-ee/base-raas-ui
-    registerRoutesPlugin, // @aws-ee/register
+    customRoutesPlugin, // @aws-ee/custom
     routesPlugin, // ./routes-plugin
   ],
   'env-type-management': [
