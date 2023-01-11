@@ -193,6 +193,10 @@ case "$(env_type)" in
         sudo yum localinstall -y "${FILES_DIR}/offline-packages/ec2-linux/fuse-2.9.2-11.amzn2.x86_64.rpm"
         echo "Finish installing fuse"
         printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
+
+        # set autosave
+        mkdir -p /home/rstudio-user/.config/rstudio
+        echo '{"initial_working_directory":"~","auto_save_on_blur":true,"auto_save_on_idle":"commit","posix_terminal_shell":"bash"}' > /home/rstudio-user/.config/rstudio/rstudio-prefs.json
         ;;
     "rstudiov2") # Add mount script to bash profile and generate self signed certificates
         echo "Generate SSL certs"
@@ -201,6 +205,10 @@ case "$(env_type)" in
         yum install -y fuse-2.9.2
         echo "Finish installing fuse"
         printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
+
+        # set autosave
+        mkdir -p /home/rstudio-user/.config/rstudio
+        echo '{"initial_working_directory":"~","auto_save_on_blur":true,"auto_save_on_idle":"commit","posix_terminal_shell":"bash"}' > /home/rstudio-user/.config/rstudio/rstudio-prefs.json
         ;;
 esac
 

@@ -24,7 +24,7 @@ import 'animate.css/animate.css';
 import 'toastr/build/toastr.css';
 import 'react-table/react-table.css';
 import './css/index.css';
-import '@aws-ee/register/css/overrides.css';
+import '@aws-ee/custom/css/overrides.css';
 
 bootstrapApp({
   renderAppContainer,

@@ -14,7 +14,7 @@
  */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 
 import Login from '@aws-ee/base-ui/dist/parts/Login';
@@ -22,7 +22,14 @@ import _withAuth from '@aws-ee/base-ui/dist/withAuth';
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
+import TermsPage from '../parts/TermsPage';
 import Register from '../parts/Register';
+
+const noAuthPaths = [
+  { path: '/legal', component: TermsPage },
+  { path: '/register', component: Register },
+  { path: '/register-confirmation', component: Register },
+];
 
 function RegisterLogin() {
   function RegisterButton(selfRef) {
@@ -44,6 +51,8 @@ function RegisterLogin() {
         >
           Register
         </Button>
+        <Link to="/legal">Terms of Service</Link>
+        <br />
         {branding.register.loginWarning}
       </>
     );
@@ -52,25 +61,26 @@ function RegisterLogin() {
 }
 
 class AuthWrapper extends React.Component {
-  renderComp(authenticated = false) {
+  renderAuthComp(authenticated = false) {
     const Comp = this.props.Comp;
     const props = this.getWrappedCompProps({ authenticated });
     return <Comp {...props} />;
   }
 
-  registerComp() {
+  renderNoAuthComp(Comp) {
     const { location } = this.props;
     const props = this.getWrappedCompProps({ authenticated: false });
-    return <Register {...props} location={location} />;
+    return <Comp {...props} location={location} />;
   }
 
   render() {
     const { app, location } = this.props;
     if (app.userAuthenticated) {
-      return this.renderComp(true);
+      return this.renderAuthComp(true);
     }
-    if (['/register', '/register-confirmation'].includes(location.pathname)) {
-      return this.registerComp();
+    const noAuthPath = noAuthPaths.find(o => o.path === location.pathname);
+    if (noAuthPath) {
+      return this.renderNoAuthComp(noAuthPath.component);
     }
     if (location.pathname !== '/') {
       // If you try to click the login button with a path like /dashboard the page

@@ -14,7 +14,6 @@
  */
 import _ from 'lodash';
 import validate from '@aws-ee/base-ui/dist/models/forms/Validate';
-import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
 const registerUserFormFields = {
   email: {
@@ -36,11 +35,6 @@ const registerUserFormFields = {
     label: 'Last Name',
     placeholder: 'Last Name',
     rules: 'string|required|between:1,500',
-  },
-  terms: {
-    label: branding.register.tos,
-    placeholder: 'Terms & Conditions',
-    rules: 'boolean|accepted',
   },
 };
 
@@ -67,8 +61,6 @@ async function formValidationErrors(data) {
     const fieldString = fieldErrors.length > 0 ? `${fieldErrors.join(', ')} and ${finalField}` : finalField;
 
     validation.message = `Please populate ${fieldString}.`;
-  } else if (!data.terms) {
-    validation.message = 'You must accept the terms of service to register.';
   }
   return validation;
 }

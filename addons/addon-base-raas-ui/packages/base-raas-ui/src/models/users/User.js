@@ -37,7 +37,8 @@ const User = types
     projectId: types.array(types.string, []), // TODO this property should be named projectIds
     isExternalUser: types.optional(types.boolean, false), // TODO we need to consider have this a derived property
     encryptedCreds: types.maybeNull(types.string),
-    applyReason: '',
+    acceptedTerms: '1900-01-01T01:00:00.000Z',
+    applyReason: 'N/A',
   })
   .actions(self => ({
     runInAction(fn) {
@@ -75,6 +76,7 @@ const User = types
       self.projectId = rawUser.projectId || self.projectId || [];
       self.encryptedCreds = rawUser.encryptedCreds || self.encryptedCreds;
       self.applyReason = rawUser.applyReason || self.applyReason || '';
+      self.acceptedTerms = rawUser.acceptedTerms || self.acceptedTerms || '';
       // we don't update the other fields because they are being populated by a separate store
     },
   }))

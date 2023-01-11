@@ -64,7 +64,7 @@ class RegisterUserService extends Service {
     const authProviders = await authConfigService.getAuthenticationProviderConfigs();
     const providerConfig = authProviders[0].config;
 
-    const { lastName, firstName, email } = user;
+    const { lastName, firstName, email, acceptedTerms } = user;
     const identityProviderName =
       providerConfig.federatedIdentityProviders.length === 0
         ? providerConfig.title
@@ -76,6 +76,8 @@ class RegisterUserService extends Service {
 
     return {
       uid,
+      acceptedTerms,
+      applyReason: 'N/A',
       createdAt,
       createdBy: '_system_',
       email: email.toLowerCase(),
