@@ -82,13 +82,17 @@ class TermsModal extends React.Component {
           <Modal.Actions>
             {acceptAction && declineAction ? (
               <>
-                <Button primary onClick={this.closeModal(acceptAction)}>Accept</Button>
+                <Button primary onClick={this.closeModal(acceptAction)}>
+                  Accept
+                </Button>
                 <Button onClick={logoutOnDecline ? this.handleLogout(declineAction) : this.closeModal(declineAction)}>
                   Decline
                 </Button>
               </>
             ) : (
-              <Button primary onClick={this.closeModal()}>Close</Button>
+              <Button primary onClick={this.closeModal()}>
+                Close
+              </Button>
             )}
           </Modal.Actions>
         </Modal>
