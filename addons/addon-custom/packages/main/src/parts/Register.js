@@ -38,7 +38,7 @@ class Register extends React.Component {
       };
       this.user = {};
       this.terms = termsState.unset;
-      this.termsModalButton = { focus: () => { } };
+      this.termsModalButton = { focus: () => {} };
     });
     this.registerFormFields = getRegisterFormFields();
   }
@@ -65,13 +65,13 @@ class Register extends React.Component {
   }
 
   renderHTML(content) {
-    const clean_content = DOMPurify.sanitize(content, { USE_PROFILES: { html: true } });
+    const cleanContent = DOMPurify.sanitize(content, { USE_PROFILES: { html: true } });
 
     // This method sets html from a string. We're pulling this from the config file made by
     // an approved admin, and we're sanitizing using dompurify package.
     // https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
     // eslint-disable-next-line react/no-danger
-    return <div dangerouslySetInnerHTML={{ __html: clean_content }} />;
+    return <div dangerouslySetInnerHTML={{ __html: cleanContent }} />;
   }
 
   setTerms(terms) {

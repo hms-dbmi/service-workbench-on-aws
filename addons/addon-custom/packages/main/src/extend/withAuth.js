@@ -13,6 +13,7 @@
  *  permissions and limitations under the License.
  */
 import React from 'react';
+import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
@@ -39,18 +40,20 @@ function RegisterLogin(enableCustomRegister) {
 
     return (
       <>
-        {enableCustomRegister && <Button
-          data-testid="login"
-          type="submit"
-          color="blue"
-          fluid
-          basic
-          size="large"
-          className="mb2"
-          onClick={handleRegister}
-        >
-          Register
-        </Button>}
+        {enableCustomRegister && (
+          <Button
+            data-testid="login"
+            type="submit"
+            color="blue"
+            fluid
+            basic
+            size="large"
+            className="mb2"
+            onClick={handleRegister}
+          >
+            Register
+          </Button>
+        )}
         <Link to="/legal">Terms of Service</Link>
         <br />
         {branding.main.loginWarning}
@@ -106,10 +109,7 @@ class AuthWrapper extends React.Component {
   }
 }
 
-const WrapperComp = inject(
-  'app',
-  'authenticationProviderPublicConfigsStore'
-)(withRouter(observer(AuthWrapper)));
+const WrapperComp = inject('app', 'authenticationProviderPublicConfigsStore')(withRouter(observer(AuthWrapper)));
 
 function withAuth(Comp) {
   return function component(props) {

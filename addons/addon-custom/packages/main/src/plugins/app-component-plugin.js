@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import App from '../parts/App';
 
 // eslint-disable-next-line no-unused-vars, consistent-return
