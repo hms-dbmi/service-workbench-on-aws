@@ -30,7 +30,6 @@ const noAuthPaths = [
   { path: '/register', component: Register },
   { path: '/register-confirmation', component: Register },
 ];
-const nativeUserPool = 'cognito_user_pool';
 
 function RegisterLogin(enableCustomRegister) {
   function RegisterButton(selfRef) {
@@ -75,8 +74,7 @@ class AuthWrapper extends React.Component {
   }
 
   enableCustomRegister() {
-    const configs = _.get(this.appContext, 'authenticationProviderPublicConfigsStore.authenticationProviderPublicConfigs', []);
-    const nativeUserPoolConfig = configs.find(({ type }) => type === nativeUserPool) || {};
+    const nativeUserPoolConfig = this.props.authenticationProviderPublicConfigsStore.nativeUserPool;
     return _.get(nativeUserPoolConfig, 'customRegister', false);
   }
 
@@ -108,7 +106,10 @@ class AuthWrapper extends React.Component {
   }
 }
 
-const WrapperComp = inject('app')(withRouter(observer(AuthWrapper)));
+const WrapperComp = inject(
+  'app',
+  'authenticationProviderPublicConfigsStore'
+)(withRouter(observer(AuthWrapper)));
 
 function withAuth(Comp) {
   return function component(props) {
