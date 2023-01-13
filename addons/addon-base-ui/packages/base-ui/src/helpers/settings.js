@@ -30,10 +30,10 @@ const branding = {
     title: process.env.REACT_APP_USER_REGISTRATION_TITLE,
     summary: process.env.REACT_APP_USER_REGISTRATION_SUMMARY,
     success: process.env.REACT_APP_USER_REGISTRATION_SUCCESS,
-    loginWarning: process.env.REACT_APP_USER_REGISTRATION_LOGIN_WARNING,
   },
   main: {
     title: process.env.REACT_APP_BRAND_MAIN_TITLE,
+    loginWarning: process.env.REACT_APP_LOGIN_WARNING,
   },
   page: {
     title: process.env.REACT_APP_BRAND_PAGE_TITLE,

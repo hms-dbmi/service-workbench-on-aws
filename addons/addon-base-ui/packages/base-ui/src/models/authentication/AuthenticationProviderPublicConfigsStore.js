@@ -19,6 +19,8 @@ import { BaseStore } from '../BaseStore';
 import { getAuthenticationProviderPublicConfigs } from '../../helpers/api';
 import AuthenticationProviderPublicConfig from './AuthenticationProviderPublicConfig';
 
+const nativeUserPool = 'cognito_user_pool';
+
 const AuthenticationProviderPublicConfigsStore = BaseStore.named('AuthenticationProviderPublicConfigsStore')
   .props({
     authenticationProviderPublicConfigs: types.optional(types.array(AuthenticationProviderPublicConfig), []),
@@ -65,7 +67,10 @@ const AuthenticationProviderPublicConfigsStore = BaseStore.named('Authentication
 
       return result;
     },
-
+    get nativeUserPool() {
+      const configs = self.authenticationProviderPublicConfigs || [];
+      return configs.find(({ type }) => type === nativeUserPool) || {};
+    },
     toAuthenticationProviderFromId(authenticationProviderId) {
       return _.find(self.authenticationProviderPublicConfigs, { id: authenticationProviderId });
     },

@@ -4,6 +4,7 @@ import { observable, action, decorate, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label, Icon } from 'semantic-ui-react';
+import * as DOMPurify from 'dompurify';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
@@ -64,11 +65,13 @@ class Register extends React.Component {
   }
 
   renderHTML(content) {
-    // This method sets html from a string. Because we're pulling this from the config file made by
-    // an approved admin, we know the value is safe so there is no danger in using it directly below.
+    const cleanContent = DOMPurify.sanitize(content, { USE_PROFILES: { html: true } });
+
+    // This method sets html from a string. We're pulling this from the config file made by
+    // an approved admin, and we're sanitizing using dompurify package.
     // https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
     // eslint-disable-next-line react/no-danger
-    return <div dangerouslySetInnerHTML={{ __html: content }} />;
+    return <div dangerouslySetInnerHTML={{ __html: cleanContent }} />;
   }
 
   setTerms(terms) {
