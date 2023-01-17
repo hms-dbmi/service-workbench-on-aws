@@ -50,7 +50,7 @@ async function configure(context) {
     wrap(async (req, res) => {
       const requestContext = res.locals.requestContext;
       const uid = req.params.uid;
-      const { firstName, lastName, email, isAdmin, status, rev } = req.body;
+      const { firstName, lastName, email, isAdmin, status, rev, acceptedTerms } = req.body;
       const user = await userService.updateUser(requestContext, {
         uid,
         firstName,
@@ -59,6 +59,7 @@ async function configure(context) {
         isAdmin: _.isNil(isAdmin) ? false : isAdmin,
         status: _.isNil(status) ? 'active' : status,
         rev,
+        acceptedTerms,
       });
       res.status(200).json(user);
     }),
