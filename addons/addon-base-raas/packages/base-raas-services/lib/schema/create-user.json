@@ -75,7 +75,8 @@
       "type": "string"
     },
     "applyReason": {
-      "type": "string"
+      "type": "string",
+      "default": "N/A"
     }
   },
   "required": ["username"]

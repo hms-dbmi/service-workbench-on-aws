@@ -1,0 +1,27 @@
+.ui.green.button {
+  background-color: rgb(105, 190, 90);
+}
+
+#register-user .header,
+#tos .header {
+  font-family: "Handel Gothic", Futura, "Trebuchet MS", Arial, sans-serif !important;
+}
+
+#register-user .bodyText,
+#tos .bodyText {
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif !important;
+}
+
+#tos ul li {
+  margin-bottom: max(12pt, 1.2rem);
+}
+
+button.link {
+  color: #4183c4;
+  text-decoration: none;
+  border: none;
+  background-color: transparent;
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;
+}
