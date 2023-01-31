@@ -192,11 +192,12 @@ case "$(env_type)" in
         echo "Installing fuse"
         sudo yum localinstall -y "${FILES_DIR}/offline-packages/ec2-linux/fuse-2.9.2-11.amzn2.x86_64.rpm"
         echo "Finish installing fuse"
-        printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
 
-        # set autosave
-        mkdir -p /home/rstudio-user/.config/rstudio
-        echo '{"initial_working_directory":"~","auto_save_on_blur":true,"auto_save_on_idle":"commit","posix_terminal_shell":"bash"}' > /home/rstudio-user/.config/rstudio/rstudio-prefs.json
+        # mount study folders for rstudio-user on boot
+        # printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
+        sudo crontab -l 2>/dev/null > "/tmp/crontab"
+        echo '@reboot sudo -u rstudio-user /usr/local/bin/mount_s3.sh 2>&1 >> /var/log/mount_s3.log' >> "/tmp/crontab"
+        sudo crontab "/tmp/crontab"
         ;;
     "rstudiov2") # Add mount script to bash profile and generate self signed certificates
         echo "Generate SSL certs"
@@ -204,11 +205,12 @@ case "$(env_type)" in
         echo "Installing fuse"
         yum install -y fuse-2.9.2
         echo "Finish installing fuse"
-        printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
 
-        # set autosave
-        mkdir -p /home/rstudio-user/.config/rstudio
-        echo '{"initial_working_directory":"~","auto_save_on_blur":true,"auto_save_on_idle":"commit","posix_terminal_shell":"bash"}' > /home/rstudio-user/.config/rstudio/rstudio-prefs.json
+        # mount study folders for rstudio-user on boot
+        # printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
+        sudo crontab -l 2>/dev/null > "/tmp/crontab"
+        echo '@reboot sudo -u rstudio-user /usr/local/bin/mount_s3.sh 2>&1 >> /var/log/mount_s3.log' >> "/tmp/crontab"
+        sudo crontab "/tmp/crontab"
         ;;
 esac
 
