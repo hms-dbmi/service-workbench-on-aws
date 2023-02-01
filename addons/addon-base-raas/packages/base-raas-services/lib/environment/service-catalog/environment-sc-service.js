@@ -538,10 +538,10 @@ class EnvironmentScService extends Service {
     const studyService = await this.service('studyService');
     const studies = environment.studyIds
       ? await Promise.all(
-        environment.studyIds.map(studyId => {
-          return studyService.mustFind(requestContext, studyId);
-        }),
-      )
+          environment.studyIds.map(studyId => {
+            return studyService.mustFind(requestContext, studyId);
+          }),
+        )
       : [];
     const openDataStudies = studies.filter(study => {
       return study.category === 'Open Data';
@@ -561,7 +561,7 @@ class EnvironmentScService extends Service {
   }
 
   async _updateEnv(requestContext, id, rev, dbObject) {
-    return await runAndCatch(
+    return runAndCatch(
       async () => {
         return this._updater()
           .condition('attribute_exists(id)') // make sure the record being updated exists
@@ -597,7 +597,10 @@ class EnvironmentScService extends Service {
 
     // Get the rest of the environment data from database, and then overwrite with new terminationLocked value
     const currentEnv = await this.mustFind(requestContext, { id });
-    const dbObject = _.omit(this._fromRawToDbObject({ ...currentEnv, terminationLocked }, { updatedBy: by }), ['rev', 'studyRoles']);
+    const dbObject = _.omit(this._fromRawToDbObject({ ...currentEnv, terminationLocked }, { updatedBy: by }), [
+      'rev',
+      'studyRoles',
+    ]);
 
     // Save new environemnt data in database
     const result = await this._updateEnv(requestContext, id, rev, dbObject);

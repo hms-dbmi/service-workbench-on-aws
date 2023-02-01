@@ -16,7 +16,6 @@
 /* eslint-disable import/prefer-default-export */
 import _ from 'lodash';
 import { types, applySnapshot } from 'mobx-state-tree';
-import { updateScEnvironmentLock } from '../../helpers/api';
 
 // 'COMPLETED', 'PENDING', 'TAINTED', 'FAILED', 'TERMINATING', 'TERMINATED', 'TERMINATING_FAILED', 'UNKNOWN'
 // Note: 'UNKNOWN' is not something that is returned from the server, it is here to catch any other status

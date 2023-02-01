@@ -188,7 +188,7 @@ class ScEnvironmentDetailPage extends React.Component {
         </Table.Cell>
       </Table.Row>
     );
-    const isAdmin = this.userStore.isAdmin
+    const isAdmin = this.userStore.isAdmin;
 
     return (
       <Table definition>
@@ -244,7 +244,7 @@ class ScEnvironmentDetailPage extends React.Component {
   renderTerminationLock(env) {
     return (
       <>
-        <Dimmer inverted active={this.processing} >
+        <Dimmer inverted active={this.processing}>
           <Loader inverted />
         </Dimmer>
         <Checkbox
@@ -255,18 +255,22 @@ class ScEnvironmentDetailPage extends React.Component {
           onClick={() => this.handleWorkspaceLockToggle(env)}
         />
       </>
-    )
+    );
   }
 
   async handleWorkspaceLockToggle(env) {
     const store = this.envsStore;
-    runInAction(() => { this.processing = true; });
+    runInAction(() => {
+      this.processing = true;
+    });
     try {
       await store.toggleScEnvironmentLock(env.id);
     } catch (error) {
       displayError(error);
     } finally {
-      runInAction(() => { this.processing = false; });
+      runInAction(() => {
+        this.processing = false;
+      });
     }
   }
 
