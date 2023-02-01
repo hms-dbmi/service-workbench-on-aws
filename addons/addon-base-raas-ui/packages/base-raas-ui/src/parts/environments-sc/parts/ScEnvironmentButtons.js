@@ -43,10 +43,6 @@ class ScEnvironmentButtons extends React.Component {
     return this.props.scEnvironmentsStore;
   }
 
-  get user() {
-    return this.props.user || {};
-  }
-
   handleViewDetail = () => {
     const goto = gotoFn(this);
     goto(`/workspaces/id/${this.environment.id}`);
@@ -125,13 +121,6 @@ class ScEnvironmentButtons extends React.Component {
     this.editCidrButtonActive = !this.editCidrButtonActive;
   };
 
-  handleWorkspaceLockToggle = async () => {
-    await this.handleAction(async () => {
-      const store = this.envsStore;
-      await store.toggleScEnvironmentLock(this.environment.id);
-    });
-  }
-
   handleEgressStoreToggle = () => {
     this.egressStoreButtonActive = !this.egressStoreButtonActive;
   };
@@ -156,12 +145,12 @@ class ScEnvironmentButtons extends React.Component {
               ? (
                 <Button
                   basic
+                  disabled
                   data-testid="sc-env-terminate"
                   floated="right"
                   size="mini"
                   color="red"
                   className="mt1 mb1"
-                  disabled={true}
                 >
                   Terminate
                 </Button>
