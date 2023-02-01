@@ -43,6 +43,10 @@ class ScEnvironmentButtons extends React.Component {
     return this.props.scEnvironmentsStore;
   }
 
+  get user() {
+    return this.props.user || {};
+  }
+
   handleViewDetail = () => {
     const goto = gotoFn(this);
     goto(`/workspaces/id/${this.environment.id}`);
@@ -121,6 +125,13 @@ class ScEnvironmentButtons extends React.Component {
     this.editCidrButtonActive = !this.editCidrButtonActive;
   };
 
+  handleWorkspaceLockToggle = async () => {
+    await this.handleAction(async () => {
+      const store = this.envsStore;
+      await store.toggleScEnvironmentLock(this.environment.id);
+    });
+  }
+
   handleEgressStoreToggle = () => {
     this.egressStoreButtonActive = !this.egressStoreButtonActive;
   };
@@ -141,28 +152,44 @@ class ScEnvironmentButtons extends React.Component {
       <>
         <div className="clearfix" style={{ minHeight: '42px' }}>
           {state.canTerminate && (
-            <Modal
-              trigger={
+            this.environment.terminationLocked
+              ? (
                 <Button
+                  basic
                   data-testid="sc-env-terminate"
                   floated="right"
-                  basic
-                  color="red"
                   size="mini"
+                  color="red"
                   className="mt1 mb1"
-                  loading={processing}
+                  disabled={true}
                 >
                   Terminate
                 </Button>
-              }
-              header="Are you sure?"
-              content="This action can not be reverted."
-              actions={[
-                'Cancel',
-                { key: 'terminate', content: 'Terminate', negative: true, onClick: this.handleTerminate },
-              ]}
-              size="mini"
-            />
+              )
+              : (
+                <Modal
+                  trigger={
+                    <Button
+                      data-testid="sc-env-terminate"
+                      floated="right"
+                      basic
+                      color="red"
+                      size="mini"
+                      className="mt1 mb1"
+                      loading={processing}
+                    >
+                      Terminate
+                    </Button>
+                  }
+                  header="Are you sure?"
+                  content="This action can not be reverted."
+                  actions={[
+                    'Cancel',
+                    { key: 'terminate', content: 'Terminate', negative: true, onClick: this.handleTerminate },
+                  ]}
+                  size="mini"
+                />
+              )
           )}
           {canStart && (
             <Button

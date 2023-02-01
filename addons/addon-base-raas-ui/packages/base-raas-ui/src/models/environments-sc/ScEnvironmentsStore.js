@@ -25,6 +25,7 @@ import {
   startScEnvironment,
   stopScEnvironment,
   updateScEnvironmentCidrs,
+  updateScEnvironmentLock,
   deleteEgressStore,
 } from '../../helpers/api';
 
@@ -97,6 +98,15 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
 
       async updateScEnvironmentCidrs(envId, updateRequest) {
         const result = await updateScEnvironmentCidrs(envId, updateRequest);
+        const env = self.getScEnvironment(envId);
+        env.setScEnvironment(result);
+        return env;
+      },
+
+      async toggleScEnvironmentLock(envId) {
+        const currEnv = self.getScEnvironment(envId);
+        const updateReq = { rev: currEnv.rev, terminationLocked: !currEnv.terminationLocked };
+        const result = await updateScEnvironmentLock(envId, updateReq);
         const env = self.getScEnvironment(envId);
         env.setScEnvironment(result);
         return env;
