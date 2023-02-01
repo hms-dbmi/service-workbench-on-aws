@@ -72,16 +72,17 @@ do
     s3_prefix="$(printf "%s" "$mounts" | jq -r ".[$study_idx].prefix" -)"
     s3_role_arn="$(printf "%s" "$mounts" | jq -r ".[$study_idx].roleArn" -)"
     kms_arn="$(printf "%s" "$mounts" | jq -r ".[$study_idx].kmsArn" -)"
-
-    # Mount S3 location if not already mounted
     study_dir="${MOUNT_DIR}/${study_id}"
-    ps -U "rstudio-user" -o "command" | egrep -q "goofys .* ${study_dir}$"
+
+    # Unmount study folder if it's already mounted (ex, when script is run manually).
+    ps -U "$LOGNAME" -o "command" | egrep -q "goofys .* ${study_dir}$"
     if [ $? == 0 ]
     then
       echo "Study already mounted-- unmounting to reduce collisions ${study_dir}"
       fusermount -u "${study_dir}"
     fi
 
+    # Mount S3 study folder
     mkdir -p "$study_dir"
     if [ "$s3_role_arn" == "null" ]
     then
