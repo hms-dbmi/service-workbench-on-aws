@@ -2,7 +2,7 @@ import React from 'react';
 import { decorate, computed, action, observable, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Button, Modal } from 'semantic-ui-react';
+import { Button, Modal, Icon } from 'semantic-ui-react';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { displayError } from '@aws-ee/base-ui/dist/helpers/notification';
@@ -151,7 +151,7 @@ class ScEnvironmentButtons extends React.Component {
                 color="red"
                 className="mt1 mb1"
               >
-                Terminate
+                <Icon fitted name="lock" /> Terminate
               </Button>
             ) : (
               <Modal
