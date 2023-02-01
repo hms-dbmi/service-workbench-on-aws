@@ -59,6 +59,8 @@ export AWS_STS_REGIONAL_ENDPOINTS=regional
 export AWS_DEFAULT_REGION=$region
 export AWS_SDK_LOAD_CONFIG=1
 
+echo "Starting mount script $(date)"
+
 # Mount S3 buckets
 mounts="$(cat "$CONFIG")"
 num_mounts=$(printf "%s" "$mounts" | jq ". | length" -)
@@ -73,8 +75,8 @@ do
 
     # Mount S3 location if not already mounted
     study_dir="${MOUNT_DIR}/${study_id}"
-    ps -U "$LOGNAME" -o "command" | egrep -q "goofys .* ${study_dir}$"
-    if [$? == 0]
+    ps -U "rstudio-user" -o "command" | egrep -q "goofys .* ${study_dir}$"
+    if [ $? == 0 ]
     then
       echo "Study already mounted-- unmounting to reduce collisions ${study_dir}"
       fusermount -u "${study_dir}"

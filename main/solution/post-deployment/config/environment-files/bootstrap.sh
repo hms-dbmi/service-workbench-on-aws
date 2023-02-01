@@ -196,8 +196,9 @@ case "$(env_type)" in
         # mount study folders for rstudio-user on boot
         # printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
         sudo crontab -l 2>/dev/null > "/tmp/crontab"
-        echo '@reboot sudo -u rstudio-user /usr/local/bin/mount_s3.sh 2>&1 >> /var/log/mount_s3.log' >> "/tmp/crontab"
+        echo '@reboot sudo -u rstudio-user /usr/local/bin/mount_s3.sh >> /var/log/mount_s3.log 2>&1' >> "/tmp/crontab"
         sudo crontab "/tmp/crontab"
+        sudo -u rstudio-user /usr/local/bin/mount_s3.sh >> /var/log/mount_s3.log 2>&1
         ;;
     "rstudiov2") # Add mount script to bash profile and generate self signed certificates
         echo "Generate SSL certs"
@@ -209,8 +210,9 @@ case "$(env_type)" in
         # mount study folders for rstudio-user on boot
         # printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
         sudo crontab -l 2>/dev/null > "/tmp/crontab"
-        echo '@reboot sudo -u rstudio-user /usr/local/bin/mount_s3.sh 2>&1 >> /var/log/mount_s3.log' >> "/tmp/crontab"
+        echo '@reboot sudo -u rstudio-user /usr/local/bin/mount_s3.sh >> /var/log/mount_s3.log 2>&1' >> "/tmp/crontab"
         sudo crontab "/tmp/crontab"
+        sudo -u rstudio-user /usr/local/bin/mount_s3.sh >> /var/log/mount_s3.log 2>&1
         ;;
 esac
 
