@@ -1,7 +1,7 @@
 // List of terms, newest to oldest
 export default [
   {
-    date: '2023-01-11T16:59:33.080Z',
+    date: '2023-02-06T16:52:34.875Z',
     fields: {
       // Fields that should get replaced in terms template
       contact: 'bch-swb-registration@childrens.harvard.edu',
@@ -61,12 +61,10 @@ export default [
     </h4>
     <ul>
       <li>
-        <h4>
-          If BCH provides links that are maintained or controlled by external
-          organizations, the listing of links is not an endorsement of information,
-          products, or services, and does not imply a direct association between the
-          University and the operators of the outside resource links.
-        </h4>
+        If BCH provides links that are maintained or controlled by external
+        organizations, the listing of links is not an endorsement of information,
+        products, or services, and does not imply a direct association between the
+        University and the operators of the outside resource links.
       </li>
       <li>
         Neither BCH nor its employees warrant that Service Workbench will be
@@ -93,8 +91,9 @@ export default [
       </li>
       <li>
         Any modification made is effective immediately upon posting the modification
-        (unless otherwise stated). You should visit this page periodically to review
-        the current Terms of Service.
+        (unless otherwise stated) and your continued use constitutes your agreement.
+        You should visit this page periodically to review the current Terms of
+        Service.
       </li>
       <li>
         Upload of any data in your workspace is under your responsibility. Any loss
@@ -117,7 +116,7 @@ export default [
       </li>
       <li>Process U.S. classified national security information on the system.</li>
       <li>
-        Browse, search or reveal any protected data except in accordance with that
+        Browse, search, or reveal any protected data except in accordance with that
         which is required to perform your legitimate tasks or assigned duties.
       </li>
       <li>
@@ -160,15 +159,14 @@ export default [
         domains.
       </li>
     </ul>
-    <h3>
-      Service Workbench is hosted on a HIPAA and HITRUST website. You are accessing
-      a secure and restricted system that is provided for HIPAA and HITRUST
-      authorized use only.
-    </h3>
-    <h4>
-      By using this System,
-      you consent to the following conditions:
-    </h4>
+    <p>
+      Service Workbench is hosted on a HIPAA compliant and HITRUST security level
+      website. You are accessing a secure and restricted system that is provided for
+      HIPAA and HITRUST authorized use only.
+    </p>
+    <p>
+      By using this System, you consent to the following conditions:
+    </p>
     <ul>
       <li>
         BCH, for their HIPAA and HITRUST service, routinely intercepts and monitors
