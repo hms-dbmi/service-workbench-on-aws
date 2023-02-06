@@ -2,7 +2,7 @@ import React from 'react';
 import { decorate, computed, action, observable, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Button, Modal } from 'semantic-ui-react';
+import { Button, Modal, Icon } from 'semantic-ui-react';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { displayError } from '@aws-ee/base-ui/dist/helpers/notification';
@@ -140,30 +140,43 @@ class ScEnvironmentButtons extends React.Component {
     return (
       <>
         <div className="clearfix" style={{ minHeight: '42px' }}>
-          {state.canTerminate && (
-            <Modal
-              trigger={
-                <Button
-                  data-testid="sc-env-terminate"
-                  floated="right"
-                  basic
-                  color="red"
-                  size="mini"
-                  className="mt1 mb1"
-                  loading={processing}
-                >
-                  Terminate
-                </Button>
-              }
-              header="Are you sure?"
-              content="This action can not be reverted."
-              actions={[
-                'Cancel',
-                { key: 'terminate', content: 'Terminate', negative: true, onClick: this.handleTerminate },
-              ]}
-              size="mini"
-            />
-          )}
+          {state.canTerminate &&
+            (this.environment.terminationLocked ? (
+              <Button
+                basic
+                disabled
+                data-testid="sc-env-terminate"
+                floated="right"
+                size="mini"
+                color="red"
+                className="mt1 mb1"
+              >
+                <Icon fitted name="lock" /> Terminate
+              </Button>
+            ) : (
+              <Modal
+                trigger={
+                  <Button
+                    data-testid="sc-env-terminate"
+                    floated="right"
+                    basic
+                    color="red"
+                    size="mini"
+                    className="mt1 mb1"
+                    loading={processing}
+                  >
+                    Terminate
+                  </Button>
+                }
+                header="Are you sure?"
+                content="This action can not be reverted."
+                actions={[
+                  'Cancel',
+                  { key: 'terminate', content: 'Terminate', negative: true, onClick: this.handleTerminate },
+                ]}
+                size="mini"
+              />
+            ))}
           {canStart && (
             <Button
               data-testid="sc-env-start"

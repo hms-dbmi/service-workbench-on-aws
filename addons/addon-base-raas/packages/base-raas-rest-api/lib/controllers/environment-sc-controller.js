@@ -70,6 +70,24 @@ async function configure(context) {
   //  PUT / (mounted to /api/workspaces/service-catalog)
   // ===============================================================
   router.put(
+    '/:id/lock',
+    wrap(async (req, res) => {
+      const requestContext = res.locals.requestContext;
+      const id = req.params.id;
+      const terminationLocked = req.body.terminationLocked;
+      const rev = req.body.rev;
+
+      const [environmentScService] = await context.service(['environmentScService']);
+      const result = await environmentScService.updateTerminationLock(requestContext, { id, rev, terminationLocked });
+
+      res.status(200).json(result);
+    }),
+  );
+
+  // ===============================================================
+  //  PUT / (mounted to /api/workspaces/service-catalog)
+  // ===============================================================
+  router.put(
     '/:id/stop',
     wrap(async (req, res) => {
       const requestContext = res.locals.requestContext;

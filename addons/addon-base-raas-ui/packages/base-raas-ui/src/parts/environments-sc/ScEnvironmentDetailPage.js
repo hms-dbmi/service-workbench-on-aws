@@ -15,7 +15,7 @@
 /* eslint-disable max-classes-per-file */
 import React from 'react';
 import _ from 'lodash';
-import { decorate, computed } from 'mobx';
+import { decorate, computed, observable, runInAction } from 'mobx';
 import { observer, inject, Observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import {
@@ -27,6 +27,9 @@ import {
   Table,
   Header,
   Message,
+  Checkbox,
+  Loader,
+  Dimmer,
   Popup,
   Label,
   Icon,
@@ -39,6 +42,7 @@ import { swallowError } from '@aws-ee/base-ui/dist/helpers/utils';
 import { isStoreLoading, isStoreError, isStoreReady } from '@aws-ee/base-ui/dist/models/BaseStore';
 import ErrorBox from '@aws-ee/base-ui/dist/parts/helpers/ErrorBox';
 import ProgressPlaceHolder from '@aws-ee/base-ui/dist/parts/helpers/BasicProgressPlaceholder';
+import { displayError } from '@aws-ee/base-ui/dist/helpers/notification';
 
 import By from '../helpers/By';
 import ScEnvironmentButtons from './parts/ScEnvironmentButtons';
@@ -57,7 +61,16 @@ class TabPaneWrapper extends React.Component {
 
 // expected props
 // - scEnvironmentsStore (via injection)
+// - userStore (via injection)
 class ScEnvironmentDetailPage extends React.Component {
+  constructor(props) {
+    super(props);
+    runInAction(() => {
+      // A flag to indicate if we are processing the call to trigger the terminate action
+      this.processing = false;
+    });
+  }
+
   componentDidMount() {
     window.scrollTo(0, 0);
     const store = this.getEnvStore();
@@ -76,6 +89,10 @@ class ScEnvironmentDetailPage extends React.Component {
 
   get envsStore() {
     return this.props.scEnvironmentsStore;
+  }
+
+  get userStore() {
+    return this.props.userStore.user;
   }
 
   get instanceId() {
@@ -171,10 +188,12 @@ class ScEnvironmentDetailPage extends React.Component {
         </Table.Cell>
       </Table.Row>
     );
+    const isAdmin = this.userStore.isAdmin;
 
     return (
       <Table definition>
         <Table.Body>
+          {isAdmin && renderRow('Termination Lock', this.renderTerminationLock(env))}
           {renderRow('Status', this.renderStatus(env))}
           {renderRow('Owner', <By uid={env.createdBy} skipPrefix />)}
           {renderRow('Studies', studyCount === 0 ? 'No studies linked to this workspace' : studyIds.join(', '))}
@@ -220,6 +239,39 @@ class ScEnvironmentDetailPage extends React.Component {
         </Popup>
       </div>
     );
+  }
+
+  renderTerminationLock(env) {
+    return (
+      <>
+        <Dimmer inverted active={this.processing}>
+          <Loader inverted />
+        </Dimmer>
+        <Checkbox
+          fitted
+          checked={env.terminationLocked}
+          toggle
+          label={env.terminationLocked ? 'Locked' : 'Unlocked'}
+          onClick={() => this.handleWorkspaceLockToggle(env)}
+        />
+      </>
+    );
+  }
+
+  async handleWorkspaceLockToggle(env) {
+    const store = this.envsStore;
+    runInAction(() => {
+      this.processing = true;
+    });
+    try {
+      await store.toggleScEnvironmentLock(env.id);
+    } catch (error) {
+      displayError(error);
+    } finally {
+      runInAction(() => {
+        this.processing = false;
+      });
+    }
   }
 
   renderError(env) {
@@ -287,6 +339,8 @@ class ScEnvironmentDetailPage extends React.Component {
 decorate(ScEnvironmentDetailPage, {
   instanceId: computed,
   envsStore: computed,
+  userStore: computed,
+  processing: observable,
 });
 
-export default inject('scEnvironmentsStore')(withRouter(observer(ScEnvironmentDetailPage)));
+export default inject('userStore', 'scEnvironmentsStore')(withRouter(observer(ScEnvironmentDetailPage)));
