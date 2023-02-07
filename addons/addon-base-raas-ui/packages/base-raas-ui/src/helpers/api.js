@@ -287,6 +287,10 @@ function startScEnvironment(id) {
   return httpApiPut(`api/workspaces/service-catalog/${id}/start`);
 }
 
+function updateScEnvironmentLock(id, updateRequest) {
+  return httpApiPut(`api/workspaces/service-catalog/${id}/lock`, { data: updateRequest });
+}
+
 function updateScEnvironmentCidrs(id, updateRequest) {
   return httpApiPost(`api/workspaces/service-catalog/${id}/cidr`, { data: updateRequest });
 }
@@ -432,6 +436,7 @@ export {
   getScEnvironment,
   getScEnvironmentConnections,
   updateScEnvironmentCidrs,
+  updateScEnvironmentLock,
   sendSshKey,
   getWindowsRpInfo,
   getDataSourceAccounts,
