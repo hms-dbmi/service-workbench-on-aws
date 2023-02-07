@@ -188,27 +188,29 @@ case "$(env_type)" in
         echo "Finish installing fuse"
         printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/ec2-user/.bash_profile"
         ;;
-    "rstudio") # Add mount script to bash profile
+    "rstudio") # Add mount script
         echo "Installing fuse"
         sudo yum localinstall -y "${FILES_DIR}/offline-packages/ec2-linux/fuse-2.9.2-11.amzn2.x86_64.rpm"
         echo "Finish installing fuse"
-        printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
 
-        # set autosave
-        mkdir -p /home/rstudio-user/.config/rstudio
-        echo '{"initial_working_directory":"~","auto_save_on_blur":true,"auto_save_on_idle":"commit","posix_terminal_shell":"bash"}' > /home/rstudio-user/.config/rstudio/rstudio-prefs.json
+        # mount study folders for rstudio-user on boot, then run mount script
+        sudo crontab -l 2>/dev/null > "/tmp/crontab"
+        echo '@reboot sudo -u rstudio-user /usr/local/bin/mount_s3.sh >> /var/log/mount_s3.log 2>&1' >> "/tmp/crontab"
+        sudo crontab "/tmp/crontab"
+        sudo -u rstudio-user /usr/local/bin/mount_s3.sh >> /var/log/mount_s3.log 2>&1
         ;;
-    "rstudiov2") # Add mount script to bash profile and generate self signed certificates
+    "rstudiov2") # Add mount script and generate self signed certificates
         echo "Generate SSL certs"
         generate_ssl_certificate
         echo "Installing fuse"
         yum install -y fuse-2.9.2
         echo "Finish installing fuse"
-        printf "\n# Mount S3 study data\nmount_s3.sh\n\n" >> "/home/rstudio-user/.bash_profile"
 
-        # set autosave
-        mkdir -p /home/rstudio-user/.config/rstudio
-        echo '{"initial_working_directory":"~","auto_save_on_blur":true,"auto_save_on_idle":"commit","posix_terminal_shell":"bash"}' > /home/rstudio-user/.config/rstudio/rstudio-prefs.json
+        # mount study folders for rstudio-user on boot, then run mount script
+        sudo crontab -l 2>/dev/null > "/tmp/crontab"
+        echo '@reboot sudo -u rstudio-user /usr/local/bin/mount_s3.sh >> /var/log/mount_s3.log 2>&1' >> "/tmp/crontab"
+        sudo crontab "/tmp/crontab"
+        sudo -u rstudio-user /usr/local/bin/mount_s3.sh >> /var/log/mount_s3.log 2>&1
         ;;
 esac
 
