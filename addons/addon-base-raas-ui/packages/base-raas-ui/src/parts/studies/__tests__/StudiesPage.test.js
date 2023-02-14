@@ -70,7 +70,7 @@ describe('StudiesPage', () => {
     // CHECK
     expect(res.content).toHaveProperty(
       ['props', 'children', 0],
-      expect.stringContaining('Select one or more studies to proceed'),
+      expect.stringContaining('Select one or more studies to proceed to the next step.'),
     );
     expect(component.renderWarningWithButton).toHaveBeenCalled();
   });
