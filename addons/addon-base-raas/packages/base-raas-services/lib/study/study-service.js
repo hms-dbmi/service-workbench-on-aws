@@ -518,7 +518,11 @@ class StudyService extends Service {
           .key('category', category)
           .limit(1000)
           .projection(fields)
-          .query();
+          .query()
+          // filter by aws region. Because the scraper might not run until after
+          // this code is deployed we want this filter to be permissive when it isn't
+          // clear if the study is in the correct region
+          .filter(study => ['us-east-1', 'unknown', undefined].includes(study.region))
         break;
 
       default: {

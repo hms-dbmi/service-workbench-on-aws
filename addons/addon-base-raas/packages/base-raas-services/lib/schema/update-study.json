@@ -34,6 +34,12 @@
       "maxLength": 2048,
       "pattern": "^(arn:aws[a-zA-Z-]*:iam::[0-9]{12}:role[/]{1}[a-zA-Z0-9-]+)$"
     },
+    "region": {
+      "type": "string",
+      "maxLength": 64,
+      "default": "unknown",
+      "description": "The AWS region of the study S3 bucket."
+    },
     "resources": {
       "type": "array",
       "items": [
@@ -56,5 +62,7 @@
       ]
     }
   },
-  "required": ["id"]
+  "required": [
+    "id"
+  ]
 }
