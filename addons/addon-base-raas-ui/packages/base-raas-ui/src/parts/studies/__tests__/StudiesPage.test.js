@@ -68,10 +68,7 @@ describe('StudiesPage', () => {
     const res = await component.renderSelection();
 
     // CHECK
-    expect(res.content).toHaveProperty(
-      ['props', 'children', 0],
-      expect.stringContaining('Select one or more studies to proceed to the next step.'),
-    );
+    expect(res.content).toBe('Select one or more studies to proceed to the next step.');
     expect(component.renderWarningWithButton).toHaveBeenCalled();
   });
 
