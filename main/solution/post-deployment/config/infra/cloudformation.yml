@@ -421,7 +421,9 @@ Resources:
                   - sagemaker:DescribeNotebookInstanceLifecycleConfig
                   - sagemaker:CreateNotebookInstanceLifecycleConfig
                   - sagemaker:DeleteNotebookInstanceLifecycleConfig
-                Resource: 'arn:aws:sagemaker:*:*:notebook-instance-lifecycle-config/basicnotebookinstancelifecycleconfig-*'
+                Resource:
+                  - 'arn:aws:sagemaker:*:*:notebook-instance-lifecycle-config/basicnotebookinstancelifecycleconfig-*'
+                  - 'arn:aws:sagemaker:*:*:notebook-instance-lifecycle-config/BasicNotebookInstanceLifecycleConfig-*'
               - Effect: Allow
                 Action:
                   - sagemaker:AddTags
@@ -430,7 +432,9 @@ Resources:
                   - sagemaker:StopNotebookInstance
                   - sagemaker:StopNotebookInstance
                   - sagemaker:DeleteNotebookInstance
-                Resource: 'arn:aws:sagemaker:*:*:notebook-instance/basicnotebookinstance-*'
+                Resource:
+                  - 'arn:aws:sagemaker:*:*:notebook-instance/basicnotebookinstance-*'
+                  - 'arn:aws:sagemaker:*:*:notebook-instance/BasicNotebookInstance-*'
               - Effect: Allow
                 Action:
                   - ec2:DescribeNetworkInterfaces

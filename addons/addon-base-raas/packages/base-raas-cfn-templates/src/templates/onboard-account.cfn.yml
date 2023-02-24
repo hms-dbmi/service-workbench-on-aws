@@ -422,7 +422,9 @@ Resources:
               - sagemaker:StartNotebookInstance
               - sagemaker:StopNotebookInstance
               - sagemaker:DescribeNotebookInstance
-            Resource: !Sub 'arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:notebook-instance/basicnotebookinstance-*'
+            Resource:
+              - !Sub 'arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:notebook-instance/basicnotebookinstance-*'
+              - !Sub 'arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:notebook-instance/BasicNotebookInstance-*'
           - Effect: Allow
             Action:
               - sagemaker:ListNotebookInstances
