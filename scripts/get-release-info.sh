@@ -30,3 +30,5 @@ if ([ "$oldVersionNumber" != "$newVersionNumber" ]) || ([ "$oldVersionDate" != "
   cleanDate="$(echo "$newVersionDate" | sed -e 's/\//\\\//g')"
   sed -i -e "/^versionDate: /s/.*/versionDate: '$cleanDate'/" "$FILE"
 fi
+
+grep 'versionDate\|versionNumber' "$FILE"
