@@ -14,7 +14,6 @@ FILE="main/config/settings/$STAGE.yml"
 versionHeader="$(grep -m 1 '## ' "CHANGELOG.md")"
 newVersionNumber="$(echo "$versionHeader" | sed -E "s/^## \[([^]]+)]\([^)]+\) \(([^)]+)\)$/\1/")"
 newVersionDate="$(echo "$versionHeader" | sed -E "s/^## \[([^]]+)]\([^)]+\) \(([^)]+)\)$/\2/")"
-echo "New - Version: $newVersionNumber, Date: $newVersionDate"
 
 # Populate stage file with versionDate and versionNumber if not set
 [ ! -f "$FILE" ] && touch "$FILE"
@@ -25,13 +24,9 @@ echo "New - Version: $newVersionNumber, Date: $newVersionDate"
 oldVersionNumber="$(sed -nE "s/^versionNumber:\s*['\"]([^'\"]*)['\"]$/\1/p" "$FILE")"
 oldVersionDate="$(sed -nE "s/^versionDate:\s*['\"]([^'\"]*)['\"]$/\1/p" "$FILE")"
 
-echo "Old - Version: $oldVersionNumber, Date: $oldVersionDate"
-
 # Replace old versions with new version
 if ([ "$oldVersionNumber" != "$newVersionNumber" ]) || ([ "$oldVersionDate" != "$newVersionDate" ]); then 
   sed -i -e "/^versionNumber: /s/.*/versionNumber: '$newVersionNumber'/" "$FILE"
   cleanDate="$(echo "$newVersionDate" | sed -e 's/\//\\\//g')"
   sed -i -e "/^versionDate: /s/.*/versionDate: '$cleanDate'/" "$FILE"
 fi
-
-tail -n 5 "$FILE" 
