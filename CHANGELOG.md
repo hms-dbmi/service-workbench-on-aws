@@ -5,14 +5,14 @@ All notable changes to this project will be documented in this file. As our fork
 ## [5.0.0_1.0.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.0...v5.0.0_1.0.1) (03/03/2023)
 
 - Remove create study UI functionality and 'My Studies' tab from Studies page.
-- Add region to OpenData Scrape handler and filter api open-data results by current region.
+- Add region to open data scrape lambda and filter api open data results by current region.
 - Update sagemaker arn IAM rules.
-- Add Help button to menu when url is set in stage file.
+- Add Help button to menu when help documentation url is set in stage file.
 - Update version script.
 
 ## [5.0.0_1.0.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0...v5.0.0_1.0.0) (02/03/2023)
 
-- Proserve team implements Bring your Own Network changes to allow SWB to run with custom network architecture.
+- Proserve team implements Bring Your Own Network changes to allow SWB to run with custom network architecture.
 - Custom user registration page.
   - WAF to protect /api endpoints.
 - Terms of service modal and page.
