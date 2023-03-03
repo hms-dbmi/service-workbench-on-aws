@@ -42,6 +42,7 @@ const settingKeys = {
   accountIdIndexName: 'dbStudiesAccountIdIndex',
   studyDataBucketName: 'studyDataBucketName',
   enableEgressStore: 'enableEgressStore',
+  awsRegion: 'awsRegion',
 };
 
 class StudyService extends Service {
@@ -508,6 +509,7 @@ class StudyService extends Service {
   }
 
   async list(requestContext, category, fields = []) {
+    const awsRegion = this.settings.get(settingKeys.awsRegion);
     // Get studies allowed for user
     let result = [];
     switch (category) {
@@ -522,7 +524,7 @@ class StudyService extends Service {
         // filter by aws region. Because the scraper might not run until after
         // this code is deployed we want this filter to be permissive when it isn't
         // clear if the study is in the correct region
-        result = result.filter(study => ['us-east-1', 'unknown', undefined].includes(study.region));
+        result = result.filter(study => [awsRegion, 'unknown', undefined].includes(study.region));
         break;
 
       default: {
