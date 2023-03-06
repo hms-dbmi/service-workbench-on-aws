@@ -175,12 +175,17 @@ const newHandler = async ({ studyService, log = consoleLogger } = {}) => {
   }
 
   function basicProjection({ id, sha, name, description, resources }) {
+    let regions = resources.map(({ region }) => region).filter(o => !!o);
+    // assumption: a study is assigned to a single region
+    regions = _.isEmpty(regions) ? 'unknown' : regions[0];
+
     return {
       id,
       name,
       description,
       category: studyCategory,
       sha,
+      region: regions,
       resources: resources.map(({ arn }) => ({ arn })),
     };
   }

@@ -8,53 +8,27 @@ pushd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null
 popd > /dev/null
 
 STAGE="$1"
-
-# Dynamically set versionNumber and versionDate
-# Get the first header (not Changelog) in CHANGELOG.md
-versionLine="$(cat CHANGELOG.md | grep -m 1 "[0-9]\+\.[0-9]\+\.[0-9]\+\|Beta")"
-
-# Get version number
-versionNumber="$(echo $versionLine | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+\|Beta" | head -n 1)"
-
-# Get version date (or generate if beta)
-if [ "$versionNumber" == "Beta" ]
-then
-    latestReleaseVersion="$(cat CHANGELOG.md | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+" | head -n 1)"
-    versionDate="Latest Release Version: $latestReleaseVersion"
-else
-    versionDate="$(echo $versionLine | grep -o "[0-9][0-9][0-9][0-9]\-[0-9][0-9]\-[0-9][0-9]")"
-fi
-
-# Is there a stage.yml file?
 FILE="main/config/settings/$STAGE.yml"
-if [ -f "$FILE" ]
-then
-    # Yes-->Is there a versionDate and versionNumber key?
-    if (cat "$FILE" | grep -q "versionDate") && (cat "$FILE" | grep -q "versionNumber")
-    then
-        # Yes-->Are they different from above?
-        oldVersionNumber="$(cat "$FILE" | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+\|Beta" | head -n 1)"
-        oldVersionDate="$(sed -nE "s/^versionDate:\s*['\"]?([\d\w :.-]*)['\"]?/\1/p" "$FILE" | sed "s/[\"']//g")"
-        if ([ "$oldVersionNumber" != "$versionNumber" ]) || ([ "$oldVersionDate" != "$versionDate" ])
-        then
-            # Yes-->Replace new with old
-            sed -i -e "/^versionNumber: /s/.*/versionNumber: '$versionNumber'/" "$FILE"
-            sed -i -e "/^versionDate: /s/.*/versionDate: '$versionDate'/" "$FILE"
-        fi
-    else
-        # No-->Append new
-        echo "
-# Version number of current release
-versionNumber: '${versionNumber}'
 
-# Release date of current release
-versionDate: '${versionDate}'" >> "$FILE"
-    fi
-else
-    # No-->Make file and append new
-    echo "# Version number of current release
-versionNumber: '${versionNumber}'
+# Get new version numbers
+versionHeader="$(grep -m 1 '## ' "CHANGELOG.md")"
+newVersionNumber="$(echo "$versionHeader" | sed -E "s/^## \[([^]]+)]\([^)]+\) \(([^)]+)\)$/\1/")"
+newVersionDate="$(echo "$versionHeader" | sed -E "s/^## \[([^]]+)]\([^)]+\) \(([^)]+)\)$/\2/")"
 
-# Release date of current release
-versionDate: '${versionDate}'" >> "$FILE"
+# Populate stage file with versionDate and versionNumber if not set
+[ ! -f "$FILE" ] && touch "$FILE"
+! (grep -q 'versionDate' "$FILE") && echo -e "\nversionDate: ''" >> "$FILE"
+! (grep -q 'versionNumber' "$FILE") && echo -e "\nversionNumber: ''" >> "$FILE"
+
+# Get old version values- empty if file or values did not exist
+oldVersionNumber="$(sed -nE "s/^versionNumber:\s*['\"]([^'\"]*)['\"]$/\1/p" "$FILE")"
+oldVersionDate="$(sed -nE "s/^versionDate:\s*['\"]([^'\"]*)['\"]$/\1/p" "$FILE")"
+
+# Replace old versions with new version
+if ([ "$oldVersionNumber" != "$newVersionNumber" ]) || ([ "$oldVersionDate" != "$newVersionDate" ]); then 
+  sed -i -e "/^versionNumber: /s/.*/versionNumber: '$newVersionNumber'/" "$FILE"
+  cleanDate="$(echo "$newVersionDate" | sed -e 's/\//\\\//g')"
+  sed -i -e "/^versionDate: /s/.*/versionDate: '$cleanDate'/" "$FILE"
 fi
+
+grep 'versionDate\|versionNumber' "$FILE"

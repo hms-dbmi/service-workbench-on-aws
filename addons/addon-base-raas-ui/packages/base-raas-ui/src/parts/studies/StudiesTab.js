@@ -53,10 +53,6 @@ class StudiesTab extends React.Component {
     stopHeartbeat(this.studiesStore);
   }
 
-  get canCreateStudy() {
-    return _.get(this.props.userStore, 'user.capabilities.canCreateStudy', true) && this.hasProjects;
-  }
-
   get canSelectStudy() {
     const can = _.get(this.props.userStore, 'user.capabilities.canSelectStudy', true);
     if (!can) return can; // If can't select study, then return early, no need to examine if the user is internal and does not have projects
@@ -109,16 +105,9 @@ class StudiesTab extends React.Component {
     const categoryId = this.props.category.id;
     const isOpenData = categoryId === categories.openData.id;
     const isOrgData = categoryId === categories.organization.id;
-    const canCreateStudy = this.canCreateStudy;
 
     let header = 'No studies';
-    let subheader = canCreateStudy ? (
-      <>
-        To create a study, click on the <b>Create Study</b> button at the top.
-      </>
-    ) : (
-      ''
-    );
+    let subheader = '';
 
     if (isOpenData) {
       header = 'No studies from the Open Data project';
@@ -132,16 +121,9 @@ class StudiesTab extends React.Component {
           <div>
             Studies created at the organization level can be shared but you don&apos;t have any that is shared with you.
           </div>
-          {canCreateStudy && (
-            <div>
-              You can create one yourself by clicking on the <b>Create Study</b> button at the top.
-            </div>
-          )}
-          {!canCreateStudy && (
-            <div>
-              Consider viewing the Open Data studies by clicking on the <span>Open Data</span> tab above.
-            </div>
-          )}
+          <div>
+            Consider viewing the Open Data studies by clicking on the <span>Open Data</span> tab above.
+          </div>
         </>
       );
     }
@@ -160,7 +142,6 @@ class StudiesTab extends React.Component {
 
 decorate(StudiesTab, {
   studiesStore: computed,
-  canCreateStudy: computed,
   canSelectStudy: computed,
   hasProjects: computed,
   isExternalUser: computed,

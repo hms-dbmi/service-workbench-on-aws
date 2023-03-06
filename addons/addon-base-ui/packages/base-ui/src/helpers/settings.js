@@ -37,6 +37,7 @@ const branding = {
   },
   page: {
     title: process.env.REACT_APP_BRAND_PAGE_TITLE,
+    help: process.env.REACT_APP_HELP_URL,
   },
 };
 
