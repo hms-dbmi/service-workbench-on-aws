@@ -8,6 +8,12 @@ INSTALL_DIR="/usr/local/share/workspace-environment"
 sudo mkdir "$INSTALL_DIR"
 sudo aws s3 sync "$bootstrap_s3_location" "$INSTALL_DIR"
 
+clone_script="$INSTALL_DIR/clone_repos.sh"
+if [ -s "$clone_script" ]
+then
+    $clone_script
+fi
+
 bootstrap_script="$INSTALL_DIR/bootstrap.sh"
 if [ -s "$bootstrap_script" ]
 then
