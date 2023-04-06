@@ -63,7 +63,7 @@ const StudyPermissionsStore = BaseStore.named('StudyPermissionsStore')
           const userToRequestFormat = uid => ({ uid, permissionLevel: type });
 
           // Set selected users as "usersToAdd" (API is idempotent)
-          // And remove staleUserIds from usersToAdd list
+          // And remove users who don't need updated from usersToAdd list
           updateRequest.usersToAdd.push(
             ..._.differenceWith(selectedUserIds[type], self.studyPermissions[`${type}Users`], _.isEqual).map(
               userToRequestFormat,
