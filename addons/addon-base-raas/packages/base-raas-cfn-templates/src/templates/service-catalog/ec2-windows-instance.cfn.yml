@@ -359,6 +359,20 @@ Resources:
           # Source the script to start the s3 synchronizer process
           ."c:\workdir\start-s3-synchronizer.ps1"
 
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+          cd C:\Users\Administrator\Desktop\
+          mkdir example_workflows
+          cd .\example_workflows\
+
+          Invoke-WebRequest 'https://github.com/hms-dbmi/Access-to-Data-and-Compute-using-Service-Workbench/archive/refs/heads/main.zip' -OutFile .\swb.zip
+          Expand-Archive .\swb.zip .\
+          Remove-Item .\swb.zip
+          
+          Invoke-WebRequest 'https://github.com/hms-dbmi/Access-to-Data-using-PIC-SURE-API/archive/refs/heads/master.zip' -OutFile .\picsure.zip
+          Expand-Archive .\picsure.zip .\
+          Remove-Item .\picsure.zip
+
           cfn-signal.exe -e $lastexitcode --stack ${AWS::StackId} --resource EC2Instance --region ${AWS::Region}
           </powershell>
 

@@ -80,3 +80,14 @@ Connection to workspace is restricted to specific CIDR block.
 - Check if your public IP is covered by the restricted CIDR block of the workspace.
 - Check if workspace type configuration has hard-coded value in field 'AccessFromCIDRBlock'. (Admin only)
 - If you're using VPN, your public IP address might change. Try disconnect VPN, and then connect to workspace.
+
+### Example Repositories
+All workspaces come with some examples to get you started with accessing data using the 
+Service Workbench and using the PIC-SURE API. You can find these repositories in the following
+locations, depending on instance type:
+
+- **EC2 Linux**: `/home/ec2-user/example_workflows/`
+- **EC2 Windows**: `C:\Users\Administrator\Desktop\example_workflows`
+- **SageMaker Notebook**: `/home/ec2-user/example_workflows/`, and `/home/ec2-user/sample-notebooks/`
+  - Also viewable in the SageMaker examples UI
+- **EC2 RStudio Server**: `/home/rstudio-user/example_workflows/`

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
+## [5.0.0_1.0.2](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.1...v5.0.0_1.0.2) (04/06/2023)
+- Implement data source/study bugfix to only update users affected by permission changes instead of all users on the study.
+    - Users who had their permissions changes will need to be notified and will have to re-launch any effected workspaces.
+- Clone SWB example repos on workspace init.
+
 ## [5.0.0_1.0.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.0...v5.0.0_1.0.1) (03/03/2023)
 
 - Remove create study UI functionality and 'My Studies' tab from Studies page.
