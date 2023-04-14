@@ -23,6 +23,7 @@ import { Menu } from 'semantic-ui-react';
 import { getRoutes, getMenuItems, getDefaultRouteLocation } from '@aws-ee/base-ui/dist/helpers/plugins-util';
 import MainLayout from '@aws-ee/base-ui/dist/parts/MainLayout';
 import { displayError } from '@aws-ee/base-ui/dist/helpers/notification';
+import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
 import withAuth from '../extend/withAuth';
 import TermsModal from './TermsModel';
@@ -72,6 +73,23 @@ class RegisterApp extends React.Component {
     }
   }
 
+  openHelp() {
+    window.open(branding.page.help, '_blank');
+  }
+
+  appMenuItems() {
+    return (
+      <>
+        {branding.page.help && <Menu.Item onClick={this.openHelp}>Help</Menu.Item>}
+        <TermsModal // Clickable Terms menu item
+          trigger={<Menu.Item>Terms of Service</Menu.Item>}
+          closeOnDimmerClick
+          className="mt3"
+        />
+      </>
+    )
+  }
+
   renderApp() {
     return (
       <>
@@ -85,13 +103,7 @@ class RegisterApp extends React.Component {
         />
         <MainLayout
           menuItems={this.getMenuItems()}
-          appMenuItems={
-            <TermsModal // Clickable Terms menu item
-              trigger={<Menu.Item>Terms of Service</Menu.Item>}
-              closeOnDimmerClick
-              className="mt3"
-            />
-          }
+          appMenuItems={this.appMenuItems()}
         >
           <Switch>
             <Redirect exact from="/" to={this.getDefaultRouteLocation()} />

@@ -17,7 +17,11 @@
     },
     "category": {
       "type": "string",
-      "enum": ["My Studies", "Organization", "Open Data"]
+      "enum": [
+        "My Studies",
+        "Organization",
+        "Open Data"
+      ]
     },
     "description": {
       "type": "string",
@@ -38,6 +42,12 @@
       "pattern": "^([A-Fa-f0-9]{40})$",
       "description": "A unique identifier for Open Data in MD5 hash, hexadecimal"
     },
+    "region": {
+      "type": "string",
+      "maxLength": 64,
+      "default": "unknown",
+      "description": "The AWS region of the study S3 bucket."
+    },
     "resources": {
       "type": "array",
       "items": [
@@ -56,8 +66,14 @@
     },
     "accessType": {
       "type": "string",
-      "enum": ["readonly", "readwrite"]
+      "enum": [
+        "readonly",
+        "readwrite"
+      ]
     }
   },
-  "required": ["id", "category"]
+  "required": [
+    "id",
+    "category"
+  ]
 }

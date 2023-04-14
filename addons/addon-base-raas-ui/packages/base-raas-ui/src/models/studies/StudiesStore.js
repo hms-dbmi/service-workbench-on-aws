@@ -119,7 +119,6 @@ const StudiesStore = BaseStore.named('StudiesStore')
 function registerContextItems(appContext) {
   appContext.studiesStoresMap = {
     // TODO - we should be using ids when calling the backend but the backend needs fixing too since it does not support ids yet
-    [categories.myStudies.id]: StudiesStore.create({ category: categories.myStudies.name }),
     [categories.organization.id]: StudiesStore.create({ category: categories.organization.name }),
     [categories.openData.id]: StudiesStore.create({ category: categories.openData.name }),
   };

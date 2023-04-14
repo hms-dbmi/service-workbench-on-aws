@@ -26,7 +26,6 @@ import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { isStoreError, isStoreNew, isStoreLoading } from '@aws-ee/base-ui/dist/models/BaseStore';
 import { categories } from '../../models/studies/categories';
 import StudiesTab from './StudiesTab';
-import CreateStudy from './CreateStudy';
 import StudyStepsProgress from './StudyStepsProgress';
 
 // This component is used with the TabPane to replace the default Segment wrapper since
@@ -54,11 +53,6 @@ class StudiesPage extends React.Component {
   goto(pathname) {
     const goto = gotoFn(this);
     goto(pathname);
-  }
-
-  get canCreateStudy() {
-    // Note, this does not cover the case if you can create a study but don't have any project linked with you yet.
-    return _.get(this.props.userStore, 'user.capabilities.canCreateStudy', true);
   }
 
   get canSelectStudy() {
@@ -96,15 +90,12 @@ class StudiesPage extends React.Component {
   }
 
   renderTitle() {
-    const canCreateStudy = this.canCreateStudy;
-    const hasProjects = this.hasProjects;
     return (
       <div className="flex">
         <Header as="h3" className="color-grey mt1 mb0 flex-auto">
           <Icon name="book" className="align-top" />
           <Header.Content className="left-align">Studies</Header.Content>
         </Header>
-        {canCreateStudy && hasProjects && <CreateStudy />}
       </div>
     );
   }
@@ -114,7 +105,6 @@ class StudiesPage extends React.Component {
   }
 
   renderStudyTabs() {
-    const isExternalUser = this.isExternalUser;
     const getMenuItemLabel = category => {
       const store = this.getStudiesStore(category);
       const emptySpan = null;
@@ -125,13 +115,7 @@ class StudiesPage extends React.Component {
       return <Label>{niceNumber(store.total)}</Label>;
     };
 
-    // Create tab panes for each study category. If the user is not external user, then myStudies pane should not be shown
-    const applicableCategories = _.filter(categories, category => {
-      if (category.id === 'my-studies' && isExternalUser) return false;
-      return true;
-    });
-
-    const studyPanes = _.map(applicableCategories, category => ({
+    const studyPanes = _.map(categories, category => ({
       menuItem: (
         <Menu.Item data-testid="table-tab" key={category.id}>
           {category.name} {getMenuItemLabel(category)}
@@ -159,30 +143,24 @@ class StudiesPage extends React.Component {
     const selection = this.props.filesSelection;
     const empty = selection.empty;
     const count = selection.count;
-    const canCreateStudy = this.canCreateStudy;
     const canSelectStudy = this.canSelectStudy;
     const hasProjects = this.hasProjects;
 
-    if (empty && canCreateStudy && canSelectStudy && hasProjects) {
+    if (empty && canSelectStudy && hasProjects) {
       return this.renderWarningWithButton({
-        content: (
-          <>
-            Select one or more studies to proceed to the next step or create a study by clicking on <b>Create Study</b>{' '}
-            button at the top.
-          </>
-        ),
+        content: 'Select one or more studies to proceed to the next step.',
       });
     }
 
-    if (empty && canCreateStudy && canSelectStudy && !hasProjects) {
+    if (empty && canSelectStudy && !hasProjects) {
       return this.renderWarning({
         header: 'Missing association with one or more projects!',
         content:
-          "You won't be able to select or create studies because you currently don't have any association with one or more projects, please contact your administrator.",
+          "You won't be able to select studies because you currently don't have any association with one or more projects, please contact your administrator.",
       });
     }
 
-    if (empty && canSelectStudy && !canCreateStudy) {
+    if (empty && canSelectStudy) {
       return this.renderWarningWithButton({
         content: 'Select one or more studies to proceed to the next step.',
       });
@@ -275,7 +253,6 @@ class StudiesPage extends React.Component {
 
 decorate(StudiesPage, {
   getStudiesStore: observable,
-  canCreateStudy: computed,
   canSelectStudy: computed,
   hasProjects: computed,
   isExternalUser: computed,

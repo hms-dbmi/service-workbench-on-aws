@@ -8,6 +8,17 @@ INSTALL_DIR="/usr/local/share/workspace-environment"
 sudo mkdir "$INSTALL_DIR"
 sudo aws s3 sync "$bootstrap_s3_location" "$INSTALL_DIR"
 
+clone_script="$INSTALL_DIR/clone_repos.sh"
+if [ -s "$clone_script" ]
+then
+    sudo touch /var/log/clone.log
+    sudo chmod 777 /var/log/clone.log
+    # Whatever is copying these scripts to ec2 doesn't seem to respect permissions
+    # We just need execute, disregard the 00
+    sudo chmod 500 "$clone_script"
+    sudo $clone_script >> /var/log/clone.log
+fi
+
 bootstrap_script="$INSTALL_DIR/bootstrap.sh"
 if [ -s "$bootstrap_script" ]
 then
