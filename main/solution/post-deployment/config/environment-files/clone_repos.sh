@@ -7,7 +7,7 @@ return_dir=$(pwd)
 
 chown_user="ec2-user"
 repo_dir="/home/ec2-user/example_workflows"
-branch="dev"
+branch="gic"
 
 GIT_TERMINAL_PROMPT=0
 if [ -d "/home/rstudio-user" ]
