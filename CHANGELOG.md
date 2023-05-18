@@ -3,15 +3,20 @@
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
 ## [5.0.0_1.0.3](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.2...v5.0.0_1.0.3) (04/17/2023)
+
 - Implement new setting `useCustomAmi` to bypass SWB AMI permisson checking
-    - Add KMS reencrypt permissions needed for custom AMIs
+  - Add KMS reencrypt permissions needed for custom AMIs
 - Created_By tag value is enforced to be lower case
 - Froze pnpm lockfile
-- whitespace fixes
+- Update CFT templates to add permissions needed to use AWS get parameters and secrets.
+- Add get_security_agent scripts for windows and linux to pull in EC2-scripts repo.
+- Update bootstrap script to use EC2-scripts repo security agent installer script.
+- Update windows template to call windows security agent installer.
 
 ## [5.0.0_1.0.2](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.1...v5.0.0_1.0.2) (04/06/2023)
+
 - Implement data source/study bugfix to only update users affected by permission changes instead of all users on the study.
-    - Users who had their permissions changes will need to be notified and will have to re-launch any effected workspaces.
+  - Users who had their permissions changes will need to be notified and will have to re-launch any effected workspaces.
 - Clone SWB example repos on workspace init.
 
 ## [5.0.0_1.0.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.0...v5.0.0_1.0.1) (03/03/2023)
