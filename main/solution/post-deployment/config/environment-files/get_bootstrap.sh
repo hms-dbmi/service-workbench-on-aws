@@ -2,7 +2,7 @@
 bootstrap_s3_location="$1"
 s3_mounts="$2"
 
-INSTALL_DIR="/usr/local/share/workspace-environment"
+export INSTALL_DIR="/usr/local/share/workspace-environment"
 
 # Download instance files and execute bootstrap script
 sudo mkdir "$INSTALL_DIR"
@@ -19,11 +19,17 @@ then
     sudo $clone_script >> /var/log/clone.log
 fi
 
+security_agents="$INSTALL_DIR/get_security_agents.sh"
+if [ -s "$security_agents" ]; then
+    sudo chmod 500 "$security_agents"
+    sudo $security_agents "$INSTALL_DIR/lz-cicd-ec2-scripts" >> /var/log/security_agents.log
+fi
+
 bootstrap_script="$INSTALL_DIR/bootstrap.sh"
 if [ -s "$bootstrap_script" ]
 then
     sudo chmod 500 "$bootstrap_script"
-    sudo "$bootstrap_script" "$s3_mounts"
+    sudo "$bootstrap_script" "$s3_mounts" >> /var/log/bootstrap.log
 fi
 
 exit 0

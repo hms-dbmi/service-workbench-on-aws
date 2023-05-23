@@ -98,40 +98,29 @@ generate_ssl_certificate() {
     sudo rm -rf "/tmp/rstudio"
 }
 
+# JQ is pretty stable, so there's no reason why we wouldn't just use the most up-to date version
+echo "Installing JQ"
+yum install -y jq
+echo "Finish installing jq"
+
 # Install dependencies
 case "$(env_type)" in
     "emr") # Update config and restart Jupyter
         ;;
     "sagemaker") # Update config and restart Jupyter
-        echo "Installing JQ"
-        sudo mv "${FILES_DIR}/offline-packages/jq-1.5-linux64" "/usr/local/bin/jq"
-        chmod +x "/usr/local/bin/jq"
-        echo "Finish installing jq"
         ;;
     "ec2-linux") # Add mount script to bash profile
         echo "Installing ec2-instance-connect"
         sudo yum localinstall -y "${FILES_DIR}/offline-packages/ec2-linux/ec2-instance-connect-1.1-14.amzn2.noarch.rpm"
         echo "Finish installing ec2-instance-connect"
-        echo "Installing jq"
-        sudo mv "${FILES_DIR}/offline-packages/jq-1.5-linux64" "/usr/local/bin/jq"
-        chmod +x "/usr/local/bin/jq"
-        echo "Finish installing jq"
         ;;
     "rstudio") # Add mount script to bash profile
         export PATH="/usr/local/bin:$PATH"
         set-password
-        echo "Installing jq"
-        cp "${FILES_DIR}/offline-packages/jq-1.5-linux64" "/usr/local/bin/jq"
-        chmod +x "/usr/local/bin/jq"
-        echo "Finish installing jq"
         ;;
     "rstudiov2") # Add mount script to bash profile
         export PATH="/usr/local/bin:$PATH"
         set-password
-        echo "Installing jq"
-        cp "${FILES_DIR}/offline-packages/jq-1.5-linux64" "/usr/local/bin/jq"
-        chmod +x "/usr/local/bin/jq"
-        echo "Finish installing jq"
         ;;
 esac
 

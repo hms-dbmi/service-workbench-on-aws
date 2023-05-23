@@ -229,3 +229,6 @@ dbStudyPermissions: ${self:custom.settings.dbPrefix}-StudyPermissions
 
 # DynamoDB table name for Environments created using AWS Service Catalog
 dbEnvironmentsSc: ${self:custom.settings.dbPrefix}-EnvironmentsSc
+
+# Use Custom AMIs that are already managed by other process like golden image pipeline
+useCustomAmi: false

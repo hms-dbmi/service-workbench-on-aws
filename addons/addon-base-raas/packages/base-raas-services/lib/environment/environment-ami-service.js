@@ -82,6 +82,12 @@ class EnvironmentAmiService extends Service {
       return;
     }
 
+    const useCustomAmi = this.settings.getBoolean('useCustomAmi');
+    if (useCustomAmi) {
+      //permissions are already setup, no need to validate further for custom AMIs
+      return;
+    }
+
     const params = {
       ImageId: imageId,
       LaunchPermission: {
