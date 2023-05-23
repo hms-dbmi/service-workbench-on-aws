@@ -87,7 +87,7 @@ class RegisterApp extends React.Component {
           className="mt3"
         />
       </>
-    )
+    );
   }
 
   renderApp() {
@@ -101,10 +101,7 @@ class RegisterApp extends React.Component {
           logoutOnDecline
           className="mt3"
         />
-        <MainLayout
-          menuItems={this.getMenuItems()}
-          appMenuItems={this.appMenuItems()}
-        >
+        <MainLayout menuItems={this.getMenuItems()} appMenuItems={this.appMenuItems()}>
           <Switch>
             <Redirect exact from="/" to={this.getDefaultRouteLocation()} />
             {this.getRoutes()}
