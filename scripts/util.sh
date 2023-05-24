@@ -15,9 +15,9 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 # This sets STAGE to $1 if present and not null, otherwise it sets stage to
 # $STAGE from the environment if present, else it defaults to $USER
-if [ -z "$1" ]; then 
+if [ -z "$1" ]; then
   echo "STAGE not supplied as command line argument"
-  if [ -z "$STAGE" ]; then 
+  if [ -z "$STAGE" ]; then
     echo "STAGE not supplied as environment variable STAGE"
     echo "Setting STAGE from environment variable USER: ${USER}"
     STAGE=$USER
@@ -34,7 +34,7 @@ export SOLUTION_ROOT_DIR="${PWD}"
 export SOLUTION_DIR="${SOLUTION_ROOT_DIR}/main/solution"
 export CONFIG_DIR="${SOLUTION_ROOT_DIR}/main/config"
 export INT_TEST_DIR="${SOLUTION_ROOT_DIR}/main/integration-tests"
-# By default, we assume test config file exists. 
+# By default, we assume test config file exists.
 # The check for it happens later
 export TEST_CONFIG_EXISTS=true
 popd > /dev/null
@@ -59,7 +59,7 @@ function init_package_manager() {
       EXEC="pnpx"
       RUN_SCRIPT="pnpm run"
       export EXEC RUN_SCRIPT
-      INSTALL_RECURSIVE="pnpm recursive install"
+      INSTALL_RECURSIVE="pnpm recursive install --frozen-lockfile"
       ;;
     *)
       echo "error: Unknown package manager: '${PACKAGE_MANAGER}''" >&2

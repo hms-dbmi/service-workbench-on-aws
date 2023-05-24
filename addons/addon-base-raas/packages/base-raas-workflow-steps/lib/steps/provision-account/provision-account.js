@@ -240,7 +240,7 @@ class ProvisionAccount extends StepBase {
         },
         {
           Key: 'CreatedBy',
-          Value: user.username,
+          Value: user.username.toLowerCase(),
         },
       ],
     };
@@ -381,7 +381,7 @@ class ProvisionAccount extends StepBase {
       data = {
         CreateAccountStatus: {
         AccountId: "333333333333",
-        Id: "car-exampleaccountcreationrequestid", 
+        Id: "car-exampleaccountcreationrequestid",
         State: "SUCCEEDED"
         }
       }
@@ -430,9 +430,9 @@ class ProvisionAccount extends StepBase {
     /* response example
     data = {
       Account: {
-      Arn: "arn:aws:organizations::111111111111:account/o-exampleorgid/555555555555", 
-      Email: "anika@example.com", 
-      Id: "555555555555", 
+      Arn: "arn:aws:organizations::111111111111:account/o-exampleorgid/555555555555",
+      Email: "anika@example.com",
+      Id: "555555555555",
       Name: "Beta Account"
       }
     }

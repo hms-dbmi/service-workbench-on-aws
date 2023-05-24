@@ -212,6 +212,7 @@ workflowLoopRunner:
     APP_LAUNCH_CONSTRAINT_ROLE_PREFIX: ${self:custom.settings.launchConstraintRolePrefix}
     APP_LAUNCH_CONSTRAINT_POLICY_PREFIX: ${self:custom.settings.launchConstraintPolicyPrefix}
     APP_ENV_TYPE_CONFIGS_BUCKET_NAME: ${self:custom.settings.envTypeConfigsBucketName}
+    APP_USE_CUSTOM_AMI: ${self:custom.settings.useCustomAmi}
     APP_HOSTED_ZONE_ID: ${self:custom.settings.hostedZoneId}
     APP_DOMAIN_NAME: ${self:custom.settings.domainName}
     APP_ENV_BOOTSTRAP_BUCKET_NAME: ${self:custom.settings.environmentsBootstrapBucketName}
