@@ -366,7 +366,6 @@ Resources:
                   - ec2:DescribeSubnets
                   - ec2:DescribeVpcs
                   - elasticloadbalancing:*
-                
                 Resource: '*' # EMR slave node security group has a machine generated ID and no tags, can not specify resource or add condition here
               - Effect: Allow
                 Action:
@@ -447,6 +446,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - kms:GenerateDataKeyWithoutPlaintext
+                  - kms:ReEncrypt*
                 Resource: '*'
               - Effect: Allow
                 Action:
@@ -533,7 +533,7 @@ Resources:
           // This regex check should be the same as the one in create-user email pattern
           const emailRegex = /^\w+([\.+-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,63})+$/
           const { userPoolId, triggerSource, request, userName } = event
-          const logInfo = { userPoolId, triggerSource, userName, 
+          const logInfo = { userPoolId, triggerSource, userName,
           requestBody: { name: request.name, given_name: request.given_name, family_name: request.family_name, email: request.email } }
           console.info("Event-parsed details:\n" + JSON.stringify(logInfo, null, 2));
 

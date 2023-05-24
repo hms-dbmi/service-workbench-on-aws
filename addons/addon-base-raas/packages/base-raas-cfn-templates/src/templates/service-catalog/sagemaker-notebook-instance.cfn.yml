@@ -84,12 +84,14 @@ Resources:
         Statement:
           - Effect: Allow
             Action:
+              - 'ssm:GetParameter*'
+              - 'secretsmanager:GetSecretValue'
               - 's3:*'
               - 'logs:*'
-            Resource: '*'
-          - Effect: Allow
-            Action:
-              - 'kms:*'
+              - 'kms:Decrypt'
+              - 'kms:GenerateDataKey'
+              - 'sagemaker:DeleteTags'
+              - 'sagemaker:AddTags'
             Resource: '*'
           - Effect: Allow
             Action:
@@ -155,6 +157,34 @@ Resources:
           - !Ref 'AWS::NoValue'
           - PolicyName: !Join ['-', [Ref: Namespace, 's3-egressstore-policy']]
             PolicyDocument: !Ref EgressStoreIamPolicyDocument
+        - PolicyName: !Join ['-', [Ref: Namespace, 'tag-policy']]
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - sagemaker:DeleteTags
+                  - sagemaker:AddTags
+                Resource: !Sub 'arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:notebook-instance/basicnotebookinstance-*'
+                Condition:
+                  StringLike:
+                    sagemaker:ResourceTag/Name: !Sub '${Namespace}-sagemaker'
+        - PolicyName: !Join ['-', [Ref: Namespace, 'config-policy']]
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - 'ssm:GetParametersByPath'
+                  - 'ssm:GetParameter'
+                Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/config/*'
+              - Effect: 'Allow'
+                Action:
+                  - 'secretsmanager:GetSecretValue'
+                  - 'kms:Decrypt'
+                  - 'kms:GenerateDataKey'
+                  - 's3:GetObject'
+                Resource: '*'
         - PolicyName: !Join ['-', [Ref: Namespace, 's3-bootstrap-script-policy']]
           PolicyDocument:
             Version: '2012-10-17'
@@ -219,6 +249,9 @@ Resources:
       LifecycleConfigName: !GetAtt BasicNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleConfigName
       KmsKeyId: !Ref EncryptionKeyArn
       PlatformIdentifier: 'notebook-al2-v1'
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [Ref: Namespace, 'sagemaker']]
 
   BasicNotebookInstanceLifecycleConfig:
     Type: 'AWS::SageMaker::NotebookInstanceLifecycleConfig'
@@ -230,7 +263,7 @@ Resources:
               # Download and execute bootstrap script
               aws s3 cp "${EnvironmentInstanceFiles}/get_bootstrap.sh" "/tmp"
               chmod 500 "/tmp/get_bootstrap.sh"
-              /tmp/get_bootstrap.sh "${EnvironmentInstanceFiles}" '${S3Mounts}'
+              /tmp/get_bootstrap.sh "${EnvironmentInstanceFiles}" '${S3Mounts}' >> "/var/log/get_bootstrap.log"
 
               # Stop Idle Script
               if [ "${AutoStopIdleTimeInMinutes}" != "0" ]; then
