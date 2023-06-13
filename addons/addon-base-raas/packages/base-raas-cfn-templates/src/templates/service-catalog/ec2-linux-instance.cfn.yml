@@ -165,7 +165,9 @@ Resources:
                 Action:
                   - s3:GetObject
                   - s3:List*
-                Resource: '*'
+                Resource:
+                  - 'arn:aws:s3:::embed-aim-ahead'
+                  - 'arn:aws:s3:::embed-aim-ahead/*'
       PermissionsBoundary: !Ref InstanceRolePermissionBoundary
 
   InstanceProfile:
