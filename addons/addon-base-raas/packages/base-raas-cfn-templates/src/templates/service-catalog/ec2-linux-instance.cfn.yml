@@ -157,6 +157,15 @@ Resources:
                     s3:prefix: !Sub
                       - '${S3Prefix}/*'
                       - S3Prefix: !Select [3, !Split ['/', !Ref EnvironmentInstanceFiles]]
+        - PolicyName: !Join ['-', [Ref: Namespace, 's3-get-and-list-any']]
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:List*
+                Resource: '*'
       PermissionsBoundary: !Ref InstanceRolePermissionBoundary
 
   InstanceProfile:
