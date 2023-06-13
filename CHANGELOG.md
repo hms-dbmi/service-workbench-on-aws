@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. As our fork
 
 
 ## [5.0.0_1.0.4](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.3...v5.0.0_1.0.4) (06/13/2023)
-- Add global S3 GetObject and List permission for workspace roles.
+- Add S3 GetObject and List permission to access embed data for workspaces.
 
 ## [5.0.0_1.0.3](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.2...v5.0.0_1.0.3) (04/17/2023)
 
