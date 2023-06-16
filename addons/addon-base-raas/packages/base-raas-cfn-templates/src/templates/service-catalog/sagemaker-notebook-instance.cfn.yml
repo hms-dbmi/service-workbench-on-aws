@@ -215,17 +215,18 @@ Resources:
                     s3:prefix: !Sub
                       - '${S3Prefix}/*'
                       - S3Prefix: !Select [3, !Split ['/', !Ref EnvironmentInstanceFiles]]
-        - PolicyName: !Join ['-', [Ref: Namespace, 's3-get-and-list-any']]
+        - PolicyName: !Join ['-', [Ref: Namespace, 'allow-non-account-s3-access']]
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-              - Effect: Allow
+              - Effect: 'Allow'
                 Action:
-                  - s3:GetObject
-                  - s3:List*
-                Resource:
-                  - 'arn:aws:s3:::embed-aim-ahead'
-                  - 'arn:aws:s3:::embed-aim-ahead/*'
+                  - 's3:GetObject'
+                  - 's3:List*'
+                Resource: '*'
+                Condition:
+                  StringNotEquals:
+                    s3:ResourceAccount: !Sub '${AWS::AccountId}'
         - PolicyName: cw-logs
           PolicyDocument:
             Statement:
