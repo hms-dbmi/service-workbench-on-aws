@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
+
+## [5.0.0_1.0.4](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.3...v5.0.0_1.0.4) (06/13/2023)
+- Add S3 GetObject and List permission to access embed data for workspaces.
+
 ## [5.0.0_1.0.3](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.2...v5.0.0_1.0.3) (04/17/2023)
 
 - Implement new setting `useCustomAmi` to bypass SWB AMI permisson checking
