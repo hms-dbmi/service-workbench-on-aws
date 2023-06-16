@@ -152,6 +152,9 @@ Resources:
                   - 'arn:aws:s3:::*-sec-apps/*.rpm'
                   - 'arn:aws:s3:::*-sec-apps/*.tar'
                   - 'arn:aws:s3:::*-sec-apps/*.zip'
+                Condition:
+                  StringNotEquals:
+                    s3:ResourceAccount: !Sub '${AWS::AccountId}'
               - Effect: 'Allow'
                 Action: 'secretsmanager:GetSecretValue'
                 Resource:
