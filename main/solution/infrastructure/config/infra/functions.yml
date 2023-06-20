@@ -1,9 +1,15 @@
 lambdaProxyHandler:
-  handler: src/lambdas/lambda-proxy/handler.handler
+  handler: src/lambdas/lambda-proxy/handler.lambda_handler
+  package:
+    patterns:
+      - '!./**'
+      - src/lambdas/lambda-proxy/handler.py
+  layers:
+      - Ref: PythonRequirementsLambdaLayer
   role: LambdaProxyRole
   description: Proxy between ALB and API GW.
   timeout: 30
-  runtime: python3.9
+  runtime: python3.11
   events:
       - alb:
           listenerArn: !Ref ListenerHTTPS

@@ -12,7 +12,15 @@ provider:
     serverSideEncryption: AES256
   stackTags: ${self:custom.tags}
 
+package:
+  individually: true
+
 custom:
+  pythonRequirements:
+    slim: true
+    layer:
+      compatibleRuntimes:
+        - python3.11
   settings: ${file(./config/settings/.settings.js):merged}
   tags:
     Name: ${self:custom.settings.envName}-${self:service}
