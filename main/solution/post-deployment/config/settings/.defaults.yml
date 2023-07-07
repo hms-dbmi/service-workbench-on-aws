@@ -310,3 +310,8 @@ envMgmtRoleArn: ${cf:${self:custom.settings.backendStackName}.EnvMgmtRoleArn}
 # The S3 bucket name to be used to store egress store data
 egressStoreBucketName: ${self:custom.settings.globalNamespace}-egress-store
 # =========================================================================================================
+
+#===============================WAF=IP=Rate=Limit===========================================================
+# Per ip, per 5 minutes
+wafIpRateLimit: 1000
+
