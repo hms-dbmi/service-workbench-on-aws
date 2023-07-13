@@ -15,10 +15,10 @@
 
 // We are using Babel in this module to allow importing ".cfn.yml" files as plain text instead of parsing them webpack
 // "yaml-loader", because in this case we want the text value not the parsed yaml as an object.
-import ec2RStudioInstance from '../templates/ec2-rstudio-instance.cfn.yml';
-import ec2LinuxInstance from '../templates/ec2-linux-instance.cfn.yml';
-import ec2WindowsInstance from '../templates/ec2-windows-instance.cfn.yml';
-import sagemakerInstance from '../templates/sagemaker-notebook-instance.cfn.yml';
+import ec2RStudioInstance from '../templates/service-catalog/ec2-rstudio-instance.cfn.yml';
+import ec2LinuxInstance from '../templates/service-catalog/ec2-linux-instance.cfn.yml';
+import ec2WindowsInstance from '../templates/service-catalog/ec2-windows-instance.cfn.yml';
+import sagemakerInstance from '../templates/service-catalog/sagemaker-notebook-instance.cfn.yml';
 import onboardAccount from '../templates/onboard-account.cfn.yml';
 import storageGatewayNetworkInfra from '../templates/storage-gateway/network-infrastructure.cfn.yml';
 import applicationLoadBalancer from '../templates/application-load-balancer.cfn.yml';
