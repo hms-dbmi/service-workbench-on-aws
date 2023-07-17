@@ -96,6 +96,7 @@ Resources:
               - 'kms:GenerateDataKey'
               - 'sagemaker:DeleteTags'
               - 'sagemaker:AddTags'
+              - 'sagemaker:ListTags'
             Resource: '*'
           - Effect: Allow
             Action:
@@ -168,6 +169,7 @@ Resources:
               - Effect: 'Allow'
                 Action:
                   - sagemaker:DeleteTags
+                  - sagemaker:ListTags
                   - sagemaker:AddTags
                 Resource: !Sub 'arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:notebook-instance/basicnotebookinstance-*'
                 Condition:
@@ -286,6 +288,20 @@ Resources:
   BasicNotebookInstanceLifecycleConfig:
     Type: 'AWS::SageMaker::NotebookInstanceLifecycleConfig'
     Properties:
+      OnCreate:
+        - Content:
+            Fn::Base64: !Sub |
+              #!/bin/bash
+              set -e
+
+              # Save kernel installation script so we can load on create and start
+              aws s3 cp "${EnvironmentInstanceFiles}/install_kernel.sh" "/home/ec2-user/SageMaker/.install_kernel.sh"
+              chmod 500 /home/ec2-user/SageMaker/.install_kernel.sh
+
+              # Load kernel if tagged
+              sudo -u ec2-user -i /home/ec2-user/SageMaker/.install_kernel.sh \
+                "${EnvironmentInstanceFiles}" "/home/ec2-user/SageMaker/.kernels"
+
       OnStart:
         - Content:
             Fn::Base64: !Sub |
@@ -294,6 +310,10 @@ Resources:
               aws s3 cp "${EnvironmentInstanceFiles}/get_bootstrap.sh" "/tmp"
               chmod 500 "/tmp/get_bootstrap.sh"
               /tmp/get_bootstrap.sh "${EnvironmentInstanceFiles}" '${S3Mounts}' >> "/var/log/get_bootstrap.log"
+
+              # Load kernel if tagged
+              sudo -u ec2-user -i /home/ec2-user/SageMaker/.install_kernel.sh \
+                "${EnvironmentInstanceFiles}" "/home/ec2-user/SageMaker/.kernels"
 
               # Stop Idle Script
               if [ "${AutoStopIdleTimeInMinutes}" != "0" ]; then
