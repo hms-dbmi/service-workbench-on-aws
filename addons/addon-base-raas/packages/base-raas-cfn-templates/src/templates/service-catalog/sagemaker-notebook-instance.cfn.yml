@@ -224,6 +224,20 @@ Resources:
                     s3:prefix: !Sub
                       - '${S3Prefix}/*'
                       - S3Prefix: !Select [3, !Split ['/', !Ref EnvironmentInstanceFiles]]
+        - PolicyName: !Join ['-', [Ref: Namespace, 'kernel-policy']]
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - 's3:ListBucket'
+                  - 's3:GetObject'
+                Resource: !Sub
+                  - 'arn:aws:s3:::${S3Bucket}'
+                  - S3Bucket: !Select [2, !Split ['/', !Ref EnvironmentInstanceFiles]]
+                Condition:
+                  StringLike:
+                    s3:prefix: 'kernels/*'
         - PolicyName: !Join ['-', [Ref: Namespace, 'allow-non-account-s3-access']]
           PolicyDocument:
             Version: '2012-10-17'
@@ -299,8 +313,9 @@ Resources:
               chmod 500 /home/ec2-user/SageMaker/.install_kernel.sh
 
               # Load kernel if tagged
+              bucket="s3://$(cut -d '/' -f 3 <<< ${EnvironmentInstanceFiles})"
               sudo -u ec2-user -i /home/ec2-user/SageMaker/.install_kernel.sh \
-                "${EnvironmentInstanceFiles}" "/home/ec2-user/SageMaker/.kernels"
+                "$bucket" "/home/ec2-user/SageMaker/.kernels"
 
       OnStart:
         - Content:
@@ -312,8 +327,9 @@ Resources:
               /tmp/get_bootstrap.sh "${EnvironmentInstanceFiles}" '${S3Mounts}' >> "/var/log/get_bootstrap.log"
 
               # Load kernel if tagged
+              bucket="s3://$(cut -d '/' -f 3 <<< ${EnvironmentInstanceFiles})"
               sudo -u ec2-user -i /home/ec2-user/SageMaker/.install_kernel.sh \
-                "${EnvironmentInstanceFiles}" "/home/ec2-user/SageMaker/.kernels"
+                "$bucket" "/home/ec2-user/SageMaker/.kernels"
 
               # Stop Idle Script
               if [ "${AutoStopIdleTimeInMinutes}" != "0" ]; then

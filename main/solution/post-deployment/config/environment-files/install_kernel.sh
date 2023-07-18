@@ -6,7 +6,6 @@ source /home/ec2-user/.bashrc
 bucket="$1"
 path="$2" # like /home/ec2-user/anaconda3/envs or /home/ec2-user/SageMaker/.kernels
 
-# kernel information stored in "kernel" tag on notebook with value like "rapids_23.X=SM-al2-v1_rapids-23.06"
 AWS_INSTANCE_ID=$(jq --raw-output '.ResourceArn' /opt/ml/metadata/resource-metadata.json)
 kernel=$(aws sagemaker list-tags --resource-arn $AWS_INSTANCE_ID \
   | jq --raw-output '.Tags[]  | select(.Key == "kernels") | .Value' )
@@ -31,7 +30,10 @@ if [ "$path" != "/home/ec2-user/anaconda3/envs" ] && [ ! -d "/home/ec2-user/anac
   ln -s "$path/$kernel_name" "/home/ec2-user/anaconda3/envs/$kernel_name"
 fi
 
-# Activate the kernel
-conda activate $kernel_name
-python -m ipykernel install --user --name $kernel_name
-
+# Activate the kernel if it's not active and register it in jupyter
+if [ "$(conda env list | grep -Fi "$kernel_name")" == "" ]; then
+  conda activate $kernel_name
+fi
+if [ "$(jupyter kernelspec list --log-level=CRITICAL | grep -Fi "$kernel_name")" == "" ]; then
+  python -m ipykernel install --user --name $kernel_name
+fi
