@@ -305,22 +305,23 @@ Resources:
       OnCreate:
         - Content:
             Fn::Base64: !Sub |
-              #!/bin/bash
-              set -e
+              #!/usr/bin/env bash
+              sudo -u ec2-user -i <<'EOF'
 
               # Save kernel installation script so we can load on create and start
               aws s3 cp "${EnvironmentInstanceFiles}/install_kernel.sh" "/home/ec2-user/SageMaker/.install_kernel.sh"
-              chmod 500 /home/ec2-user/SageMaker/.install_kernel.sh
+              chmod +x /home/ec2-user/SageMaker/.install_kernel.sh
 
               # Load kernel if tagged
               bucket="s3://$(cut -d '/' -f 3 <<< ${EnvironmentInstanceFiles})"
-              sudo -u ec2-user -i /home/ec2-user/SageMaker/.install_kernel.sh \
-                "$bucket" "/home/ec2-user/SageMaker/.kernels"
+              /home/ec2-user/SageMaker/.install_kernel.sh "$bucket" "/home/ec2-user/SageMaker/.kernels"
 
+              EOF
       OnStart:
         - Content:
             Fn::Base64: !Sub |
               #!/usr/bin/env bash
+
               # Download and execute bootstrap script
               aws s3 cp "${EnvironmentInstanceFiles}/get_bootstrap.sh" "/tmp"
               chmod 500 "/tmp/get_bootstrap.sh"
@@ -328,8 +329,7 @@ Resources:
 
               # Load kernel if tagged
               bucket="s3://$(cut -d '/' -f 3 <<< ${EnvironmentInstanceFiles})"
-              sudo -u ec2-user -i /home/ec2-user/SageMaker/.install_kernel.sh \
-                "$bucket" "/home/ec2-user/SageMaker/.kernels"
+              sudo -u ec2-user -i /home/ec2-user/SageMaker/.install_kernel.sh "$bucket" "/home/ec2-user/SageMaker/.kernels"
 
               # Stop Idle Script
               if [ "${AutoStopIdleTimeInMinutes}" != "0" ]; then
