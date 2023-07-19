@@ -224,20 +224,6 @@ Resources:
                     s3:prefix: !Sub
                       - '${S3Prefix}/*'
                       - S3Prefix: !Select [3, !Split ['/', !Ref EnvironmentInstanceFiles]]
-        - PolicyName: !Join ['-', [Ref: Namespace, 'kernel-policy']]
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: 'Allow'
-                Action:
-                  - 's3:ListBucket'
-                  - 's3:GetObject'
-                Resource: !Sub
-                  - 'arn:aws:s3:::${S3Bucket}'
-                  - S3Bucket: !Select [2, !Split ['/', !Ref EnvironmentInstanceFiles]]
-                Condition:
-                  StringLike:
-                    s3:prefix: 'kernels/*'
         - PolicyName: !Join ['-', [Ref: Namespace, 'allow-non-account-s3-access']]
           PolicyDocument:
             Version: '2012-10-17'
@@ -308,13 +294,10 @@ Resources:
               #!/usr/bin/env bash
               sudo -u ec2-user -i <<'EOF'
 
-              # Save kernel installation script so we can load on create and start
+              # Save and run kernel installation/loading script
               aws s3 cp "${EnvironmentInstanceFiles}/install_kernel.sh" "/home/ec2-user/SageMaker/.install_kernel.sh"
               chmod +x /home/ec2-user/SageMaker/.install_kernel.sh
-
-              # Load kernel if tagged
-              bucket="s3://$(cut -d '/' -f 3 <<< ${EnvironmentInstanceFiles})"
-              /home/ec2-user/SageMaker/.install_kernel.sh "$bucket" "/home/ec2-user/SageMaker/.kernels"
+              /home/ec2-user/SageMaker/.install_kernel.sh "${EnvironmentInstanceFiles}"
 
               EOF
       OnStart:
@@ -322,14 +305,13 @@ Resources:
             Fn::Base64: !Sub |
               #!/usr/bin/env bash
 
+              # Run kernel installation/loading script
+              /home/ec2-user/SageMaker/.install_kernel.sh "${EnvironmentInstanceFiles}"
+
               # Download and execute bootstrap script
               aws s3 cp "${EnvironmentInstanceFiles}/get_bootstrap.sh" "/tmp"
               chmod 500 "/tmp/get_bootstrap.sh"
               /tmp/get_bootstrap.sh "${EnvironmentInstanceFiles}" '${S3Mounts}' >> "/var/log/get_bootstrap.log"
-
-              # Load kernel if tagged
-              bucket="s3://$(cut -d '/' -f 3 <<< ${EnvironmentInstanceFiles})"
-              sudo -u ec2-user -i /home/ec2-user/SageMaker/.install_kernel.sh "$bucket" "/home/ec2-user/SageMaker/.kernels"
 
               # Stop Idle Script
               if [ "${AutoStopIdleTimeInMinutes}" != "0" ]; then

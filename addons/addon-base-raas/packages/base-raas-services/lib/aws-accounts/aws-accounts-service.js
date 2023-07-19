@@ -126,10 +126,7 @@ class AwsAccountsService extends Service {
         Resource: `arn:aws:s3:::${s3BucketName}`,
         Condition: {
           StringLike: {
-            's3:prefix': [
-              `${s3Prefix}*`,
-              'kernels/*'
-            ],
+            's3:prefix': [`${s3Prefix}*`],
           },
         },
       };
@@ -138,10 +135,7 @@ class AwsAccountsService extends Service {
         Effect: 'Allow',
         Principal: { AWS: accountArns },
         Action: ['s3:GetObject'],
-        Resource: [
-          `arn:aws:s3:::${s3BucketName}/${s3Prefix}*`,
-          `arn:aws:s3:::${s3BucketName}/kernels/*`,
-        ],
+        Resource: [`arn:aws:s3:::${s3BucketName}/${s3Prefix}*`],
       };
 
       const Policy = JSON.stringify({
