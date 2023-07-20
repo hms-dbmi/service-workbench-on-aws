@@ -32,10 +32,6 @@ class EnvironmentsList extends React.Component {
     });
   }
 
-  get envsStore() {
-    return this.props.scEnvironmentsStore;
-  }
-
   get viewStore() {
     return this.props.ScEnvView || VIEW.NORMAL;
   }
@@ -53,4 +49,4 @@ decorate(EnvironmentsList, {
   compact: observable,
 });
 
-export default inject('ScEnvView', 'scEnvironmentsStore')(observer(EnvironmentsList));
+export default inject('ScEnvView')(observer(EnvironmentsList));
