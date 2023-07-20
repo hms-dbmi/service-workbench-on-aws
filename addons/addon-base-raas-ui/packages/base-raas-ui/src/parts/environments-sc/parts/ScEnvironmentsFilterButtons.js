@@ -17,7 +17,6 @@ import React from 'react';
 import { decorate, computed, action } from 'mobx';
 import { observer } from 'mobx-react';
 import { Button } from 'semantic-ui-react';
-import c from 'classnames';
 
 import { filterNames } from '../../../models/environments-sc/ScEnvironmentsStore';
 
@@ -60,15 +59,13 @@ class ScEnvironmentsFilterButtons extends React.Component {
     };
 
     return (
-      <div className={c('clearfix', this.props.className)}>
-        <Button.Group floated="right">
-          {_.map(_.keys(filterColorMap), name => (
-            <Button key={name} {...getAttrs(name)}>
-              {_.startCase(name)}
-            </Button>
-          ))}
-        </Button.Group>
-      </div>
+      <Button.Group className="ml2">
+        {_.map(_.keys(filterColorMap), name => (
+          <Button key={name} {...getAttrs(name)}>
+            {_.startCase(name)}
+          </Button>
+        ))}
+      </Button.Group>
     );
   }
 }
