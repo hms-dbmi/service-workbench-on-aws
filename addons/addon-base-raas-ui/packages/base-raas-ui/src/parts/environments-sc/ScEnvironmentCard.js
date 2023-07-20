@@ -20,8 +20,7 @@ import { withRouter } from 'react-router-dom';
 import { Header, Label, Popup, Icon, Divider, Message, Table, Grid, Segment, List } from 'semantic-ui-react';
 import TimeAgo from 'react-timeago';
 import { niceNumber, swallowError } from '@aws-ee/base-ui/dist/helpers/utils';
-import { isStoreLoading, isStoreNotEmpty, isStoreError } from '@aws-ee/base-ui/dist/models/BaseStore';
-import ErrorBox from '@aws-ee/base-ui/dist/parts/helpers/ErrorBox';
+import { isStoreLoading } from '@aws-ee/base-ui/dist/models/BaseStore';
 import ProgressPlaceHolder from '@aws-ee/base-ui/dist/parts/helpers/BasicProgressPlaceholder';
 
 import { isAppStreamEnabled } from '../../helpers/settings';
@@ -69,14 +68,10 @@ class ScEnvironmentCard extends React.Component {
     const configsStore = this.getEnvTypeConfigsStore();
     let content = null;
 
-    if (isStoreError(configsStore)) {
-      content = <ErrorBox error={configsStore.error} className="p0" />;
-    } else if (isStoreLoading(configsStore)) {
+    if (isStoreLoading(configsStore)) {
       content = <ProgressPlaceHolder segmentCount={3} />;
-    } else if (isStoreNotEmpty(configsStore)) {
-      content = this.renderMain();
     } else {
-      content = null;
+      content = this.renderMain();
     }
 
     return content;
@@ -115,7 +110,7 @@ class ScEnvironmentCard extends React.Component {
 
   renderDetailTable(env) {
     const studyCount = _.size(_.get(env, 'studyIds', []));
-    const envType = this.envType || {};
+    const envType = this.envType;
 
     const config = this.getConfiguration(this.environment.envTypeConfigId);
 
@@ -134,9 +129,21 @@ class ScEnvironmentCard extends React.Component {
           {renderRow('Owner', <By uid={env.createdBy} skipPrefix />)}
           {renderRow('Studies', studyCount === 0 ? 'No studies linked to this workspace' : niceNumber(studyCount))}
           {renderRow('Project', _.isEmpty(env.projectId) ? 'N/A' : env.projectId)}
-          {renderRow('Workspace Type', envType.name)}
-          {renderRow('Configuration Name', config !== undefined ? config.name : 'Unavailable')}
-          {renderRow('Instance Type', config !== undefined ? config.instanceType : 'Unavailable')}
+          {renderRow(
+            'Workspace Type',
+            envType?.name || (
+              <>
+                {env.envTypeId}
+                <Popup
+                  trigger={<Icon color="red" className="ml1" name="question circle outline" />}
+                  content="Workspace type is no longer approved or has been deleted."
+                  size="mini"
+                />
+              </>
+            ),
+          )}
+          {!!config && renderRow('Configuration Name', config ? config.name : env.envTypeConfigId)}
+          {!!config && renderRow('Instance Type', config ? config.instanceType : env.envTypeId)}
         </Table.Body>
       </Table>
     );

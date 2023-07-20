@@ -47,7 +47,6 @@ import { displayError } from '@aws-ee/base-ui/dist/helpers/notification';
 import By from '../helpers/By';
 import ScEnvironmentButtons from './parts/ScEnvironmentButtons';
 import ScEnvironmentCost from './parts/ScEnvironmentCost';
-import ScEnvironmentTypeName from './parts/ScEnvironmentTypeName';
 import ScEnvironmentCostTable from './parts/ScEnvironmentCostTable';
 
 // This component is used with the TabPane to replace the default Segment wrapper since
@@ -89,6 +88,10 @@ class ScEnvironmentDetailPage extends React.Component {
 
   get envsStore() {
     return this.props.scEnvironmentsStore;
+  }
+
+  get envTypesStore() {
+    return this.props.envTypesStore;
   }
 
   get userStore() {
@@ -189,6 +192,7 @@ class ScEnvironmentDetailPage extends React.Component {
       </Table.Row>
     );
     const isAdmin = this.userStore.isAdmin;
+    const envType = this.envTypesStore.getEnvType(env.envTypeId);
 
     return (
       <Table definition>
@@ -198,7 +202,19 @@ class ScEnvironmentDetailPage extends React.Component {
           {renderRow('Owner', <By uid={env.createdBy} skipPrefix />)}
           {renderRow('Studies', studyCount === 0 ? 'No studies linked to this workspace' : studyIds.join(', '))}
           {renderRow('Project', _.isEmpty(env.projectId) ? 'N/A' : env.projectId)}
-          {renderRow('Workspace Type', <ScEnvironmentTypeName envTypeId={env.envTypeId} />)}
+          {renderRow(
+            'Workspace Type',
+            envType?.name || (
+              <>
+                {env.envTypeId}
+                <Popup
+                  trigger={<Icon color="red" className="ml1" name="question circle outline" />}
+                  content="Workspace type is no longer approved or has been deleted."
+                  size="mini"
+                />
+              </>
+            ),
+          )}
         </Table.Body>
       </Table>
     );
@@ -339,8 +355,13 @@ class ScEnvironmentDetailPage extends React.Component {
 decorate(ScEnvironmentDetailPage, {
   instanceId: computed,
   envsStore: computed,
+  envTypesStore: computed,
   userStore: computed,
   processing: observable,
 });
 
-export default inject('userStore', 'scEnvironmentsStore')(withRouter(observer(ScEnvironmentDetailPage)));
+export default inject(
+  'userStore',
+  'envTypesStore',
+  'scEnvironmentsStore',
+)(withRouter(observer(ScEnvironmentDetailPage)));
