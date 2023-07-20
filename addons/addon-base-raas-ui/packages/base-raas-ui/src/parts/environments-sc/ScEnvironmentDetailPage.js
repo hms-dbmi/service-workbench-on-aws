@@ -189,11 +189,12 @@ class ScEnvironmentDetailPage extends React.Component {
       </Table.Row>
     );
     const isAdmin = this.userStore.isAdmin;
+    const canToggleLock = this.envsStore.canChangeState(env.id) && env.state.canTerminate;
 
     return (
       <Table definition>
         <Table.Body>
-          {isAdmin && renderRow('Termination Lock', this.renderTerminationLock(env))}
+          {isAdmin && canToggleLock && renderRow('Termination Lock', this.renderTerminationLock(env))}
           {renderRow('Status', this.renderStatus(env))}
           {renderRow('Owner', <By uid={env.createdBy} skipPrefix />)}
           {renderRow('Studies', studyCount === 0 ? 'No studies linked to this workspace' : studyIds.join(', '))}
@@ -304,7 +305,15 @@ class ScEnvironmentDetailPage extends React.Component {
       },
     ];
 
-    return <Tab className="mt4" menu={{ secondary: true, pointing: true }} renderActiveOnly panes={panes} />;
+    return (
+      <Tab
+        className="mt4"
+        menu={{ secondary: true, pointing: true }}
+        renderActiveOnly
+        panes={panes}
+        defaultActiveIndex="1"
+      />
+    );
   }
 
   renderCfnOutput(env) {

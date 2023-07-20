@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
+## [5.0.0_1.1.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.3...v5.0.0_1.1.0) (07/05/2023)
+- Add search field to normal workspace view.
+- Add an advanced workspace table view with sorting & filtering.
+- Set workspace CFT info as default tab on workspace detail page.
+- Hide termination toggle on detail view for workspaces that can't be terminated.
 
 ## [5.0.0_1.0.4](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.3...v5.0.0_1.0.4) (06/13/2023)
 - Add S3 GetObject and List permission to access embed data for workspaces.
