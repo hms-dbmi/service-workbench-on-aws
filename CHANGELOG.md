@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file. As our fork
 - Add S3 GetObject and List permission to access embed data for workspaces.
 - Add logos to workspace types on user creation step so it's easier to visually find the types they want.
 - Add new notice on revoked workspace types, but continue to load the env detail card to allow users to start/stop/terminate revoked workspace types. (Does not give users access to make new workspaces based on the revoked type, only allows them to access already launched ones.)
+- Add custom kernel install and load script in Sagemaker onCreate and onStart lifecycles. Saved in /home/ec2-user/Sagemaker persistent folder for fast start/stop kernel loading.
+- Add volume size parameter to SageMaker persistent folder/drive.
+- Remove old cft templates that are not needed.
+- Add current RStudio template.
 
 ## [5.0.0_1.0.3](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.2...v5.0.0_1.0.3) (04/17/2023)
 
