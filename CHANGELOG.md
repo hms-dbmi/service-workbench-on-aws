@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
-
-## [5.0.0_1.0.4](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.3...v5.0.0_1.0.4) (06/13/2023)
+## [5.0.0_1.1.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.3...v5.0.0_1.1.0) (07/05/2023)
 - Add S3 GetObject and List permission to access embed data for workspaces.
+- Add logos to workspace types on user creation step so it's easier to visually find the types they want.
+- Add new notice on revoked workspace types, but continue to load the env detail card to allow users to start/stop/terminate revoked workspace types. (Does not give users access to make new workspaces based on the revoked type, only allows them to access already launched ones.)
 
 ## [5.0.0_1.0.3](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.2...v5.0.0_1.0.3) (04/17/2023)
 
