@@ -26,6 +26,8 @@ import BasicProgressPlaceholder from '@aws-ee/base-ui/dist/parts/helpers/BasicPr
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import ErrorBox from '@aws-ee/base-ui/dist/parts/helpers/ErrorBox';
 
+import Logos from './Logos';
+
 // expected props
 // - onPrevious (via props)
 // - onNext (via props) a function is called with the selected envTypeId
@@ -148,6 +150,7 @@ class SelectEnvTypeStep extends React.Component {
                   <Header as="h4" className="flex-auto mt0 pt0">
                     {type.name}
                   </Header>
+                  <Logos.Dynamic name={type.name} size="large" className="ml1" />
                 </div>
                 <Divider />
               </Card.Header>
