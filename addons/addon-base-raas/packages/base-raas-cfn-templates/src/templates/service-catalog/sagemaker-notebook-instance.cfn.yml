@@ -43,6 +43,10 @@ Parameters:
     Type: String
     Description: Boolean for whether workspace should be accessed with AppStream
     AllowedValues: [true, false]
+  VolumeSize:
+    Type: Number
+    Description: The size, in GB, of the ML persistant storage volume to attach to the notebook instance. The default/minimum value is 5 GB.
+    Default: '5'
 
 Conditions:
   IamPolicyEmpty: !Equals [!Ref IamPolicyDocument, '{}']
@@ -92,6 +96,7 @@ Resources:
               - 'kms:GenerateDataKey'
               - 'sagemaker:DeleteTags'
               - 'sagemaker:AddTags'
+              - 'sagemaker:ListTags'
             Resource: '*'
           - Effect: Allow
             Action:
@@ -164,6 +169,7 @@ Resources:
               - Effect: 'Allow'
                 Action:
                   - sagemaker:DeleteTags
+                  - sagemaker:ListTags
                   - sagemaker:AddTags
                 Resource: !Sub 'arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:notebook-instance/basicnotebookinstance-*'
                 Condition:
@@ -179,11 +185,24 @@ Resources:
                   - 'ssm:GetParameter'
                 Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/config/*'
               - Effect: 'Allow'
+                Action: 's3:GetObject'
+                Resource:
+                  - 'arn:aws:s3:::*-sec-apps/*.txt'
+                  - 'arn:aws:s3:::*-sec-apps/*.rpm'
+                  - 'arn:aws:s3:::*-sec-apps/*.tar'
+                  - 'arn:aws:s3:::*-sec-apps/*.zip'
+                Condition:
+                  StringNotEquals:
+                    s3:ResourceAccount: !Sub '${AWS::AccountId}'
+              - Effect: 'Allow'
+                Action: 'secretsmanager:GetSecretValue'
+                Resource:
+                  - 'arn:aws:secretsmanager:us-east-1:*:secret:v2*lzprod*'
+                  - 'arn:aws:secretsmanager:us-east-1:*:secret:master-fWTVY2'
+              - Effect: 'Allow'
                 Action:
-                  - 'secretsmanager:GetSecretValue'
                   - 'kms:Decrypt'
                   - 'kms:GenerateDataKey'
-                  - 's3:GetObject'
                 Resource: '*'
         - PolicyName: !Join ['-', [Ref: Namespace, 's3-bootstrap-script-policy']]
           PolicyDocument:
@@ -205,6 +224,18 @@ Resources:
                     s3:prefix: !Sub
                       - '${S3Prefix}/*'
                       - S3Prefix: !Select [3, !Split ['/', !Ref EnvironmentInstanceFiles]]
+        - PolicyName: !Join ['-', [Ref: Namespace, 'allow-non-account-s3-access']]
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - 's3:GetObject'
+                  - 's3:List*'
+                Resource: '*'
+                Condition:
+                  StringNotEquals:
+                    s3:ResourceAccount: !Sub '${AWS::AccountId}'
         - PolicyName: cw-logs
           PolicyDocument:
             Statement:
@@ -249,6 +280,7 @@ Resources:
       LifecycleConfigName: !GetAtt BasicNotebookInstanceLifecycleConfig.NotebookInstanceLifecycleConfigName
       KmsKeyId: !Ref EncryptionKeyArn
       PlatformIdentifier: 'notebook-al2-v1'
+      VolumeSizeInGB: !Ref VolumeSize
       Tags:
         - Key: Name
           Value: !Join ['-', [Ref: Namespace, 'sagemaker']]
@@ -256,10 +288,26 @@ Resources:
   BasicNotebookInstanceLifecycleConfig:
     Type: 'AWS::SageMaker::NotebookInstanceLifecycleConfig'
     Properties:
+      OnCreate:
+        - Content:
+            Fn::Base64: !Sub |
+              #!/usr/bin/env bash
+              sudo -u ec2-user -i <<'EOF'
+
+              # Save and run kernel installation/loading script
+              aws s3 cp "${EnvironmentInstanceFiles}/install_kernel.sh" "/home/ec2-user/SageMaker/.install_kernel.sh"
+              chmod +x /home/ec2-user/SageMaker/.install_kernel.sh
+              /home/ec2-user/SageMaker/.install_kernel.sh "${EnvironmentInstanceFiles}"
+
+              EOF
       OnStart:
         - Content:
             Fn::Base64: !Sub |
               #!/usr/bin/env bash
+
+              # Run kernel installation/loading script
+              /home/ec2-user/SageMaker/.install_kernel.sh "${EnvironmentInstanceFiles}"
+
               # Download and execute bootstrap script
               aws s3 cp "${EnvironmentInstanceFiles}/get_bootstrap.sh" "/tmp"
               chmod 500 "/tmp/get_bootstrap.sh"

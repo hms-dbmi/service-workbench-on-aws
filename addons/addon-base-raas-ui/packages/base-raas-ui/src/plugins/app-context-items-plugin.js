@@ -33,6 +33,7 @@ import * as scEnvironmentsStore from '../models/environments-sc/ScEnvironmentsSt
 import * as scEnvironmentCostsStore from '../models/environments-sc/ScEnvironmentCostsStore';
 import * as dataSourceAccountsStore from '../models/data-sources/DataSourceAccountsStore';
 import * as registerStudyWizard from '../models/data-sources/register/RegisterStudyWizard';
+import * as ScEnvViewStore from '../models/environments-sc/advanced/ScEnvView';
 import { enableBuiltInWorkspaces } from '../helpers/settings';
 
 // eslint-disable-next-line no-unused-vars
@@ -57,6 +58,7 @@ function registerAppContextItems(appContext) {
   scEnvironmentCostsStore.registerContextItems(appContext);
   dataSourceAccountsStore.registerContextItems(appContext);
   registerStudyWizard.registerContextItems(appContext);
+  ScEnvViewStore.registerContextItems(appContext);
 
   // console.log('enableBuiltInWorkspaces', enableBuiltInWorkspaces);
   // If built in workspaces are enabled then do not show environment type management

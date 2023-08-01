@@ -71,7 +71,7 @@ custom:
   registrationWAF:
     albExportName: "${self:custom.settings.awsRegionShortName}-${self:custom.settings.solutionName}-LoadBalancerFullName"
     name: "${self:custom.settings.awsRegionShortName}-${self:custom.settings.solutionName}-WAF"
-    rateLimit: 1000 # Per ip, per 5 minutes
+    rateLimit: ${self:custom.settings.wafIpRateLimit} # Per ip, per 5 minutes
 
 functions: ${file(./config/infra/functions.yml)}
 

@@ -72,9 +72,9 @@ git clone ssh://git@ssh.github.com:443/hms-dbmi/lz-cicd-ec2-scripts.git ./lz-cic
 ."$install_dir\lz-cicd-ec2-scripts\windows\security_agents.ps1" -secret_arn $secret_arn -project $project -bucket $bucket
 
 # Cleanup install files, key and scripts folder
-Remove-Item -Path "$install_dir\git_config.txt"
-Remove-Item -Path -Force "$install_dir\install_git.exe"
-Remove-Item -Path "$env:UserProfile\.ssh\lz-cicd-ec2-scripts"
+Remove-Item "$install_dir\git_config.txt"
+Remove-Item "$install_dir\install_git.exe"
+Remove-Item "$env:UserProfile\.ssh\lz-cicd-ec2-scripts"
 Remove-Item -Recurse -Force "$install_dir\lz-cicd-ec2-scripts\"
 
 Stop-Transcript
