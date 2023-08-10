@@ -13,8 +13,8 @@
  *  permissions and limitations under the License.
  */
 
-const _ = require('lodash');
 const path = require('path');
+const _ = require('lodash');
 const Service = require('@aws-ee/base-services-container/lib/service');
 
 const moveS3ObjectSchema = require('./schema/move-s3-object.json');
