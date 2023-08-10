@@ -13,6 +13,7 @@
  *  permissions and limitations under the License.
  */
 
+import crypto from 'crypto';
 import _ from 'lodash';
 import React from 'react';
 import { observer, inject, Observer } from 'mobx-react';
@@ -35,8 +36,6 @@ import {
   Table,
 } from 'semantic-ui-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-
-import crypto from 'crypto';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { swallowError } from '@aws-ee/base-ui/dist/helpers/utils';

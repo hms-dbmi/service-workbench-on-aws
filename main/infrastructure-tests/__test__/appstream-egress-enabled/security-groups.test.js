@@ -17,6 +17,7 @@ const AWS = require('aws-sdk');
 const setupAws = require('../../support/setupAws');
 const { getStackResourcesByType } = require('../../support/utilities');
 
+/* eslint-disable jest/expect-expect */
 describe('Security groups', () => {
   beforeAll(async () => {
     await setupAws();

@@ -15,8 +15,8 @@
  *  permissions and limitations under the License.
  */
 
-const _ = require('lodash');
 const fs = require('fs');
+const _ = require('lodash');
 
 const { run } = require('../../utils/utils');
 

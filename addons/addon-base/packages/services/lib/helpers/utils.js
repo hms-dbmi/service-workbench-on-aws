@@ -13,10 +13,10 @@
  *  permissions and limitations under the License.
  */
 
+const crypto = require('crypto');
 const _ = require('lodash');
 const { nanoid: nanoIdSync } = require('nanoid');
 const { nanoid } = require('nanoid/async');
-const crypto = require('crypto');
 
 function toVersionString(num) {
   return `v${_.padStart(num, 4, '0')}_`;

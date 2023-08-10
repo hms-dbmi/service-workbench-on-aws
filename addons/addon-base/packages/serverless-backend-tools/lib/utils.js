@@ -13,8 +13,8 @@
  *  permissions and limitations under the License.
  */
 
-const _ = require('lodash');
 const inspect = require('util').inspect;
+const _ = require('lodash');
 
 // a promise friendly delay function
 function delay(seconds) {

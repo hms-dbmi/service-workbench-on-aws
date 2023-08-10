@@ -13,10 +13,10 @@
  *  permissions and limitations under the License.
  */
 
+const crypto = require('crypto');
 const ServicesContainer = require('@aws-ee/base-services-container/lib/services-container');
 const JsonSchemaValidationService = require('@aws-ee/base-services/lib/json-schema-validation-service');
 const Logger = require('@aws-ee/base-services/lib/logger/logger-service');
-const crypto = require('crypto');
 
 // Mocked dependencies
 const AwsService = require('@aws-ee/base-services/lib/aws/aws-service');
