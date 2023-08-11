@@ -22,5 +22,3 @@ preDeploymentHandlerRoleName: ${self:custom.settings.namespace}-preDeployment-Ro
 
 # The IAM role arn for the Lambda Pre Deployment handler, we need to define it in the settings because it is being passed to lambdas as an env var
 preDeploymentHandlerRoleArn: 'arn:aws:iam::${self:custom.settings.awsAccountInfo.awsAccountId}:role/${self:custom.settings.preDeploymentHandlerRoleName}'
-
-useAwsProfile: true

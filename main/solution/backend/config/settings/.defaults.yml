@@ -315,5 +315,3 @@ dataSourceReachabilityHandlerRoleArn: 'arn:aws:iam::${self:custom.settings.awsAc
 backendStackName: ${self:custom.settings.namespace}-backend
 
 envMgmtRoleArn: ${self:custom.settings.backendStackName}.EnvMgmtRoleArn}
-
-useAwsProfile: true
