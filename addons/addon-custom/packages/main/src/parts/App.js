@@ -20,10 +20,10 @@ import { inject, observer } from 'mobx-react';
 import { getEnv } from 'mobx-state-tree';
 import { Menu } from 'semantic-ui-react';
 
-import { getRoutes, getMenuItems, getDefaultRouteLocation } from '@aws-ee/base-ui/dist/helpers/plugins-util';
-import MainLayout from '@aws-ee/base-ui/dist/parts/MainLayout';
-import { displayError } from '@aws-ee/base-ui/dist/helpers/notification';
-import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
+import { getRoutes, getMenuItems, getDefaultRouteLocation } from '@amzn/base-ui/dist/helpers/plugins-util';
+import MainLayout from '@amzn/base-ui/dist/parts/MainLayout';
+import { displayError } from '@amzn/base-ui/dist/helpers/notification';
+import { branding } from '@amzn/base-ui/dist/helpers/settings';
 
 import withAuth from '../extend/withAuth';
 import TermsModal from './TermsModel';

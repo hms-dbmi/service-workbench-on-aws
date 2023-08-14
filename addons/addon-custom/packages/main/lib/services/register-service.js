@@ -12,9 +12,9 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-const Service = require('@aws-ee/base-services-container/lib/service');
-const { toUserNamespace } = require('@aws-ee/base-services/lib/user/helpers/user-namespace');
-const { generateId } = require('@aws-ee/base-services/lib/helpers/utils');
+const Service = require('@amzn/base-services-container/lib/service');
+const { toUserNamespace } = require('@amzn/base-services/lib/user/helpers/user-namespace');
+const { generateId } = require('@amzn/base-services/lib/helpers/utils');
 
 const jsonSchema = require('../schemas/register-user.json');
 

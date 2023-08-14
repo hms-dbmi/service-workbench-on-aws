@@ -1,28 +1,28 @@
 {
-  "name": "@aws-ee/infrastructure",
+  "name": "@amzn/infrastructure",
   "version": "1.0.0",
   "private": true,
   "description": "The website infrastructure",
   "author": "Amazon Web Services",
   "license": "Apache 2.0",
   "devDependencies": {
-    "@aws-ee/base-serverless-settings-helper": "workspace:*",
+    "@amzn/base-serverless-settings-helper": "workspace:*",
     "serverless": "^1.63.0",
     "serverless-deployment-bucket": "^1.5.1",
     "serverless-webpack": "^5.3.1",
     "serverless-offline": "^5.12.1",
     "serverless-s3-sync": "^1.12.0",
     "serverless-python-requirements": "^5.3.1",
-    "@aws-ee/base-serverless-backend-tools": "workspace:*"
+    "@amzn/base-serverless-backend-tools": "workspace:*"
   },
   "dependencies": {
-    "@aws-ee/base-serverless-settings-helper": "workspace:*",
+    "@amzn/base-serverless-settings-helper": "workspace:*",
     "serverless": "^3.22.0",
     "serverless-deployment-bucket": "^1.6.0",
     "serverless-webpack": "^5.3.1",
     "serverless-offline": "^5.12.1",
     "serverless-s3-sync": "^1.12.0",
     "serverless-python-requirements": "^5.3.1",
-    "@aws-ee/base-serverless-backend-tools": "workspace:*"
+    "@amzn/base-serverless-backend-tools": "workspace:*"
   }
 }

@@ -12,41 +12,41 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-// @aws-ee/base-ui
-import baseAppContextItemsPlugin from '@aws-ee/base-ui/dist/plugins/app-context-items-plugin';
-import baseInitializationPlugin from '@aws-ee/base-ui/dist/plugins/initialization-plugin';
-import baseAuthenticationPlugin from '@aws-ee/base-ui/dist/plugins/authentication-plugin';
-import baseAppComponentPlugin from '@aws-ee/base-ui/dist/plugins/app-component-plugin';
-import baseMenuItemsPlugin from '@aws-ee/base-ui/dist/plugins/menu-items-plugin';
-import baseRoutesPlugin from '@aws-ee/base-ui/dist/plugins/routes-plugin';
+// @amzn/base-ui
+import baseAppContextItemsPlugin from '@amzn/base-ui/dist/plugins/app-context-items-plugin';
+import baseInitializationPlugin from '@amzn/base-ui/dist/plugins/initialization-plugin';
+import baseAuthenticationPlugin from '@amzn/base-ui/dist/plugins/authentication-plugin';
+import baseAppComponentPlugin from '@amzn/base-ui/dist/plugins/app-component-plugin';
+import baseMenuItemsPlugin from '@amzn/base-ui/dist/plugins/menu-items-plugin';
+import baseRoutesPlugin from '@amzn/base-ui/dist/plugins/routes-plugin';
 
-// @aws-ee/base-workflow-ui
-import workflowAppContextItemsPlugin from '@aws-ee/base-workflow-ui/dist/plugins/app-context-items-plugin';
-import workflowMenuItemsPlugin from '@aws-ee/base-workflow-ui/dist/plugins/menu-items-plugin';
-import workflowRoutesPlugin from '@aws-ee/base-workflow-ui/dist/plugins/routes-plugin';
+// @amzn/base-workflow-ui
+import workflowAppContextItemsPlugin from '@amzn/base-workflow-ui/dist/plugins/app-context-items-plugin';
+import workflowMenuItemsPlugin from '@amzn/base-workflow-ui/dist/plugins/menu-items-plugin';
+import workflowRoutesPlugin from '@amzn/base-workflow-ui/dist/plugins/routes-plugin';
 
-// @aws-ee/environment-type-mgmt-ui
-import envMgmtMenuItemsPlugin from '@aws-ee/environment-type-mgmt-ui/dist/plugins/menu-items-plugin';
-import envMgmtRoutesPlugin from '@aws-ee/environment-type-mgmt-ui/dist/plugins/routes-plugin';
-import envMgmtAppContextItemsPlugin from '@aws-ee/environment-type-mgmt-ui/dist/plugins/app-context-items-plugin';
+// @amzn/environment-type-mgmt-ui
+import envMgmtMenuItemsPlugin from '@amzn/environment-type-mgmt-ui/dist/plugins/menu-items-plugin';
+import envMgmtRoutesPlugin from '@amzn/environment-type-mgmt-ui/dist/plugins/routes-plugin';
+import envMgmtAppContextItemsPlugin from '@amzn/environment-type-mgmt-ui/dist/plugins/app-context-items-plugin';
 
-// @aws-ee/key-pair-mgmt-ui
-import keyPairAppContextItemsPlugin from '@aws-ee/key-pair-mgmt-ui/dist/plugins/app-context-items-plugin';
-import keyPairMenuItemsPlugin from '@aws-ee/key-pair-mgmt-ui/dist/plugins/menu-items-plugin';
-import keyPairRoutesPlugin from '@aws-ee/key-pair-mgmt-ui/dist/plugins/routes-plugin';
+// @amzn/key-pair-mgmt-ui
+import keyPairAppContextItemsPlugin from '@amzn/key-pair-mgmt-ui/dist/plugins/app-context-items-plugin';
+import keyPairMenuItemsPlugin from '@amzn/key-pair-mgmt-ui/dist/plugins/menu-items-plugin';
+import keyPairRoutesPlugin from '@amzn/key-pair-mgmt-ui/dist/plugins/routes-plugin';
 
-// @aws-ee/base-raas-ui
-import raasAppContextItemsPlugin from '@aws-ee/base-raas-ui/dist/plugins/app-context-items-plugin';
-import raasInitializationPlugin from '@aws-ee/base-raas-ui/dist/plugins/initialization-plugin';
-import raasAppComponentPlugin from '@aws-ee/base-raas-ui/dist/plugins/app-component-plugin';
-import raasMenuItemsPlugin from '@aws-ee/base-raas-ui/dist/plugins/menu-items-plugin';
-import raasRoutesPlugin from '@aws-ee/base-raas-ui/dist/plugins/routes-plugin';
-import raasEnvTypeMgmtPlugin from '@aws-ee/base-raas-ui/dist/plugins/env-type-mgmt-plugin';
+// @amzn/base-raas-ui
+import raasAppContextItemsPlugin from '@amzn/base-raas-ui/dist/plugins/app-context-items-plugin';
+import raasInitializationPlugin from '@amzn/base-raas-ui/dist/plugins/initialization-plugin';
+import raasAppComponentPlugin from '@amzn/base-raas-ui/dist/plugins/app-component-plugin';
+import raasMenuItemsPlugin from '@amzn/base-raas-ui/dist/plugins/menu-items-plugin';
+import raasRoutesPlugin from '@amzn/base-raas-ui/dist/plugins/routes-plugin';
+import raasEnvTypeMgmtPlugin from '@amzn/base-raas-ui/dist/plugins/env-type-mgmt-plugin';
 
-// @aws-ee/custom
-import customAppContextPlugin from '@aws-ee/custom/dist/plugins/app-context-items-plugin';
-import customAppComponentPlugin from '@aws-ee/custom/dist/plugins/app-component-plugin';
-import customRoutesPlugin from '@aws-ee/custom/dist/plugins/routes-plugin';
+// @amzn/custom
+import customAppContextPlugin from '@amzn/custom/dist/plugins/app-context-items-plugin';
+import customAppComponentPlugin from '@amzn/custom/dist/plugins/app-component-plugin';
+import customRoutesPlugin from '@amzn/custom/dist/plugins/routes-plugin';
 
 // This repo
 import appContextItemsPlugin from './app-context-items-plugin';
@@ -60,46 +60,46 @@ import routesPlugin from './routes-plugin';
 // baseRoutesPlugin registers base routes provided by the base addon
 const extensionPoints = {
   'app-context-items': [
-    baseAppContextItemsPlugin, // @aws-ee/base-ui
-    workflowAppContextItemsPlugin, // @aws-ee/base-workflow-ui
-    envMgmtAppContextItemsPlugin, // @aws-ee/environment-type-mgmt-ui
-    keyPairAppContextItemsPlugin, // @aws-ee/key-pair-mgmt-ui
-    raasAppContextItemsPlugin, // @aws-ee/base-raas-ui
-    customAppContextPlugin, // @aws-ee/custom
+    baseAppContextItemsPlugin, // @amzn/base-ui
+    workflowAppContextItemsPlugin, // @amzn/base-workflow-ui
+    envMgmtAppContextItemsPlugin, // @amzn/environment-type-mgmt-ui
+    keyPairAppContextItemsPlugin, // @amzn/key-pair-mgmt-ui
+    raasAppContextItemsPlugin, // @amzn/base-raas-ui
+    customAppContextPlugin, // @amzn/custom
     appContextItemsPlugin, // ./app-context-items-plugin
   ],
   'initialization': [
-    baseInitializationPlugin, // @aws-ee/base-ui
-    raasInitializationPlugin, // @aws-ee/base-raas-ui
+    baseInitializationPlugin, // @amzn/base-ui
+    raasInitializationPlugin, // @amzn/base-raas-ui
     initializationPlugin, // ./initialization-plugin
   ],
   'authentication': [
-    baseAuthenticationPlugin, // @aws-ee/base-ui
+    baseAuthenticationPlugin, // @amzn/base-ui
   ],
   'app-component': [
-    baseAppComponentPlugin, // @aws-ee/base-ui
-    raasAppComponentPlugin, // @aws-ee/base-raas-ui
-    customAppComponentPlugin, // @aws-ee/custom
+    baseAppComponentPlugin, // @amzn/base-ui
+    raasAppComponentPlugin, // @amzn/base-raas-ui
+    customAppComponentPlugin, // @amzn/custom
   ],
   'menu-items': [
-    baseMenuItemsPlugin, // @aws-ee/base-ui
-    workflowMenuItemsPlugin, // @aws-ee/base-workflow-ui
-    envMgmtMenuItemsPlugin, // @aws-ee/environment-type-mgmt-ui
-    keyPairMenuItemsPlugin, // @aws-ee/key-pair-mgmt-ui
-    raasMenuItemsPlugin, // @aws-ee/base-raas-ui
+    baseMenuItemsPlugin, // @amzn/base-ui
+    workflowMenuItemsPlugin, // @amzn/base-workflow-ui
+    envMgmtMenuItemsPlugin, // @amzn/environment-type-mgmt-ui
+    keyPairMenuItemsPlugin, // @amzn/key-pair-mgmt-ui
+    raasMenuItemsPlugin, // @amzn/base-raas-ui
     menuItemsPlugin, // ./menu-items-plugin
   ],
   'routes': [
-    baseRoutesPlugin, // @aws-ee/base-ui
-    workflowRoutesPlugin, // @aws-ee/base-workflow-ui
-    envMgmtRoutesPlugin, // @aws-ee/environment-type-mgmt-ui
-    keyPairRoutesPlugin, // @aws-ee/key-pair-mgmt-ui
-    raasRoutesPlugin, // @aws-ee/base-raas-ui
-    customRoutesPlugin, // @aws-ee/custom
+    baseRoutesPlugin, // @amzn/base-ui
+    workflowRoutesPlugin, // @amzn/base-workflow-ui
+    envMgmtRoutesPlugin, // @amzn/environment-type-mgmt-ui
+    keyPairRoutesPlugin, // @amzn/key-pair-mgmt-ui
+    raasRoutesPlugin, // @amzn/base-raas-ui
+    customRoutesPlugin, // @amzn/custom
     routesPlugin, // ./routes-plugin
   ],
   'env-type-management': [
-    raasEnvTypeMgmtPlugin, // @aws-ee/base-raas-ui
+    raasEnvTypeMgmtPlugin, // @amzn/base-raas-ui
   ],
 };
 

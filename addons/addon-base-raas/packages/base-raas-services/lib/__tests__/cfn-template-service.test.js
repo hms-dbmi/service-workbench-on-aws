@@ -14,8 +14,8 @@
  */
 
 const fs = require('fs');
-const ServicesContainer = require('@aws-ee/base-services-container/lib/services-container');
-const SettingsServiceMock = require('@aws-ee/base-services/lib/settings/env-settings-service');
+const ServicesContainer = require('@amzn/base-services-container/lib/services-container');
+const SettingsServiceMock = require('@amzn/base-services/lib/settings/env-settings-service');
 
 const { yamlParse } = require('yaml-cfn');
 const CfnTemplateService = require('../cfn-templates/cfn-template-service');

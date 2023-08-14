@@ -13,7 +13,7 @@
  *  permissions and limitations under the License.
  */
 
-import logoImage from '@aws-ee/base-ui/images/login-image.gif';
+import logoImage from '@amzn/base-ui/images/login-image.gif';
 import awsImage from '../../images/SWB.png';
 
 /**

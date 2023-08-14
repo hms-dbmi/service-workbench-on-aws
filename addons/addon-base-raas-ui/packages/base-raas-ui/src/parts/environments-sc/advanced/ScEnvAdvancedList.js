@@ -5,17 +5,17 @@ import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Container, Icon, Segment, Header } from 'semantic-ui-react';
 
-import { swallowError } from '@aws-ee/base-ui/dist/helpers/utils';
-import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
+import { swallowError } from '@amzn/base-ui/dist/helpers/utils';
+import { gotoFn } from '@amzn/base-ui/dist/helpers/routing';
 import {
   isStoreLoading,
   isStoreEmpty,
   isStoreNotEmpty,
   isStoreError,
   isStoreReady,
-} from '@aws-ee/base-ui/dist/models/BaseStore';
-import ErrorBox from '@aws-ee/base-ui/dist/parts/helpers/ErrorBox';
-import ProgressPlaceHolder from '@aws-ee/base-ui/dist/parts/helpers/BasicProgressPlaceholder';
+} from '@amzn/base-ui/dist/models/BaseStore';
+import ErrorBox from '@amzn/base-ui/dist/parts/helpers/ErrorBox';
+import ProgressPlaceHolder from '@amzn/base-ui/dist/parts/helpers/BasicProgressPlaceholder';
 
 import CompactTable from './CompactTable';
 import FilterBox from './FilterBox';

@@ -16,8 +16,8 @@
 /* eslint-disable import/prefer-default-export */
 // eslint-disable-next-line no-unused-vars
 import _ from 'lodash';
-import { httpApiPost } from '@aws-ee/base-ui/dist/helpers/api';
-import { removeNulls } from '@aws-ee/base-ui/dist/helpers/utils';
+import { httpApiPost } from '@amzn/base-ui/dist/helpers/api';
+import { removeNulls } from '@amzn/base-ui/dist/helpers/utils';
 
 function registerUser(user) {
   const params = {};

@@ -3,8 +3,8 @@ import { decorate, observable, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Button, Modal, Dimmer, Loader } from 'semantic-ui-react';
 
-import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
-import { displayError } from '@aws-ee/base-ui/dist/helpers/notification';
+import { branding } from '@amzn/base-ui/dist/helpers/settings';
+import { displayError } from '@amzn/base-ui/dist/helpers/notification';
 
 import Terms from './Terms';
 

@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Container, Grid, Header, Image } from 'semantic-ui-react';
 
-import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
+import { branding } from '@amzn/base-ui/dist/helpers/settings';
 
 import Terms from './Terms';
 

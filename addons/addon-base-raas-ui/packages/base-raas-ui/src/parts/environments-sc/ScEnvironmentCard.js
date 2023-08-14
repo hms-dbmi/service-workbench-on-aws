@@ -19,9 +19,9 @@ import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Label, Popup, Icon, Divider, Message, Table, Grid, Segment, List } from 'semantic-ui-react';
 import TimeAgo from 'react-timeago';
-import { niceNumber, swallowError } from '@aws-ee/base-ui/dist/helpers/utils';
-import { isStoreLoading } from '@aws-ee/base-ui/dist/models/BaseStore';
-import ProgressPlaceHolder from '@aws-ee/base-ui/dist/parts/helpers/BasicProgressPlaceholder';
+import { niceNumber, swallowError } from '@amzn/base-ui/dist/helpers/utils';
+import { isStoreLoading } from '@amzn/base-ui/dist/models/BaseStore';
+import ProgressPlaceHolder from '@amzn/base-ui/dist/parts/helpers/BasicProgressPlaceholder';
 
 import { isAppStreamEnabled } from '../../helpers/settings';
 import By from '../helpers/By';

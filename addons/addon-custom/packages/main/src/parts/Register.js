@@ -6,8 +6,8 @@ import { withRouter } from 'react-router-dom';
 import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label, Icon } from 'semantic-ui-react';
 import * as DOMPurify from 'dompurify';
 
-import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
-import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
+import { gotoFn } from '@amzn/base-ui/dist/helpers/routing';
+import { branding } from '@amzn/base-ui/dist/helpers/settings';
 
 import { getRegisterFormFields, formValidationErrors } from '../models/RegisterForm';
 import { registerUser } from '../helpers/api';

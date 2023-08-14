@@ -13,7 +13,7 @@
  *  permissions and limitations under the License.
  */
 import _ from 'lodash';
-import validate from '@aws-ee/base-ui/dist/models/forms/Validate';
+import validate from '@amzn/base-ui/dist/models/forms/Validate';
 
 const registerUserFormFields = {
   email: {

@@ -30,5 +30,5 @@ resources:
 plugins:
   - serverless-offline
   - serverless-deployment-bucket
-  - '@aws-ee/base-serverless-backend-tools'
+  - '@amzn/base-serverless-backend-tools'
   - serverless-python-requirements

@@ -18,10 +18,10 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 
-import Login from '@aws-ee/base-ui/dist/parts/Login';
-import _withAuth from '@aws-ee/base-ui/dist/withAuth';
-import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
-import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
+import Login from '@amzn/base-ui/dist/parts/Login';
+import _withAuth from '@amzn/base-ui/dist/withAuth';
+import { gotoFn } from '@amzn/base-ui/dist/helpers/routing';
+import { branding } from '@amzn/base-ui/dist/helpers/settings';
 
 import TermsPage from '../parts/TermsPage';
 import Register from '../parts/Register';
