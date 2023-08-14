@@ -8,7 +8,7 @@
   "dependencies": {
     "@amzn/base-services-container": "workspace:*",
     "ajv": "^6.12.6",
-    "aws-sdk": "^2.1228.0",
+    "aws-sdk": "^2.647.0",
     "aws-xray-sdk": "^3.2.0",
     "cycle": "^1.0.3",
     "jsonwebtoken": "^8.5.1",

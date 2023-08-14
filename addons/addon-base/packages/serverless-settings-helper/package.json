@@ -49,7 +49,7 @@
     }
   },
   "dependencies": {
-    "aws-sdk": "^2.1228.0",
+    "aws-sdk": "^2.647.0",
     "js-yaml": "^4.1.0"
   }
 }

@@ -21,7 +21,7 @@
     "@amzn/key-pair-mgmt-ui": "workspace:*",
     "@amzn/custom": "workspace:*",
     "animate.css": "3.7.0",
-    "aws-sdk": "^2.1228.0",
+    "aws-sdk": "^2.647.0",
     "classnames": "^2.3.2",
     "lodash": "^4.17.21",
     "mobx": "^5.15.7",

@@ -31,7 +31,7 @@
     "@amzn/base-workflow-steps": "workspace:*",
     "@amzn/custom": "workspace:*",
     "services": "workspace:*",
-    "aws-sdk": "^2.1228.0",
+    "aws-sdk": "^2.647.0",
     "controllers": "workspace:*",
     "js-yaml": "^3.14.1",
     "jwt-decode": "^2.2.0",

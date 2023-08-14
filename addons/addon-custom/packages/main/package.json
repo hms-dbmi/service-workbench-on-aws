@@ -8,7 +8,7 @@
     "@amzn/base-controllers": "workspace:*",
     "@amzn/base-services": "workspace:*",
     "@amzn/base-services-container": "workspace:*",
-    "aws-sdk": "^2.1228.0",
+    "aws-sdk": "^2.647.0",
     "dompurify": "^2.4.3",
     "lodash": "^4.17.21",
     "mobx": "^5.15.7",

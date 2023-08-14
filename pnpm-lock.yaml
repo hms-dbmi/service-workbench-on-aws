@@ -7,7 +7,7 @@ importers:
       '@amzn/base-api-services': workspace:*
       '@amzn/base-services': workspace:*
       '@amzn/base-services-container': workspace:*
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       aws-sdk-mock: ^5.7.0
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
@@ -50,7 +50,7 @@ importers:
       '@amzn/base-api-services': workspace:*
       '@amzn/base-services': workspace:*
       '@amzn/base-services-container': workspace:*
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
       eslint-config-prettier: ^6.15.0
@@ -182,7 +182,7 @@ importers:
       '@babel/plugin-transform-react-jsx': ^7.19.0
       '@babel/preset-env': ^7.19.3
       '@babel/preset-react': ^7.18.6
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       babel-eslint: ^10.1.0
       babel-jest: ^24.9.0
       babel-loader: ^8.2.5
@@ -679,7 +679,7 @@ importers:
       '@amzn/base-api-services': workspace:*
       '@amzn/base-services': workspace:*
       '@amzn/base-services-container': workspace:*
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
       eslint-config-prettier: ^6.15.0
@@ -720,7 +720,7 @@ importers:
       '@amzn/base-api-services': workspace:*
       '@amzn/base-services': workspace:*
       '@amzn/base-services-container': workspace:*
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
       eslint-config-prettier: ^6.15.0
@@ -800,7 +800,7 @@ importers:
       '@amzn/base-services': workspace:*
       '@amzn/base-services-container': workspace:*
       ajv: ^6.11.0
-      aws-sdk: ^2.1000.0
+      aws-sdk: ^2.647.0
       aws-sdk-mock: ^5.7.0
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
@@ -826,7 +826,7 @@ importers:
       '@amzn/base-services': link:../../../addon-base/packages/services
       '@amzn/base-services-container': link:../../../addon-base/packages/services-container
       ajv: 6.12.0
-      aws-sdk: 2.1015.0
+      aws-sdk: 2.1431.0
       jsonwebtoken: 8.5.1
       jwk-to-pem: 2.0.5
       jwt-decode: 2.2.0
@@ -860,7 +860,7 @@ importers:
       '@babel/plugin-transform-react-jsx': ^7.19.0
       '@babel/preset-env': ^7.19.3
       '@babel/preset-react': ^7.18.6
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       babel-eslint: ^10.1.0
       chart.js: ^2.9.4
       classnames: ^2.3.2
@@ -979,7 +979,7 @@ importers:
 
   addons/addon-base-ui/packages/serverless-ui-tools:
     specifiers:
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       chalk: ^2.4.2
       cross-spawn: ^7.0.3
       eslint: ^6.8.0
@@ -1062,7 +1062,7 @@ importers:
       '@babel/plugin-transform-react-jsx': ^7.19.0
       '@babel/preset-env': ^7.19.3
       '@babel/preset-react': ^7.18.6
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       babel-eslint: ^10.1.0
       chart.js: ^2.9.4
       classnames: ^2.3.2
@@ -1326,7 +1326,7 @@ importers:
 
   addons/addon-base/packages/serverless-backend-tools:
     specifiers:
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       chalk: ^2.4.2
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
@@ -1363,7 +1363,7 @@ importers:
 
   addons/addon-base/packages/serverless-go-build-tools:
     specifiers:
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       chalk: ^2.4.2
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
@@ -1400,7 +1400,7 @@ importers:
 
   addons/addon-base/packages/serverless-settings-helper:
     specifiers:
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       eslint: ^6.8.0
       eslint-config-airbnb: ^18.2.1
       eslint-config-airbnb-base: ^14.2.1
@@ -1446,7 +1446,7 @@ importers:
       '@amzn/base-services': workspace:*
       '@amzn/base-services-container': workspace:*
       ajv: ^6.12.6
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       aws-sdk-mock: ^5.7.0
       aws-xray-sdk: ^3.2.0
       cycle: ^1.0.3
@@ -1504,7 +1504,7 @@ importers:
 
   addons/addon-base/packages/services-container:
     specifiers:
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
       eslint-config-prettier: ^6.15.0
@@ -1550,7 +1550,7 @@ importers:
       '@babel/plugin-proposal-class-properties': ^7.18.6
       '@babel/preset-env': ^7.19.3
       '@babel/preset-react': ^7.18.6
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       babel-eslint: ^10.1.0
       dompurify: ^2.4.3
       enzyme: ^3.11.0
@@ -2160,7 +2160,7 @@ importers:
       '@amzn/base-post-deployment': workspace:*
       '@amzn/base-services': workspace:*
       '@amzn/base-services-container': workspace:*
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
       eslint-config-prettier: ^6.15.0
@@ -2213,7 +2213,7 @@ importers:
   main/cicd/cicd-source:
     specifiers:
       '@amzn/base-serverless-settings-helper': workspace:*
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       fsevents: '*'
       serverless: ^3.22.0
       serverless-deployment-bucket: ^1.6.0
@@ -2265,7 +2265,7 @@ importers:
 
   main/infrastructure-tests:
     specifiers:
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       eslint: ^6.8.0
       eslint-config-airbnb: ^18.2.1
       eslint-config-airbnb-base: ^14.2.1
@@ -2309,7 +2309,7 @@ importers:
   main/integration-tests:
     specifiers:
       '@amzn/base-services': workspace:*
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       axios: ^0.21.4
       chance: ^1.1.8
       eslint: ^6.8.0
@@ -2478,7 +2478,7 @@ importers:
       '@babel/core': ^7.19.3
       '@babel/plugin-transform-runtime': ^7.19.1
       '@babel/preset-env': ^7.19.3
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       babel-jest: ^24.9.0
       babel-loader: ^8.2.5
       babel-plugin-source-map-support: ^2.2.0
@@ -2659,7 +2659,7 @@ importers:
       '@amzn/user-id-upgrade-post-deployment': workspace:*
       '@babel/core': ^7.19.3
       '@babel/preset-env': ^7.19.3
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       babel-loader: ^8.2.5
       babel-plugin-source-map-support: ^2.2.0
       copy-webpack-plugin: ^5.1.2
@@ -2756,7 +2756,7 @@ importers:
       '@amzn/key-pair-mgmt-services': workspace:*
       '@babel/core': ^7.19.3
       '@babel/preset-env': ^7.19.3
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       babel-loader: ^8.2.5
       babel-plugin-source-map-support: ^2.2.0
       copy-webpack-plugin: ^5.1.2
@@ -2846,7 +2846,7 @@ importers:
       '@amzn/environment-type-mgmt-ui': workspace:*
       '@amzn/key-pair-mgmt-ui': workspace:*
       animate.css: 3.7.0
-      aws-sdk: ^2.1228.0
+      aws-sdk: ^2.647.0
       babel-eslint: ^10.1.0
       classnames: ^2.3.2
       eslint: ^6.8.0
@@ -7736,22 +7736,6 @@ packages:
       sinon: 14.0.2
       traverse: 0.6.6
     dev: true
-
-  /aws-sdk/2.1015.0:
-    resolution: {integrity: sha512-jSM955n08r+kzCMMhOu1Dbua8SRZQKgGO1nAoUwBSlXjnLtN+F81P93h4yNBtWsxUg1mAMTP3DKJjXFFrRToPw==}
-    engines: {node: '>= 0.8.0'}
-    requiresBuild: true
-    dependencies:
-      buffer: 4.9.2
-      events: 1.1.1
-      ieee754: 1.1.13
-      jmespath: 0.15.0
-      querystring: 0.2.0
-      sax: 1.2.1
-      url: 0.10.3
-      uuid: 3.3.2
-      xml2js: 0.4.19
-    dev: false
 
   /aws-sdk/2.1431.0:
     resolution: {integrity: sha512-p6NGyI6+BgojiGn6uW2If6v7uxRPO5C+aGy/M+9/Rhdk8a5n7l0123v9ZUnEJgAy0tsNkazL2ifzV33nc0aGNA==}
@@ -15306,11 +15290,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /jmespath/0.15.0:
-    resolution: {integrity: sha1-o/Iiqarp+Wb10nx5ZRDigJF2Qhc=}
-    engines: {node: '>= 0.6.0'}
-    dev: false
-
   /jmespath/0.16.0:
     resolution: {integrity: sha512-9FzQjJ7MATs1tSpnco1K6ayiYE3figslrXA72G2HQ/n76RzvYlofyi5QM+iX4YRs/pu3yzxlVQSST23+dMDknw==}
     engines: {node: '>= 0.6.0'}
@@ -21924,12 +21903,6 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
-  /uuid/3.3.2:
-    resolution: {integrity: sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==}
-    deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
-    hasBin: true
-    dev: false
-
   /uuid/3.4.0:
     resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
     hasBin: true
@@ -22759,13 +22732,6 @@ packages:
   /xml/1.0.1:
     resolution: {integrity: sha1-eLpyAgApxbyHuKgaPPzXS0ovweU=}
 
-  /xml2js/0.4.19:
-    resolution: {integrity: sha512-esZnJZJOiJR9wWKMyuvSE1y6Dq5LCuJanqhxslH2bxM6duahNZ+HMpCLhBQGZkbX6xRf8x1Y2eJlgt2q3qo49Q==}
-    dependencies:
-      sax: 1.2.4
-      xmlbuilder: 9.0.7
-    dev: false
-
   /xml2js/0.5.0:
     resolution: {integrity: sha512-drPFnkQJik/O+uPKpqSgr22mpuFHqKdbS835iAQrUC73L2F5WkboIRd63ai/2Yg6I1jzifPFKH2NTK+cfglkIA==}
     engines: {node: '>=4.0.0'}
@@ -22776,11 +22742,6 @@ packages:
   /xmlbuilder/11.0.1:
     resolution: {integrity: sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==}
     engines: {node: '>=4.0'}
-
-  /xmlbuilder/9.0.7:
-    resolution: {integrity: sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=}
-    engines: {node: '>=4.0'}
-    dev: false
 
   /xmlchars/2.2.0:
     resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
