@@ -13,10 +13,10 @@
  *  permissions and limitations under the License.
  */
 
+const crypto = require('crypto');
 const ServicesContainer = require('@amzn/base-services-container/lib/services-container');
 const JsonSchemaValidationService = require('@amzn/base-services/lib/json-schema-validation-service');
 const Logger = require('@amzn/base-services/lib/logger/logger-service');
-const crypto = require('crypto');
 const Boom = require('@amzn/base-services-container/lib/boom');
 
 // Mocked dependencies

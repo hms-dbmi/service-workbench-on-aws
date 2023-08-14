@@ -21,7 +21,7 @@ jest.mock('@amzn/base-services/lib/logger/logger-service');
 const Logger = require('@amzn/base-services/lib/logger/logger-service');
 const AWSMock = require('aws-sdk-mock');
 const AwsService = require('@amzn/base-services/lib/aws/aws-service');
-const IamService = require('@amzn/base-services/lib/iam/iam-service.js');
+const IamService = require('@amzn/base-services/lib/iam/iam-service');
 
 // Mocked dependencies
 jest.mock('@amzn/base-services/lib/db-service');
