@@ -458,7 +458,7 @@ importers:
       moment: ^2.29.4
       nanoid: ^3.3.4
       node-cache: ^4.2.1
-      node-fetch: ^2.6.0
+      node-fetch: ^2.6.7
       node-rsa: ^1.1.1
       object-path: ^0.11.8
       prettier: ^1.19.1
@@ -482,7 +482,7 @@ importers:
       moment: 2.29.4
       nanoid: 3.3.6
       node-cache: 4.2.1
-      node-fetch: 2.6.0
+      node-fetch: 2.6.12
       node-rsa: 1.1.1
       object-path: 0.11.8
       request: 2.88.2
@@ -761,6 +761,7 @@ importers:
       '@aws-ee/base-api-services': workspace:*
       '@aws-ee/base-services': workspace:*
       '@aws-ee/base-services-container': workspace:*
+      axios: ^0.21.2
       eslint: ^6.8.0
       eslint-config-airbnb-base: ^14.2.1
       eslint-config-prettier: ^6.15.0
@@ -778,6 +779,7 @@ importers:
       '@aws-ee/base-api-services': link:../services
       '@aws-ee/base-services': link:../../../addon-base/packages/services
       '@aws-ee/base-services-container': link:../../../addon-base/packages/services-container
+      axios: 0.21.4
       lodash: 4.17.21
     devDependencies:
       eslint: 6.8.0
@@ -884,6 +886,7 @@ importers:
       mobx-react-form: ^2.0.9
       mobx-state-tree: ^3.17.3
       numeral: ^2.0.6
+      pkce-challenge: ^2.2.0
       prettier: ^1.19.1
       pretty-quick: ^1.11.1
       prop-types: ^15.8.1
@@ -907,6 +910,7 @@ importers:
       toastr: ^2.1.4
       typeface-lato: 0.0.75
       typescript: ^3.9.10
+      uuid: ^3.4.0
       validatorjs: ^3.22.1
       webpack: 4.41.2
     dependencies:
@@ -920,6 +924,7 @@ importers:
       mobx-react-form: 2.0.9_mobx@5.15.7
       mobx-state-tree: 3.17.3_mobx@5.15.7
       numeral: 2.0.6
+      pkce-challenge: 2.2.0
       react: 16.14.0
       react-avatar: 3.10.0_4vyaxm4rsh2mpfdenvlqy7kmya
       react-beautiful-dnd: 11.0.5_wcqkhtmu7mswc6yz4uyexck3ty
@@ -936,6 +941,7 @@ importers:
       showdown: 1.9.1
       toastr: 2.1.4
       typeface-lato: 0.0.75
+      uuid: 3.4.0
       validatorjs: 3.22.1
     devDependencies:
       '@aws-ee/base-serverless-settings-helper': link:../../../addon-base/packages/serverless-settings-helper
@@ -16781,11 +16787,6 @@ packages:
     dependencies:
       minimatch: 3.1.2
 
-  /node-fetch/2.6.0:
-    resolution: {integrity: sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==}
-    engines: {node: 4.x || >=6.0.0}
-    dev: false
-
   /node-fetch/2.6.12:
     resolution: {integrity: sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==}
     engines: {node: 4.x || >=6.0.0}
@@ -17687,6 +17688,10 @@ packages:
     dependencies:
       node-modules-regexp: 1.0.0
     dev: true
+
+  /pkce-challenge/2.2.0:
+    resolution: {integrity: sha512-Ly0Y0OwhtG2N1ynk5ruqoyJxkrWhAPmvdRk0teiLh9Dp2+J4URKpv1JSKWD0j1Sd+QCeiwO9lTl0EjmrB2jWeA==}
+    dev: false
 
   /pkg-dir/1.0.0:
     resolution: {integrity: sha512-c6pv3OE78mcZ92ckebVDqg0aWSoKhOTbwCV6qbCWMk546mAL9pZln0+QsN/yQ7fkucd4+yJPLrCBXNt8Ruk+Eg==}
