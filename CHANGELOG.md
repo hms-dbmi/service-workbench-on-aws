@@ -3,7 +3,13 @@
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
 ## [5.0.0_1.1.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.1.0...v5.0.0_1.1.1) (08/10/2023)
-- Cherry pick [a0c7eeed34eea02ec56f49411cf499d1c59f0d3a](https://github.com/awslabs/service-workbench-on-aws/commit/a0c7eeed34eea02ec56f49411cf499d1c59f0d3a) to upgrade nodejs version and dependencies for lambda runtimes.
+- Update serverless templates to use an empty string for aws profile.
+- Update nodejs and aws-sdk versions.
+  - Cherry pick [a0c7eeed34eea02ec56f49411cf499d1c59f0d3a](https://github.com/awslabs/service-workbench-on-aws/commit/a0c7eeed34eea02ec56f49411cf499d1c59f0d3a) to upgrade nodejs version and dependencies for lambda runtimes.
+- Update ci/cd pipeline
+  - Cherry pick [62d35f4e58a2a2d92a74a427548a721bc1c22114](https://github.com/awslabs/service-workbench-on-aws/commit/62d35f4e58a2a2d92a74a427548a721bc1c22114)
+  - Cherry pick [3e9d28ac355acff1909ebf6e6de39c22fda7e6b0](https://github.com/awslabs/service-workbench-on-aws/commit/3e9d28ac355acff1909ebf6e6de39c22fda7e6b0)
+
 ## [5.0.0_1.1.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.0.3...v5.0.0_1.1.0) (07/21/2023)
 - Add S3 GetObject and List permission to access embed data for workspaces.
 - Add logos to workspace types on user creation step so it's easier to visually find the types they want.
