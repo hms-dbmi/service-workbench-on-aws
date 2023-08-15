@@ -13,8 +13,8 @@
  *  permissions and limitations under the License.
  */
 
-const _ = require('lodash');
 const assert = require('assert');
+const _ = require('lodash');
 
 class CognitoIdp {
   constructor({ aws, sdk }) {

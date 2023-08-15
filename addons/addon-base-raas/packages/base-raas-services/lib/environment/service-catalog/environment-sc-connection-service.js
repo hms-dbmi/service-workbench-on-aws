@@ -13,14 +13,14 @@
  *  permissions and limitations under the License.
  */
 
+const crypto = require('crypto');
+const querystring = require('querystring');
 const _ = require('lodash');
 let fetch = require('node-fetch');
-const crypto = require('crypto');
 const NodeRSA = require('node-rsa');
-const querystring = require('querystring');
 const Service = require('@aws-ee/base-services-container/lib/service');
 const { retry, linearInterval } = require('@aws-ee/base-services/lib/helpers/utils');
-const sshConnectionInfoSchema = require('../../schema/ssh-connection-info-sc');
+const sshConnectionInfoSchema = require('../../schema/ssh-connection-info-sc.json');
 const { connectionScheme } = require('./environment-sc-connection-enum');
 const { cfnOutputsToConnections } = require('./helpers/connections-util');
 
@@ -438,7 +438,7 @@ class EnvironmentScConnectionService extends Service {
 
   async updateRoleToIncludeCurrentIP(iam, connection, currentPolicyResponse) {
     // Construct new statement which will allow the caller IP address permission to generate the presigned URL
-    const currentIpAddress = await fetch('http://checkip.amazonaws.com/').then(function(res) {
+    const currentIpAddress = await fetch('http://checkip.amazonaws.com/').then(function getText(res) {
       return res.text();
     });
     const newStatement = {

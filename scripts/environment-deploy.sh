@@ -16,7 +16,7 @@ function disableStats {
   COMPONENT_DIR=$1
   pushd "$SOLUTION_DIR/$COMPONENT_DIR" > /dev/null
   # Disable serverless stats (only strictly needs to be done one time)
-  $EXEC sls slstats --disable -s "$STAGE"
+  $EXEC sls slstats --disable
   popd > /dev/null
 }
 

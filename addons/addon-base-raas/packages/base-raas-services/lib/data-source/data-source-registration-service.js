@@ -13,8 +13,8 @@
  *  permissions and limitations under the License.
  */
 
-const _ = require('lodash');
 const crypto = require('crypto');
+const _ = require('lodash');
 const Service = require('@aws-ee/base-services-container/lib/service');
 
 const { CfnTemplate } = require('../helpers/cfn-template');

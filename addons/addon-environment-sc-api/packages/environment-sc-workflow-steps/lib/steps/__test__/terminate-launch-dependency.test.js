@@ -40,8 +40,8 @@ const EnvironmentScCidrServiceMock = require('@aws-ee/base-raas-services/lib/env
 jest.mock('@aws-ee/base-raas-services/lib/environment/environment-dns-service');
 const EnvironmentDnsServiceMock = require('@aws-ee/base-raas-services/lib/environment/environment-dns-service');
 
-jest.mock('../../../../environment-type-mgmt-services/lib/environment-type/env-type-service.js');
-const EnvTypeServiceMock = require('../../../../environment-type-mgmt-services/lib/environment-type/env-type-service.js');
+jest.mock('../../../../environment-type-mgmt-services/lib/environment-type/env-type-service');
+const EnvTypeServiceMock = require('../../../../environment-type-mgmt-services/lib/environment-type/env-type-service');
 
 const TerminateLaunchDependency = require('../terminate-launch-dependency/terminate-launch-dependency');
 

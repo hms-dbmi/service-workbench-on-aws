@@ -13,10 +13,10 @@
  *  permissions and limitations under the License.
  */
 
+const crypto = require('crypto');
 const ServicesContainer = require('@aws-ee/base-services-container/lib/services-container');
 const JsonSchemaValidationService = require('@aws-ee/base-services/lib/json-schema-validation-service');
 const Logger = require('@aws-ee/base-services/lib/logger/logger-service');
-const crypto = require('crypto');
 
 // Mocked dependencies
 const AwsService = require('@aws-ee/base-services/lib/aws/aws-service');
@@ -41,8 +41,8 @@ const AuditServiceMock = require('@aws-ee/base-services/lib/audit/audit-writer-s
 jest.mock('@aws-ee/base-services/lib/plugin-registry/plugin-registry-service');
 const PluginRegistryServiceMock = require('@aws-ee/base-services/lib/plugin-registry/plugin-registry-service');
 
-jest.mock('../../environment-dns-service.js');
-const EnvironmentDnsServiceMock = require('../../environment-dns-service.js');
+jest.mock('../../environment-dns-service');
+const EnvironmentDnsServiceMock = require('../../environment-dns-service');
 
 jest.mock('../environment-sc-service');
 const EnvironmentSCServiceMock = require('../environment-sc-service');

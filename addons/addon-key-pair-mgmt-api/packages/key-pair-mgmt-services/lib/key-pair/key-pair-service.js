@@ -12,9 +12,9 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
+const { generateKeyPair } = require('crypto');
 const _ = require('lodash');
 const uuid = require('uuid/v4');
-const { generateKeyPair } = require('crypto');
 const forge = require('node-forge');
 
 const Service = require('@aws-ee/base-services-container/lib/service');

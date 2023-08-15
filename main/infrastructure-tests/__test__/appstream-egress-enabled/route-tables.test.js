@@ -17,6 +17,7 @@ const AWS = require('aws-sdk');
 const setupAws = require('../../support/setupAws');
 const { getCFStackResources, getStackResourcesByType } = require('../../support/utilities');
 
+/* eslint-disable jest/expect-expect */
 describe('Route tables', () => {
   beforeAll(async () => {
     await setupAws();

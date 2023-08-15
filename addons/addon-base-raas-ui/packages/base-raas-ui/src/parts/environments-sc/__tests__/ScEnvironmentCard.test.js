@@ -49,6 +49,12 @@ const scEnvironment = {
   studyIds: [],
   cidr: [],
   outputs: [],
+  state: {
+    color: 'red',
+    spinner: false,
+    tip: '',
+    display: 'text',
+  },
 };
 
 const scEnvConfig = {
@@ -59,6 +65,7 @@ const scEnvConfig = {
 const envTypesStore = {
   getEnvTypeConfigsStore: jest.fn(() => envTypesStore),
   load: jest.fn(),
+  getEnvType: jest.fn(),
   getEnvTypeConfig: jest.fn(envTypeConfigId => (envTypeConfigId === 'existingConfigId' ? scEnvConfig : undefined)),
 };
 

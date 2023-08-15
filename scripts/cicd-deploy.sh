@@ -22,7 +22,7 @@ install_dependencies "$@"
 pushd "$SOLUTION_ROOT_DIR/main/cicd/cicd-pipeline" > /dev/null
 
 # Disable serverless stats (only strictly needs to be done one time)
-$EXEC sls slstats --disable -s "$STAGE"
+$EXEC sls slstats --disable
 
 # Deploy the updated stack of the CICD
 printf "\n\n---- Deploy CICD Stack\n"

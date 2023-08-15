@@ -14,8 +14,8 @@
  */
 
 const crypto = require('crypto');
-const NodeRSA = require('node-rsa');
 const querystring = require('querystring');
+const NodeRSA = require('node-rsa');
 const request = require('request-promise-native');
 const Service = require('@aws-ee/base-services-container/lib/service');
 

@@ -15,12 +15,12 @@
 const { execSync } = require('child_process');
 const { createReadStream } = require('fs');
 const path = require('path');
-const _ = require('lodash');
-const chalk = require('chalk');
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+const chalk = require('chalk');
+const _ = require('lodash');
 
 // TODO: Make this a generic build artifact and upload to s3 tool in the future
 // ie - remove the hard-coded go bits and make it more extensible.
