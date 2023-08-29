@@ -13,9 +13,9 @@
  *  permissions and limitations under the License.
  */
 
+const crypto = require('crypto');
 const _ = require('lodash');
 const Service = require('@aws-ee/base-services-container/lib/service');
-const crypto = require('crypto');
 
 const { allowIfActive, allowIfAdmin } = require('@aws-ee/base-services/lib/authorization/authorization-utils');
 const { processInBatches } = require('@aws-ee/base-services/lib/helpers/utils');

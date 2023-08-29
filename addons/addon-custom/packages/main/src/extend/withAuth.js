@@ -26,6 +26,8 @@ import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 import TermsPage from '../parts/TermsPage';
 import Register from '../parts/Register';
 
+/* eslint-disable react/jsx-no-bind */
+
 const noAuthPaths = [
   { path: '/legal', component: TermsPage },
   { path: '/register', component: Register },

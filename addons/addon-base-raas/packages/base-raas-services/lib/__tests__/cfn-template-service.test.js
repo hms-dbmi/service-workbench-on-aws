@@ -13,8 +13,8 @@
  *  permissions and limitations under the License.
  */
 
-const ServicesContainer = require('@aws-ee/base-services-container/lib/services-container');
 const fs = require('fs');
+const ServicesContainer = require('@aws-ee/base-services-container/lib/services-container');
 const SettingsServiceMock = require('@aws-ee/base-services/lib/settings/env-settings-service');
 
 const { yamlParse } = require('yaml-cfn');

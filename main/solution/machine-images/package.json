@@ -13,6 +13,6 @@
   "devDependencies": {
     "@aws-ee/serverless-packer": "workspace:*",
     "@aws-ee/base-serverless-settings-helper": "workspace:*",
-    "serverless": "^1.63.0"
+    "serverless": "^3.22.0"
   }
 }

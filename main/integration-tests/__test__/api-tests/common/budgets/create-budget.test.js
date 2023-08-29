@@ -16,6 +16,7 @@
 const { runSetup } = require('../../../../support/setup');
 const errorCode = require('../../../../support/utils/error-code');
 
+/* eslint-disable jest/no-commented-out-tests */
 describe('Create budget', () => {
   let setup;
   let adminSession;

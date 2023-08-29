@@ -14,9 +14,39 @@
  */
 
 import React from 'react';
+import { decorate, observable, runInAction } from 'mobx';
+import { observer, inject } from 'mobx-react';
 
 import { enableBuiltInWorkspaces } from '../../helpers/settings';
 import BuiltIntEnvironmentsList from '../environments-builtin/EnvironmentsList';
 import ScEnvironmentsList from '../environments-sc/ScEnvironmentsList';
+import ScEnvAdvancedList from '../environments-sc/advanced/ScEnvAdvancedList';
 
-export default () => (enableBuiltInWorkspaces ? <BuiltIntEnvironmentsList /> : <ScEnvironmentsList />);
+import { VIEW } from '../../models/environments-sc/advanced/ScEnvView';
+
+class EnvironmentsList extends React.Component {
+  constructor(props) {
+    super(props);
+    runInAction(() => {
+      this.compact = false;
+    });
+  }
+
+  get viewStore() {
+    return this.props.ScEnvView || VIEW.NORMAL;
+  }
+
+  render() {
+    if (this.viewStore.view === VIEW.ADVANCED) {
+      return <ScEnvAdvancedList />;
+    }
+    return enableBuiltInWorkspaces ? <BuiltIntEnvironmentsList /> : <ScEnvironmentsList />;
+  }
+}
+
+// see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
+decorate(EnvironmentsList, {
+  compact: observable,
+});
+
+export default inject('ScEnvView')(observer(EnvironmentsList));
