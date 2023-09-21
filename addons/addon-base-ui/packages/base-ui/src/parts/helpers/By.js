@@ -23,7 +23,7 @@ import c from 'classnames';
 // - user (via props)
 // - userDisplayName (via injection)
 // - className (via props)
-class By extends React.Component {
+class BaseBy extends React.Component {
   get uid() {
     return this.props.uid;
   }
@@ -45,6 +45,6 @@ class By extends React.Component {
 }
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
-decorate(By, {});
+decorate(BaseBy, {});
 
-export default inject('userDisplayName')(withRouter(observer(By)));
+export default inject('userDisplayName')(withRouter(observer(BaseBy)));

@@ -36,7 +36,7 @@ import AccountStatusMessage from './parts/AccountStatusMessage';
 // This component is used with the TabPane to replace the default Segment wrapper since
 // we don't want to display the border.
 // eslint-disable-next-line react/prefer-stateless-function
-class TabPaneWrapper extends React.Component {
+class TabPaneWrapperDataSource extends React.Component {
   render() {
     return <>{this.props.children}</>;
   }
@@ -129,7 +129,7 @@ class DataSourceAccountCard extends React.Component {
       {
         menuItem: <Menu.Item key="studies">Studies {getMenuItemLabel()}</Menu.Item>,
         render: () => (
-          <Tab.Pane attached={false} key="studies" as={TabPaneWrapper}>
+          <Tab.Pane attached={false} key="studies" as={TabPaneWrapperDataSource}>
             <Observer>{() => <DataSourceStudiesList account={account} />}</Observer>
           </Tab.Pane>
         ),
@@ -137,7 +137,7 @@ class DataSourceAccountCard extends React.Component {
       {
         menuItem: 'CloudFormation',
         render: () => (
-          <Tab.Pane attached={false} key="cloudformation" as={TabPaneWrapper}>
+          <Tab.Pane attached={false} key="cloudformation" as={TabPaneWrapperDataSource}>
             <Observer>{() => <DataSourceAccountCfn account={account} />}</Observer>
           </Tab.Pane>
         ),
@@ -145,7 +145,7 @@ class DataSourceAccountCard extends React.Component {
       {
         menuItem: 'Account Information',
         render: () => (
-          <Tab.Pane attached={false} key="accountInfo" as={TabPaneWrapper}>
+          <Tab.Pane attached={false} key="accountInfo" as={TabPaneWrapperDataSource}>
             <Observer>{() => <DataSourceAccountInfo account={account} />}</Observer>
           </Tab.Pane>
         ),

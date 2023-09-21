@@ -29,7 +29,7 @@ import { enableBuiltInWorkspaces } from '../../helpers/settings';
 import { blueDatasets } from './graphs/graph-options';
 import BarGraph from './graphs/BarGraph';
 
-class Dashboard extends React.Component {
+class BaseDashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -335,7 +335,7 @@ async function getAccumulatedEnvCost(getEnvironmentsFn, getEnvironmentCostFn) {
 }
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
-decorate(Dashboard, {});
+decorate(BaseDashboard, {});
 
-export default inject('userStore')(withRouter(observer(Dashboard)));
+export default inject('userStore')(withRouter(observer(BaseDashboard)));
 export { getAccumulatedEnvCost, getCosts, getLabels };

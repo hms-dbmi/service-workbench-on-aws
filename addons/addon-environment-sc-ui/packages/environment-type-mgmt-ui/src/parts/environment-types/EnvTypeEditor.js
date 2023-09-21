@@ -32,7 +32,7 @@ import ConfigStep from './env-type-editor-steps/ConfigStep';
 
 // This component is used with the TabPane to replace the default Segment wrapper since
 // we don't want to display the border.
-function TabPaneWrapper(props) {
+function TabPaneWrapperTypeEditor(props) {
   return <>{props.children}</>;
 }
 
@@ -136,7 +136,7 @@ class EnvTypeEditor extends React.Component {
     const stepPanes = _.map(this.wizardModel.steps, step => ({
       menuItem: step.title,
       render: () => (
-        <Tab.Pane attached={false} key={step.key} as={TabPaneWrapper}>
+        <Tab.Pane attached={false} key={step.key} as={TabPaneWrapperTypeEditor}>
           <Observer>{() => this.renderEnvTypeStep(step.key)}</Observer>
         </Tab.Pane>
         // <Observer>{() => this.renderEnvTypeStep(step.key)}</Observer>

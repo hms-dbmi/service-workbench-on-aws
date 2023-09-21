@@ -27,7 +27,7 @@ import { nicePrice } from '@aws-ee/base-ui/dist/helpers/utils';
 // expected props
 // - configurations (via props) and array of the compute configurations MST
 // - formField (via props) an instance of the mobx form field
-class SelectConfigurationCards extends React.Component {
+class SelectConfigurationCardsCompute extends React.Component {
   get configurations() {
     return this.props.configurations;
   }
@@ -138,11 +138,11 @@ class SelectConfigurationCards extends React.Component {
 }
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
-decorate(SelectConfigurationCards, {
+decorate(SelectConfigurationCardsCompute, {
   configurations: computed,
   configurationId: computed,
   formField: computed,
   handleSelectConfigurationId: action,
 });
 
-export default inject()(observer(SelectConfigurationCards));
+export default inject()(observer(SelectConfigurationCardsCompute));

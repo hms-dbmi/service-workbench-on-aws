@@ -31,7 +31,7 @@ import StudyStepsProgress from './StudyStepsProgress';
 // This component is used with the TabPane to replace the default Segment wrapper since
 // we don't want to display the border.
 // eslint-disable-next-line react/prefer-stateless-function
-class TabPaneWrapper extends React.Component {
+class TabPaneWrapperStudies extends React.Component {
   render() {
     return <>{this.props.children}</>;
   }
@@ -122,7 +122,7 @@ class StudiesPage extends React.Component {
         </Menu.Item>
       ),
       render: () => (
-        <Tab.Pane attached={false} key={category.id} as={TabPaneWrapper}>
+        <Tab.Pane attached={false} key={category.id} as={TabPaneWrapperStudies}>
           <Observer>{() => <StudiesTab category={category} />}</Observer>
         </Tab.Pane>
       ),
