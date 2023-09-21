@@ -193,6 +193,8 @@ class ScEnvAdvancedList extends React.Component {
 
   render() {
     let content = null;
+    let list = [];
+    let total = 0;
 
     if (isStoreError(this.envsStore)) {
       content = <ErrorBox error={this.envsStore.error} className="p0" />;
@@ -211,30 +213,40 @@ class ScEnvAdvancedList extends React.Component {
     } else if (isStoreNotEmpty(this.envsStore)) {
       const fields = this.getEnvFields(this.envsStore.list);
       const tableColumns = fields.map(column => _.pick(column, ['key', 'label', 'sortable', 'type']));
-      const tableRows = this.getEnvs(this.envsStore.list, this.viewStore.filters, this.viewStore.sort);
+      list = this.getEnvs(this.envsStore.list, this.viewStore.filters, this.viewStore.sort);
+      total = this.envsStore.total;
 
       content = (
         <>
-          <EnvsHeader
-            current={tableRows.length}
-            total={this.envsStore.total}
-            view={this.viewStore.view}
-            isAdmin // We only get to this view if we're an admin, so this must be true
-            onViewToggle={this.handleViewToggle()}
-            onEnvCreate={this.handleCreateEnvironment()}
-          />
           <FilterBox
             mode={this.viewStore.mode}
             filters={this.viewStore.filters}
             fields={fields}
             onFilter={this.handleFilter()}
           />
-          <CompactTable sort={this.viewStore.sort} columns={tableColumns} rows={tableRows} onSort={this.handleSort()} />
+          <CompactTable
+            sort={this.viewStore.sort}
+            columns={tableColumns}
+            rows={list}
+            onSort={this.handleSort()}
+          />
         </>
       );
     }
 
-    return <Container className="mt3 animated fadeIn">{content}</Container>;
+    return (
+      <Container className="mt3 animated fadeIn">
+        <EnvsHeader
+          current={list.length}
+          total={total}
+          view={this.viewStore.view}
+          isAdmin // We only get to this view if we're an admin, so this must be true
+          onViewToggle={this.handleViewToggle()}
+          onEnvCreate={this.handleCreateEnvironment()}
+        />
+        {content}
+      </Container>
+    );
   }
 }
 
