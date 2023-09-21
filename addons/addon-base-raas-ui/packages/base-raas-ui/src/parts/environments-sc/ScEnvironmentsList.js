@@ -135,6 +135,8 @@ class ScEnvironmentsList extends React.Component {
     const store = this.envsStore;
     let content = null;
     let list = [];
+    let total = 0;
+
     const projects = this.getProjects();
     const appStreamProjectIds = _.map(
       _.filter(projects, proj => proj.isAppStreamConfigured),
@@ -153,24 +155,21 @@ class ScEnvironmentsList extends React.Component {
       content = this.renderEmpty();
     } else if (isStoreNotEmpty(store)) {
       list = this.searchAndFilter();
-      content = (
-        <>
-          <EnvsHeader
-            current={list.length}
-            total={store.total}
-            isAdmin={this.isAdmin}
-            provisionDisabled={this.provisionDisabled}
-            onViewToggle={this.handleViewToggle()}
-            onEnvCreate={this.handleCreateEnvironment}
-          />
-          {this.renderMain(list)}
-        </>
-      );
+      content = this.renderMain(list);
+      total = store.total;
     }
 
     return (
       <Container className="mt3 animated fadeIn">
         {this.provisionDisabled && this.renderMissingAppStreamConfig()}
+        <EnvsHeader
+          current={list.length}
+          total={total}
+          isAdmin={this.isAdmin}
+          provisionDisabled={this.provisionDisabled}
+          onViewToggle={this.handleViewToggle()}
+          onEnvCreate={this.handleCreateEnvironment}
+        />
         {content}
       </Container>
     );
