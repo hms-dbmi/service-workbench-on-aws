@@ -224,12 +224,7 @@ class ScEnvAdvancedList extends React.Component {
             fields={fields}
             onFilter={this.handleFilter()}
           />
-          <CompactTable
-            sort={this.viewStore.sort}
-            columns={tableColumns}
-            rows={list}
-            onSort={this.handleSort()}
-          />
+          <CompactTable sort={this.viewStore.sort} columns={tableColumns} rows={list} onSort={this.handleSort()} />
         </>
       );
     }
