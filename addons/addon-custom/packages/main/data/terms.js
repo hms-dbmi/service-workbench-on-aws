@@ -40,7 +40,7 @@ export default [
         your access is no more than necessary to perform your legitimate tasks or
         assigned duties. If you believe you are being granted access that you should
         not have, you must immediately notify
-        <a href="mailto:{CONTACT}" target="_blank" rel=”noreferrer”>{CONTACT}</a>.
+        <a href="mailto:{CONTACT}" target="_blank" rel="noreferrer">{CONTACT}</a>.
       </li>
       <li>
         Safeguard system resources against waste, loss, abuse, unauthorized use or
@@ -49,11 +49,11 @@ export default [
       <li>
         Report all security incidents or suspected incidents (e.g., lost passwords,
         improper or suspicious acts) related to Service Workbench
-        <a href="mailto:{CONTACT}" target="_blank" rel=”noreferrer”>{CONTACT}</a>
+        <a href="mailto:{CONTACT}" target="_blank" rel="noreferrer">{CONTACT}</a>
       </li>
       <li>
         Contact
-        <a href="mailto:{CONTACT}" target="_blank" rel=”noreferrer”>{CONTACT}</a>
+        <a href="mailto:{CONTACT}" target="_blank" rel="noreferrer">{CONTACT}</a>
         if you do not understand any of these rules.
       </li>
     </ul>
@@ -88,7 +88,7 @@ export default [
       <li>
         The University maintains the right to modify these Terms of Service at any
         time, and may do so by posting notice of such modifications to
-        <a href="https://{HOSTNAME}/legal" target="_blank" rel=”noreferrer”>
+        <a href="https://{HOSTNAME}/legal" target="_blank" rel="noreferrer">
           https://{HOSTNAME}/legal
         </a>
       </li>
