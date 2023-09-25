@@ -29,7 +29,7 @@ import { displayError } from '../../helpers/notification';
 import BasicProgressPlaceholder from '../helpers/BasicProgressPlaceholder';
 import { swallowError } from '../../helpers/utils';
 
-class UsersList extends React.Component {
+class BaseUsersList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -393,9 +393,9 @@ class UsersList extends React.Component {
 }
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
-decorate(UsersList, {
+decorate(BaseUsersList, {
   mapOfUsersBeingEdited: observable,
   formProcessing: observable,
 });
 
-export default inject('userStore', 'usersStore')(withRouter(observer(UsersList)));
+export default inject('userStore', 'usersStore')(withRouter(observer(BaseUsersList)));

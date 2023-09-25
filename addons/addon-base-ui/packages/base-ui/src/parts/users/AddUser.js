@@ -25,7 +25,7 @@ import { displayError } from '../../helpers/notification';
 import { createLink } from '../../helpers/routing';
 import validate from '../../models/forms/Validate';
 
-class AddUser extends React.Component {
+class BaseAddUser extends React.Component {
   constructor(props) {
     super(props);
 
@@ -248,9 +248,9 @@ class AddUser extends React.Component {
 }
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
-decorate(AddUser, {
+decorate(BaseAddUser, {
   formProcessing: observable,
   user: observable,
   validationErrors: observable,
 });
-export default inject('userStore', 'usersStore')(withRouter(observer(AddUser)));
+export default inject('userStore', 'usersStore')(withRouter(observer(BaseAddUser)));

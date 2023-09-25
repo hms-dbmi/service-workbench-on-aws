@@ -19,7 +19,7 @@ import Input from '@aws-ee/base-ui/dist/parts/helpers/fields/Input';
 import TextArea from '@aws-ee/base-ui/dist/parts/helpers/fields/TextArea';
 import BaseEnvTypeConfigStep from './BaseEnvTypeConfigStep';
 
-class BasicInfoStep extends BaseEnvTypeConfigStep {
+class BasicInfoStepConfig extends BaseEnvTypeConfigStep {
   renderFormFields({ form, processing }) {
     const isUpdating = this.isEditAction();
 
@@ -39,4 +39,4 @@ class BasicInfoStep extends BaseEnvTypeConfigStep {
   }
 }
 
-export default observer(BasicInfoStep);
+export default observer(BasicInfoStepConfig);

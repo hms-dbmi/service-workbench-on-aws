@@ -32,6 +32,7 @@ class EnvironmentConnectButton extends React.Component {
 
     const url = await this.getUrl(environment);
     // Change to the notebook
+    newTab.opener = null;
     newTab.location = url;
     environment.setFetchingUrl(false);
   };

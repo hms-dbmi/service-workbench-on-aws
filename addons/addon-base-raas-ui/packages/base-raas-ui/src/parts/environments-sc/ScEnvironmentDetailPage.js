@@ -52,7 +52,7 @@ import ScEnvironmentCostTable from './parts/ScEnvironmentCostTable';
 // This component is used with the TabPane to replace the default Segment wrapper since
 // we don't want to display the border.
 // eslint-disable-next-line react/prefer-stateless-function
-class TabPaneWrapper extends React.Component {
+class TabPaneWrapperEnvs extends React.Component {
   render() {
     return <>{this.props.children}</>;
   }
@@ -306,7 +306,7 @@ class ScEnvironmentDetailPage extends React.Component {
       {
         menuItem: 'Cost',
         render: () => (
-          <Tab.Pane attached={false} key="cost" as={TabPaneWrapper}>
+          <Tab.Pane attached={false} key="cost" as={TabPaneWrapperEnvs}>
             <Observer>{() => <ScEnvironmentCostTable envId={env.id} />}</Observer>
           </Tab.Pane>
         ),
@@ -314,7 +314,7 @@ class ScEnvironmentDetailPage extends React.Component {
       {
         menuItem: 'CloudFormation Output',
         render: () => (
-          <Tab.Pane attached={false} key="cfn-outputs" as={TabPaneWrapper}>
+          <Tab.Pane attached={false} key="cfn-outputs" as={TabPaneWrapperEnvs}>
             <Observer>{() => this.renderCfnOutput(env)}</Observer>
           </Tab.Pane>
         ),

@@ -33,7 +33,7 @@ import localStorageKeys from '../../models/constants/local-storage-keys';
 // expected props
 // - environmentsStore (via injection)
 // - location (from react router)
-class EnvironmentsList extends React.Component {
+class EnvironmentsListBuiltin extends React.Component {
   constructor(props) {
     super(props);
     const user = this.getUserStore().user;
@@ -203,7 +203,7 @@ class EnvironmentsList extends React.Component {
 }
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
-decorate(EnvironmentsList, {
+decorate(EnvironmentsListBuiltin, {
   handleDetailClick: action,
   setOnboarding: action,
   hidePinModal: action,
@@ -212,4 +212,4 @@ decorate(EnvironmentsList, {
   pinModalOpen: observable,
 });
 
-export default inject('environmentsStore', 'userStore')(withRouter(observer(EnvironmentsList)));
+export default inject('environmentsStore', 'userStore')(withRouter(observer(EnvironmentsListBuiltin)));

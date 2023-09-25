@@ -28,7 +28,7 @@ import KeyPairButtons from './parts/KeyPairButtons';
 // This component is used with the TabPane to replace the default Segment wrapper since
 // we don't want to display the border.
 // eslint-disable-next-line react/prefer-stateless-function
-class TabPaneWrapper extends React.Component {
+class TabPaneWrapperKeyCard extends React.Component {
   render() {
     return <>{this.props.children}</>;
   }
@@ -63,7 +63,7 @@ class KeyPairCard extends React.Component {
       {
         menuItem: 'Public Key',
         render: () => (
-          <Tab.Pane attached={false} key="public-key" as={TabPaneWrapper}>
+          <Tab.Pane attached={false} key="public-key" as={TabPaneWrapperKeyCard}>
             <Observer>{() => this.renderPublicKey(keyPair)}</Observer>
           </Tab.Pane>
         ),
@@ -71,7 +71,7 @@ class KeyPairCard extends React.Component {
       {
         menuItem: 'Private Key',
         render: () => (
-          <Tab.Pane attached={false} key="private-key" as={TabPaneWrapper}>
+          <Tab.Pane attached={false} key="private-key" as={TabPaneWrapperKeyCard}>
             <Observer>{() => this.renderPrivateKey()}</Observer>
           </Tab.Pane>
         ),

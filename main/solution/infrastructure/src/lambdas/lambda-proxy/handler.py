@@ -3,7 +3,7 @@ import requests
 import json
 import os
 
-def handler(event, context):
+def lambda_handler(event, context):
     URL = os.environ['APIGW_URL'] + event['path']
     HTTP_METHOD='';
     
@@ -66,4 +66,3 @@ def handler(event, context):
         
         
     return response;
-  
