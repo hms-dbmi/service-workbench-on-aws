@@ -6,7 +6,7 @@ phases:
     runtime-versions:
       nodejs: 14
       golang: 1.15
-      python: 3.11
+      python: 3.9
 
   pre_build:
     commands:

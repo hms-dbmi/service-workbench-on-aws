@@ -5,7 +5,7 @@ phases:
     # See supported runtimes at https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-available.html
     runtime-versions:
       nodejs: 12
-      python: 3.11
+      python: 3.9
 
   pre_build:
     commands:
