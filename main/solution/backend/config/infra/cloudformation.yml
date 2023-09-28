@@ -1721,6 +1721,27 @@ Resources:
               KeyType: 'HASH'
           Projection:
             ProjectionType: 'ALL'
+  
+  LoadBalancersDb:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.settings.dbLoadBalancers}
+      AttributeDefinitions:
+        - AttributeName: 'id'
+          AttributeType: 'S'
+        - AttributeName: 'awsAccountId'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'id'
+          KeyType: 'HASH'
+      BillingMode: PAY_PER_REQUEST
+      GlobalSecondaryIndexes:
+        - IndexName: ${self:custom.settings.dbLoadBalancersAccountIdIndex}
+          KeySchema:
+            - AttributeName: 'awsAccountId'
+              KeyType: 'HASH'
+          Projection:
+            ProjectionType: 'ALL'
 
   # =============================================================================================
   # SNS

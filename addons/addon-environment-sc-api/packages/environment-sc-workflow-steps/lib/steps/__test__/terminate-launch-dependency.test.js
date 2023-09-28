@@ -170,14 +170,16 @@ describe('TerminateLaunchDependencyStep', () => {
       };
     });
     const albDetails = {
-      createdAt: '2021-05-21T13:06:58.216Z',
       id: 'test-id',
-      type: 'account-workspace-details',
-      updatedAt: '2021-05-31T13:32:15.503Z',
-      value:
-        '{"id":"test-id","albStackName":null,"albArn":null,"listenerArn":null,"albDnsName":null,"albSecurityGroup":null,"albDependentWorkspacesCount":1}',
+      awsAcccountId: null,
+      albStackName: null,
+      albArn: null,
+      listenerArn: null,
+      albDnsName: null,
+      albSecurityGroup: null,
+      albDependentWorkspacesCount: 1,
     };
-    albService.getAlbDetails = jest.fn(() => {
+    albService.find = jest.fn(() => {
       return albDetails;
     });
   });
@@ -219,8 +221,8 @@ describe('TerminateLaunchDependencyStep', () => {
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
       });
-      environmentDnsService.deleteRecord.mockImplementationOnce(() => { });
-      albService.deleteListenerRule.mockImplementationOnce(() => { });
+      environmentDnsService.deleteRecord.mockImplementationOnce(() => {});
+      albService.deleteListenerRule.mockImplementationOnce(() => {});
       await step.start();
       expect(environmentDnsService.deleteRecord).not.toHaveBeenCalled();
       expect(albService.deleteListenerRule).not.toHaveBeenCalled();
@@ -245,9 +247,6 @@ describe('TerminateLaunchDependencyStep', () => {
           route53HostedZone: 'sampleRoute53HostedZone',
         };
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return true;
-      });
       albService.getAlbHostedZoneID = jest.fn();
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
@@ -270,13 +269,10 @@ describe('TerminateLaunchDependencyStep', () => {
           ListenerRuleARN: null,
         };
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return true;
-      });
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
       });
-      environmentDnsService.deleteRecord.mockImplementationOnce(() => { });
+      environmentDnsService.deleteRecord.mockImplementationOnce(() => {});
       await step.start();
       expect(environmentDnsService.deleteRecord).toHaveBeenCalled();
     });
@@ -291,13 +287,13 @@ describe('TerminateLaunchDependencyStep', () => {
           ListenerRuleARN: null,
         };
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return false;
+      albService.find.mockImplementationOnce(() => {
+        return null;
       });
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
       });
-      environmentDnsService.deleteRecord.mockImplementationOnce(() => { });
+      environmentDnsService.deleteRecord.mockImplementationOnce(() => {});
       await step.start();
       expect(environmentDnsService.deleteRecord).not.toHaveBeenCalled();
     });
@@ -312,13 +308,10 @@ describe('TerminateLaunchDependencyStep', () => {
           ListenerRuleARN: 'rule-arn',
         };
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return false;
-      });
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
       });
-      albService.deleteListenerRule.mockImplementationOnce(() => { });
+      albService.deleteListenerRule.mockImplementationOnce(() => {});
       await step.start();
       expect(albService.deleteListenerRule).toHaveBeenCalled();
     });
@@ -333,13 +326,13 @@ describe('TerminateLaunchDependencyStep', () => {
           ListenerRuleARN: null,
         };
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return false;
+      albService.find.mockImplementationOnce(() => {
+        return null;
       });
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
       });
-      albService.deleteListenerRule.mockImplementationOnce(() => { });
+      albService.deleteListenerRule.mockImplementationOnce(() => {});
       await step.start();
       expect(albService.deleteListenerRule).not.toHaveBeenCalled();
     });
@@ -357,7 +350,7 @@ describe('TerminateLaunchDependencyStep', () => {
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
       });
-      jest.spyOn(step, 'checkAndTerminateAlb').mockImplementationOnce(() => { });
+      jest.spyOn(step, 'checkAndTerminateAlb').mockImplementationOnce(() => {});
       await step.start();
       expect(step.checkAndTerminateAlb).not.toHaveBeenCalled();
     });
@@ -375,7 +368,7 @@ describe('TerminateLaunchDependencyStep', () => {
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
       });
-      jest.spyOn(step, 'checkAndTerminateAlb').mockImplementationOnce(() => { });
+      jest.spyOn(step, 'checkAndTerminateAlb').mockImplementationOnce(() => {});
       await step.start();
       expect(step.checkAndTerminateAlb).toHaveBeenCalled();
     });
@@ -390,13 +383,10 @@ describe('TerminateLaunchDependencyStep', () => {
           ListenerRuleARN: null,
         };
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return true;
-      });
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
       });
-      environmentDnsService.deleteRecord.mockImplementationOnce(() => { });
+      environmentDnsService.deleteRecord.mockImplementationOnce(() => {});
       await step.start();
       expect(environmentScCidrService.revokeIngressRuleWithSecurityGroup).toHaveBeenCalled();
     });
@@ -411,45 +401,28 @@ describe('TerminateLaunchDependencyStep', () => {
           ListenerRuleARN: null,
         };
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return false;
+      albService.find.mockImplementationOnce(() => {
+        return null;
       });
       jest.spyOn(step, 'getTemplateOutputs').mockImplementationOnce(() => {
         return templateOutputs;
       });
-      environmentDnsService.deleteRecord.mockImplementationOnce(() => { });
+      environmentDnsService.deleteRecord.mockImplementationOnce(() => {});
       await step.start();
       expect(environmentScCidrService.revokeIngressRuleWithSecurityGroup).not.toHaveBeenCalled();
     });
   });
 
   describe('checkAndTerminateAlb', () => {
-    let origCheckPendingEnvWithSSLCertFn;
-    beforeAll(() => {
-      origCheckPendingEnvWithSSLCertFn = step.checkPendingEnvWithSSLCert;
-      step.checkPendingEnvWithSSLCert = jest.fn(() => Promise.resolve(true));
-    });
-    afterAll(() => {
-      step.checkPendingEnvWithSSLCert = origCheckPendingEnvWithSSLCertFn;
-    });
-    it('should throw error when project is not valid', async () => {
-      albService.albDependentWorkspacesCount.mockImplementationOnce(() => {
-        throw new Error('project with id "test-project" does not exist');
-      });
-      await expect(step.checkAndTerminateAlb(requestContext, 'test-project-id', 'test-external-id')).rejects.toThrow(
-        'project with id "test-project" does not exist',
-      );
-    });
-
     it('should skip alb termination when count > 0', async () => {
       albService.albDependentWorkspacesCount.mockImplementationOnce(() => {
         return 1;
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return true;
+      albService.getPendingEnvForLoadBalancer.mockImplementationOnce(() => {
+        return 0;
       });
-      jest.spyOn(step, 'terminateStack').mockImplementationOnce(() => { });
-      await step.checkAndTerminateAlb('test-project-id', 'test-external-id');
+      jest.spyOn(step, 'terminateStack').mockImplementationOnce(() => {});
+      await step.checkAndTerminateAlb(requestContext, 'test-project-id', 'test-external-id', 'alb-id');
       // CHECK
       expect(step.terminateStack).not.toHaveBeenCalled();
       jest.clearAllMocks();
@@ -459,29 +432,28 @@ describe('TerminateLaunchDependencyStep', () => {
       albService.albDependentWorkspacesCount.mockImplementationOnce(() => {
         return 0;
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return false;
+      albService.getPendingEnvForLoadBalancer.mockImplementationOnce(() => {
+        return 0;
       });
-      jest.spyOn(step, 'terminateStack').mockImplementationOnce(() => { });
-      await step.checkAndTerminateAlb('test-project-id', 'test-external-id');
+      jest.spyOn(step, 'terminateStack').mockImplementationOnce(() => {});
+      await step.checkAndTerminateAlb(requestContext, 'test-project-id', 'test-external-id', null);
       // CHECK
       expect(step.terminateStack).not.toHaveBeenCalled();
     });
 
-    it('should not call alb termination when there are pending env with SSL Cert', async () => {
+    it('should not call alb termination when there are pending env with load balancer', async () => {
       // BUILD
       albService.albDependentWorkspacesCount.mockImplementationOnce(() => {
         return 0;
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return true;
+      albService.getPendingEnvForLoadBalancer(() => {
+        return 1;
       });
-      step.checkPendingEnvWithSSLCert = jest.fn(() => Promise.resolve(true));
 
-      jest.spyOn(step, 'terminateStack').mockImplementationOnce(() => { });
+      jest.spyOn(step, 'terminateStack').mockImplementationOnce(() => {});
 
       // OPERATE
-      await step.checkAndTerminateAlb('test-project-id', 'test-external-id');
+      await step.checkAndTerminateAlb(requestContext, 'test-project-id', 'test-external-id', 'alb-id');
 
       // CHECK
       expect(step.terminateStack).not.toHaveBeenCalled();
@@ -491,10 +463,10 @@ describe('TerminateLaunchDependencyStep', () => {
       albService.albDependentWorkspacesCount.mockImplementationOnce(() => {
         return 0;
       });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return true;
+      albService.getPendingEnvForLoadBalancer.mockImplementationOnce(() => {
+        return 0;
       });
-      jest.spyOn(step, 'checkAndTerminateAlb').mockImplementationOnce(() => { });
+      jest.spyOn(step, 'checkAndTerminateAlb').mockImplementationOnce(() => {});
       await step.checkAndTerminateAlb('test-project-id', 'test-external-id');
       // CHECK
       expect(step.checkAndTerminateAlb).toHaveBeenCalled();
@@ -514,7 +486,7 @@ describe('TerminateLaunchDependencyStep', () => {
     it('should call delete stack and set stack id on success', async () => {
       cfn.deleteStack = jest.fn().mockImplementation(() => {
         return {
-          promise: () => { },
+          promise: () => {},
         };
       });
       step.getCloudFormationService = jest.fn().mockResolvedValue(cfn);
@@ -529,7 +501,7 @@ describe('TerminateLaunchDependencyStep', () => {
     it('should return resolved promise', async () => {
       cfn.deleteStack = jest.fn().mockImplementation(() => {
         return {
-          promise: () => { },
+          promise: () => {},
         };
       });
       step.getCloudFormationService = jest.fn().mockResolvedValue(cfn);
@@ -553,29 +525,26 @@ describe('TerminateLaunchDependencyStep', () => {
   });
 
   describe('onSuccessfulCompletion', () => {
-    it('should throw error when aws account id retrival fails', async () => {
-      albService.findAwsAccountId.mockImplementationOnce(() => {
-        throw new Error('project with id "test-project" does not exist');
+    it('should delete alb details on success', async () => {
+      environmentScService.mustFind.mockImplementationOnce(() => {
+        return { loadBalancerId: 'alb-id' };
       });
-      await expect(step.onSuccessfulCompletion([])).rejects.toThrow('project with id "test-project" does not exist');
+      jest.spyOn(albService, 'delete').mockImplementationOnce(() => {});
+      await step.onSuccessfulCompletion([]);
+      expect(albService.delete).toHaveBeenCalledWith(requestContext, { id: 'alb-id' });
     });
 
-    it('should update alb details with null on success', async () => {
-      albService.findAwsAccountId.mockImplementationOnce(() => {
-        return 'test-account-id';
+    it('should throw error if lock does not exists', async () => {
+      environmentScService.mustFind.mockImplementationOnce(() => {
+        return { loadBalancerId: 'alb-id' };
       });
-      jest.spyOn(albService, 'saveAlbDetails').mockImplementationOnce(() => { });
-      const albDetails = {
-        id: 'test-account-id',
-        albStackName: null,
-        albArn: null,
-        listenerArn: null,
-        albDnsName: null,
-        albSecurityGroup: null,
-        albDependentWorkspacesCount: 0,
-      };
-      await step.onSuccessfulCompletion([]);
-      expect(albService.saveAlbDetails).toHaveBeenCalledWith('test-account-id', albDetails);
+      jest.spyOn(albService, 'delete').mockImplementationOnce(() => {});
+      jest.spyOn(step.state, 'string').mockImplementationOnce(() => {
+        return '';
+      });
+      await expect(step.onSuccessfulCompletion()).rejects.toThrow(
+        'Error terminating environment. Reason: ALB lock does not exist or expired',
+      );
     });
   });
 
@@ -612,30 +581,26 @@ describe('TerminateLaunchDependencyStep', () => {
   });
 
   describe('onFail', () => {
-    it('update ALB details to null if stack id present', async () => {
+    it('remove ALB details if stack id present', async () => {
+      environmentScService.mustFind.mockImplementationOnce(() => {
+        return { loadBalancerId: 'alb-id' };
+      });
+      jest.spyOn(albService, 'delete').mockImplementationOnce(() => {});
       await step.onFail({ message: 'Error Message' });
-      const albDetails = {
-        id: 'test-account-id',
-        albStackName: null,
-        albArn: null,
-        listenerArn: null,
-        albDnsName: null,
-        albSecurityGroup: null,
-        albDependentWorkspacesCount: 0,
-      };
-      expect(albService.saveAlbDetails).toHaveBeenCalledWith('test-account-id', albDetails);
+      expect(albService.delete).toHaveBeenCalledWith(requestContext, { id: 'alb-id' });
     });
 
-    it('should not update ALB details to null if stack id is not present', async () => {
+    it('should not remove if stack id is not present', async () => {
       jest.spyOn(step.state, 'optionalString').mockImplementationOnce(() => {
         return '';
       });
+      jest.spyOn(albService, 'delete').mockImplementationOnce(() => {});
       try {
         await step.onFail({ message: 'Error Message' });
       } catch (err) {
         // DO NOTHING
       }
-      expect(albService.saveAlbDetails).not.toHaveBeenCalled();
+      expect(albService.delete).not.toHaveBeenCalled();
     });
 
     it('Should release lock if lock exists', async () => {
@@ -646,148 +611,6 @@ describe('TerminateLaunchDependencyStep', () => {
     it('should call visit plugins method', async () => {
       await step.onFail({ message: 'Error Message' });
       expect(pluginRegistryService.visitPlugins).toHaveBeenCalled();
-    });
-  });
-
-  describe('checkPendingEnvWithSSLCert', () => {
-    it('should return false since there are no pending environment', async () => {
-      // BUILD
-      const envScService = {};
-      envScService.list = jest.fn(() => Promise.resolve([]));
-
-      const envTypeService = {};
-      envTypeService.mustFind = jest.fn(() => Promise.resolve({}));
-
-      // OPERATE, CHECK
-      await expect(step.checkPendingEnvWithSSLCert(envScService, envTypeService, requestContext)).resolves.toEqual(
-        false,
-      );
-    });
-
-    it('should return false since there are NO pending environment with SSL cert', async () => {
-      // BUILD
-      const envScService = {};
-      envScService.list = jest.fn(() =>
-        Promise.resolve([
-          {
-            id: 'abc',
-            rev: 0,
-            projectId: 'proj-123',
-            inWorkflow: 'true',
-            status: 'PENDING',
-            createdAt: '2021-11-11T05:47:39.178Z',
-            cidr: '0.0.0.0/0',
-            updatedBy: 'u-zBpBkLuXjdDbdUAHalfY7',
-            createdBy: 'u-zBpBkLuXjdDbdUAHalfY7',
-            name: 'rstudio-6',
-            studyIds: [],
-            updatedAt: '2021-11-11T05:47:39.178Z',
-            indexId: 'index-123',
-            description: 'RStudio service workspace',
-            envTypeConfigId: 'config-1',
-            envTypeId: 'prod-xyz',
-          },
-        ]),
-      );
-
-      const envTypeService = {};
-      envTypeService.mustFind = jest.fn(() =>
-        Promise.resolve({
-          id: 'prod-xyz',
-          product: {
-            productId: 'prod-n52qqfqv6bmya',
-          },
-          rev: 1,
-          status: 'approved',
-          createdAt: '2021-11-09T18:06:56.944Z',
-          updatedBy: 'u-zBpBkLuXjdDbdUAHalfY7',
-          createdBy: 'u-zBpBkLuXjdDbdUAHalfY7',
-          name: 'Sample Workspace Type',
-          desc: '',
-          provisioningArtifact: {
-            id: 'pa-7udayuv3syfo6',
-          },
-          params: [
-            {
-              IsNoEcho: false,
-              ParameterConstraints: {
-                AllowedValues: [],
-              },
-              ParameterType: 'String',
-              Description: 'The ARN of the KMS encryption Key used to encrypt data in the instance',
-              ParameterKey: 'EncryptionKeyArn',
-            },
-          ],
-        }),
-      );
-
-      // OPERATE, CHECK
-      await expect(step.checkPendingEnvWithSSLCert(envScService, envTypeService, requestContext)).resolves.toEqual(
-        false,
-      );
-    });
-
-    it('should return true since there are pending environment with SSL cert', async () => {
-      // BUILD
-      const envScService = {};
-      envScService.list = jest.fn(() =>
-        Promise.resolve([
-          {
-            id: 'abc',
-            rev: 0,
-            projectId: 'proj-123',
-            inWorkflow: 'true',
-            status: 'PENDING',
-            createdAt: '2021-11-11T05:47:39.178Z',
-            cidr: '0.0.0.0/32',
-            updatedBy: 'u-zBpBkLuXjdDbdUAHalfY7',
-            createdBy: 'u-zBpBkLuXjdDbdUAHalfY7',
-            name: 'rstudio-6',
-            studyIds: [],
-            updatedAt: '2021-11-11T05:47:39.178Z',
-            indexId: 'index-123',
-            description: 'RStudio service workspace',
-            envTypeConfigId: 'config-1',
-            envTypeId: 'prod-xyz',
-          },
-        ]),
-      );
-
-      const envTypeService = {};
-      envTypeService.mustFind = jest.fn(() =>
-        Promise.resolve({
-          id: 'prod-xyz',
-          product: {
-            productId: 'prod-n52qqfqv6bmya',
-          },
-          rev: 1,
-          status: 'approved',
-          createdAt: '2021-11-09T18:06:56.944Z',
-          updatedBy: 'u-zBpBkLuXjdDbdUAHalfY7',
-          createdBy: 'u-zBpBkLuXjdDbdUAHalfY7',
-          name: 'Sample Workspace Type',
-          desc: '',
-          provisioningArtifact: {
-            id: 'pa-7udayuv3syfo6',
-          },
-          params: [
-            {
-              IsNoEcho: false,
-              ParameterConstraints: {
-                AllowedValues: [],
-              },
-              ParameterType: 'String',
-              Description: 'The ARN of the AWS Certificate Manager SSL Certificate to associate with the Load Balancer',
-              ParameterKey: 'ACMSSLCertARN',
-            },
-          ],
-        }),
-      );
-
-      // OPERATE, CHECK
-      await expect(step.checkPendingEnvWithSSLCert(envScService, envTypeService, requestContext)).resolves.toEqual(
-        true,
-      );
     });
   });
 });

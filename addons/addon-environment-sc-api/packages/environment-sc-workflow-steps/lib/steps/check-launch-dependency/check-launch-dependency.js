@@ -13,8 +13,8 @@
  *  permissions and limitations under the License.
  */
 
-const _ = require('lodash');
 const url = require('url');
+const _ = require('lodash');
 const yaml = require('js-yaml');
 
 const StepBase = require('@aws-ee/base-workflow-core/lib/workflow/helpers/step-base');
@@ -31,6 +31,7 @@ const inPayloadKeys = {
   resolvedVars: 'resolvedVars',
   portfolioId: 'portfolioId',
   productId: 'productId',
+  envId: 'envId',
 };
 
 const outPayloadKeys = {
@@ -45,8 +46,6 @@ const settingKeys = {
 const pluginConstants = {
   extensionPoint: 'env-provisioning',
 };
-
-const MAX_COUNT_ALB_DEPENDENT_WORKSPACES = 100;
 
 const failureStatuses = [
   'CREATE_FAILED',
@@ -71,6 +70,7 @@ class CheckLaunchDependency extends StepBase {
       [inPayloadKeys.productId]: 'string',
       [inPayloadKeys.envTypeId]: 'string',
       [inPayloadKeys.envTypeConfigId]: 'string',
+      [inPayloadKeys.envId]: 'string',
     };
   }
 
@@ -114,16 +114,10 @@ class CheckLaunchDependency extends StepBase {
     if (_.isUndefined(lock)) throw new Error('Could not obtain a lock');
     this.state.setKey('ALB_LOCK', lock);
 
-    const maxAlbWorkspacesCount = _.get(
-      templateOutputs.MaxCountALBDependentWorkspaces,
-      'Value',
-      MAX_COUNT_ALB_DEPENDENT_WORKSPACES,
-    );
-
     // Sets needsAlb to payload so it can be used to decrease alb workspace count on product failure
     await this.payload.setKey(outPayloadKeys.needsAlb, needsAlb);
     // eslint-disable-next-line no-return-await
-    return await this.provisionAlb(requestContext, resolvedVars, projectId, resolvedInputParams, maxAlbWorkspacesCount);
+    return await this.provisionAlb(requestContext, resolvedVars, projectId, resolvedInputParams);
   }
 
   /**
@@ -134,26 +128,22 @@ class CheckLaunchDependency extends StepBase {
    * @param resolvedVars
    * @param projectId
    * @param resolvedInputParams
-   * @param maxAlbWorkspacesCount
    * @returns {Promise<>}
    */
-  async provisionAlb(requestContext, resolvedVars, projectId, resolvedInputParams, maxAlbWorkspacesCount) {
+  async provisionAlb(requestContext, resolvedVars, projectId, resolvedInputParams) {
     // Added additional check if lock exists before staring deployment
     const [albLock] = await Promise.all([this.state.optionalString('ALB_LOCK')]);
     if (!albLock) {
       throw new Error(`Error provisioning environment. Reason: ALB lock does not exist or expired`);
     }
 
-    const [albService] = await this.mustFindServices(['albService']);
-    const count = await albService.albDependentWorkspacesCount(requestContext, projectId);
-    const albExists = await albService.checkAlbExists(requestContext, projectId);
-    if (count >= maxAlbWorkspacesCount) {
-      throw new Error(`Error provisioning environment. Reason: Maximum workspaces using ALB has reached`);
-    }
-    if (albExists) {
+    const [albService, environmentScService] = await this.mustFindServices(['albService', 'environmentScService']);
+    const albDetails = await albService.getAvailableAlb(requestContext, environmentScService, projectId);
+    if (albDetails) {
       this.print({
         msg: `ALB Already exists for the Account. Skipping ALB Creation`,
       });
+      await this.updateAlbIdtoEnvironment(albDetails.id);
     } else {
       this.print({
         msg: `Workspace needs ALB. Provisioning an ALB.`,
@@ -217,7 +207,7 @@ class CheckLaunchDependency extends StepBase {
     const [albService] = await this.mustFindServices(['albService']);
     const awsAccountId = await albService.findAwsAccountId(requestContext, projectId);
     const albDetails = {
-      id: awsAccountId,
+      awsAccountId,
       albStackName: stackId,
       albArn: _.get(stackOutputs, 'LoadBalancerArn', null),
       listenerArn: _.get(stackOutputs, 'ListenerArn', null),
@@ -229,11 +219,35 @@ class CheckLaunchDependency extends StepBase {
     if (!albLock) {
       throw new Error(`Error provisioning environment. Reason: ALB lock does not exist or expired`);
     }
-    await albService.saveAlbDetails(awsAccountId, albDetails);
+    const albDbEntry = await albService.create(requestContext, albDetails);
+    await this.updateAlbIdtoEnvironment(albDbEntry.id);
 
     this.print({
       msg: `Dependency Details Updated Successfully`,
     });
+  }
+
+  /**
+   * Method to update ALB details to the environment
+   *
+   * @param requestContext
+   * @param albId
+   * @returns {Promise<>}
+   */
+  async updateAlbIdtoEnvironment(albId) {
+    const [requestContext, envId] = await Promise.all([
+      this.payloadOrConfig.object(inPayloadKeys.requestContext),
+      this.payloadOrConfig.string(inPayloadKeys.envId),
+    ]);
+    const [environmentScService] = await this.mustFindServices(['environmentScService']);
+    const envEntity = await environmentScService.mustFind(requestContext, { id: envId });
+
+    const environment = {
+      id: envId,
+      rev: envEntity.rev || 0,
+      loadBalancerId: albId,
+    };
+    await environmentScService.update(requestContext, environment);
   }
 
   /**

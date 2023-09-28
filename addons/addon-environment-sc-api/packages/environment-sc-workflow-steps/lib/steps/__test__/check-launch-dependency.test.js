@@ -22,6 +22,9 @@ const ServicesContainer = require('@aws-ee/base-services-container/lib/services-
 jest.mock('@aws-ee/base-raas-services/lib/alb/alb-service');
 const AlbServiceMock = require('@aws-ee/base-raas-services/lib/alb/alb-service');
 
+jest.mock('@aws-ee/base-raas-services/lib/environment/service-catalog/environment-sc-service');
+const EnvironmentScServiceMock = require('@aws-ee/base-raas-services/lib/environment/service-catalog/environment-sc-service');
+
 jest.mock('@aws-ee/base-services/lib/settings/env-settings-service');
 const SettingsServiceMock = require('@aws-ee/base-services/lib/settings/env-settings-service');
 
@@ -87,6 +90,7 @@ describe('CheckLaunchDependencyStep', () => {
     container.register('envTypeService', new EnvTypeServiceMock());
     container.register('settings', new SettingsServiceMock());
     container.register('pluginRegistryService', new PluginRegistryServiceMock());
+    container.register('environmentScService', new EnvironmentScServiceMock());
 
     await container.initServices();
 
@@ -219,45 +223,43 @@ describe('CheckLaunchDependencyStep', () => {
 
   describe('provisionAlb', () => {
     it('should throw error when project is not valid', async () => {
-      albService.albDependentWorkspacesCount.mockImplementationOnce(() => {
+      albService.getAvailableAlb.mockImplementationOnce(() => {
         throw new Error('project with id "test-project" does not exist');
       });
-      await expect(step.provisionAlb(requestContext, resolvedVars, 'test-project-id', [], 1)).rejects.toThrow(
+      await expect(step.provisionAlb(requestContext, resolvedVars, 'test-project-id', [])).rejects.toThrow(
         'project with id "test-project" does not exist',
       );
     });
 
-    it('should throw error when count is greater than the maximum count', async () => {
-      albService.albDependentWorkspacesCount.mockImplementationOnce(() => {
-        return 3;
-      });
-      await expect(step.provisionAlb(requestContext, resolvedVars, 'test-project-id', [], 1)).rejects.toThrow(
-        'Error provisioning environment. Reason: Maximum workspaces using ALB has reached',
-      );
-    });
-
     it('should skip alb deployment when alb already exists', async () => {
-      albService.albDependentWorkspacesCount.mockImplementationOnce(() => {
-        return 1;
-      });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return true;
+      albService.getAvailableAlb.mockImplementationOnce(() => {
+        return { id: 'test-alb' };
       });
       jest.spyOn(step, 'deployStack').mockImplementationOnce(() => {});
-      await step.provisionAlb(requestContext, resolvedVars, 'test-project-id', [], 10);
+      jest.spyOn(step, 'updateAlbIdtoEnvironment').mockImplementationOnce(() => {});
+      await step.provisionAlb(requestContext, resolvedVars, 'test-project-id', []);
       // CHECK
       expect(step.deployStack).not.toHaveBeenCalled();
     });
 
-    it('should call alb deployment when alb does not exists', async () => {
-      albService.albDependentWorkspacesCount.mockImplementationOnce(() => {
-        return 1;
-      });
-      albService.checkAlbExists.mockImplementationOnce(() => {
-        return false;
+    it('should update environment with alb id', async () => {
+      albService.getAvailableAlb.mockImplementationOnce(() => {
+        return { id: 'test-alb' };
       });
       jest.spyOn(step, 'deployStack').mockImplementationOnce(() => {});
-      await step.provisionAlb(requestContext, resolvedVars, 'test-project-id', [], 10);
+      jest.spyOn(step, 'updateAlbIdtoEnvironment').mockImplementationOnce(() => {});
+      await step.provisionAlb(requestContext, resolvedVars, 'test-project-id', []);
+      // CHECK
+      expect(step.updateAlbIdtoEnvironment).toHaveBeenCalledWith('test-alb');
+    });
+
+    it('should call alb deployment when alb does not exists', async () => {
+      albService.getAvailableAlb.mockImplementationOnce(() => {
+        return null;
+      });
+      jest.spyOn(step, 'deployStack').mockImplementationOnce(() => {});
+      jest.spyOn(step, 'updateAlbIdtoEnvironment').mockImplementationOnce(() => {});
+      await step.provisionAlb(requestContext, resolvedVars, 'test-project-id', []);
       // CHECK
       expect(step.deployStack).toHaveBeenCalled();
     });
@@ -282,7 +284,7 @@ describe('CheckLaunchDependencyStep', () => {
         };
       });
       step.getCloudFormationService = jest.fn().mockResolvedValue(cfn);
-      await step.provisionAlb(requestContext, resolvedVars, 'test-project-id', [], 10);
+      await step.provisionAlb(requestContext, resolvedVars, 'test-project-id', []);
       // CHECK
       expect(cfn.createStack).toHaveBeenCalled();
       expect(step.state.setKey).toHaveBeenCalledWith('STACK_ID', 'test-stack-id');
@@ -298,7 +300,7 @@ describe('CheckLaunchDependencyStep', () => {
       });
       step.getCloudFormationService = jest.fn().mockResolvedValue(cfn);
       // OPERATE
-      const response = await step.provisionAlb(requestContext, resolvedVars, 'test-project-id', [], 10);
+      const response = await step.provisionAlb(requestContext, resolvedVars, 'test-project-id', []);
       // CHECK
       expect(response).toMatchObject({
         waitDecision: {
@@ -330,9 +332,12 @@ describe('CheckLaunchDependencyStep', () => {
       albService.findAwsAccountId.mockImplementationOnce(() => {
         return 'test-account-id';
       });
-      jest.spyOn(albService, 'saveAlbDetails').mockImplementationOnce(() => {});
+      jest.spyOn(albService, 'create').mockImplementationOnce(() => {
+        return { id: 'test-alb' };
+      });
+      jest.spyOn(step, 'updateAlbIdtoEnvironment').mockImplementationOnce(() => {});
       const albDetails = {
-        id: 'test-account-id',
+        awsAccountId: 'test-account-id',
         albStackName: 'STACK_ID',
         albArn: null,
         listenerArn: null,
@@ -342,7 +347,7 @@ describe('CheckLaunchDependencyStep', () => {
         albDependentWorkspacesCount: 0,
       };
       await step.handleStackCompletion([]);
-      expect(albService.saveAlbDetails).toHaveBeenCalledWith('test-account-id', albDetails);
+      expect(albService.create).toHaveBeenCalledWith(requestContext, albDetails);
     });
 
     it('should update alb details with output values for AppStream', async () => {
@@ -352,7 +357,32 @@ describe('CheckLaunchDependencyStep', () => {
       albService.getAlbHostedZoneId = jest.fn(() => {
         return 'albHostedZoneId';
       });
-      jest.spyOn(albService, 'saveAlbDetails').mockImplementationOnce(() => {});
+      jest.spyOn(albService, 'create').mockImplementationOnce(() => {
+        return { id: 'test-alb' };
+      });
+      jest.spyOn(step, 'updateAlbIdtoEnvironment').mockImplementationOnce(() => {});
+      const output = {
+        LoadBalancerArn: 'test-alb-arn',
+        ListenerArn: 'test-listener-arn',
+        ALBDNSName: 'test-dns',
+        ALBSecurityGroupId: 'test-sg',
+        ALBHostedZoneId: 'albHostedZoneId',
+      };
+      await step.handleStackCompletion(output);
+      expect(step.updateAlbIdtoEnvironment).toHaveBeenCalledWith('test-alb');
+    });
+
+    it('should update environment with alb id', async () => {
+      albService.findAwsAccountId.mockImplementationOnce(() => {
+        return 'test-account-id';
+      });
+      albService.getAlbHostedZoneId = jest.fn(() => {
+        return 'albHostedZoneId';
+      });
+      jest.spyOn(albService, 'create').mockImplementationOnce(() => {
+        return { id: 'test-alb' };
+      });
+      jest.spyOn(step, 'updateAlbIdtoEnvironment').mockImplementationOnce(() => {});
       const output = {
         LoadBalancerArn: 'test-alb-arn',
         ListenerArn: 'test-listener-arn',
@@ -361,7 +391,7 @@ describe('CheckLaunchDependencyStep', () => {
         ALBHostedZoneId: 'albHostedZoneId',
       };
       const albDetails = {
-        id: 'test-account-id',
+        awsAccountId: 'test-account-id',
         albStackName: 'STACK_ID',
         albArn: 'test-alb-arn',
         listenerArn: 'test-listener-arn',
@@ -371,13 +401,17 @@ describe('CheckLaunchDependencyStep', () => {
         albDependentWorkspacesCount: 0,
       };
       await step.handleStackCompletion(output);
-      expect(albService.saveAlbDetails).toHaveBeenCalledWith('test-account-id', albDetails);
+      expect(albService.create).toHaveBeenCalledWith(requestContext, albDetails);
     });
+
     it('should update alb details with output values', async () => {
       albService.findAwsAccountId.mockImplementationOnce(() => {
         return 'test-account-id';
       });
-      jest.spyOn(albService, 'saveAlbDetails').mockImplementationOnce(() => {});
+      jest.spyOn(albService, 'create').mockImplementationOnce(() => {
+        return { id: 'test-alb' };
+      });
+      jest.spyOn(step, 'updateAlbIdtoEnvironment').mockImplementationOnce(() => {});
       const output = {
         LoadBalancerArn: 'test-alb-arn',
         ListenerArn: 'test-listener-arn',
@@ -385,7 +419,7 @@ describe('CheckLaunchDependencyStep', () => {
         ALBSecurityGroupId: 'test-sg',
       };
       const albDetails = {
-        id: 'test-account-id',
+        awsAccountId: 'test-account-id',
         albStackName: 'STACK_ID',
         albArn: 'test-alb-arn',
         listenerArn: 'test-listener-arn',
@@ -395,7 +429,7 @@ describe('CheckLaunchDependencyStep', () => {
         albDependentWorkspacesCount: 0,
       };
       await step.handleStackCompletion(output);
-      expect(albService.saveAlbDetails).toHaveBeenCalledWith('test-account-id', albDetails);
+      expect(albService.create).toHaveBeenCalledWith(requestContext, albDetails);
     });
   });
 

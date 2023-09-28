@@ -87,6 +87,8 @@ emrAmiPrefix: ${self:custom.settings.namespace}-EMR-AMI
 # S3 location of files copied to an environment instance along with bootstrap scripts
 environmentInstanceFiles: s3://${self:custom.settings.environmentsBootstrapBucketName}/${self:custom.settings.environmentsBootstrapBucketPrefix}
 
+maximumWorkspacesPerAlb: 100
+
 # ================================ DB Settings ===========================================
 
 # DynamoDB table name for supported authentication provider types
@@ -138,6 +140,12 @@ dbStudiesCategoryIndex: CategoryIndex
 
 # DynamoDB table global secondary index name for the "accountId" field
 dbStudiesAccountIdIndex: AccountIdIndex
+
+# DynamoDB table name for LoadBalancers
+dbLoadBalancers: ${self:custom.settings.dbPrefix}-LoadBalancers
+
+# DynamoDB table global secondary index name for the "awsAccountId" field
+dbLoadBalancersAccountIdIndex: AwsAccountIdIndex
 
 # DynamoDB table name for Environments
 dbEnvironments: ${self:custom.settings.dbPrefix}-Environments

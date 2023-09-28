@@ -164,6 +164,8 @@ apiHandler:
     APP_EC2_WINDOWS_AMI_PREFIX: ${self:custom.settings.ec2WindowsAmiPrefix}
     APP_EMR_AMI_PREFIX: ${self:custom.settings.emrAmiPrefix}
     APP_DB_STUDIES_CATEGORY_INDEX: ${self:custom.settings.dbStudiesCategoryIndex}
+    APP_DB_LOAD_BALANCERS_ACCOUNTID_INDEX: ${self:custom.settings.dbLoadBalancersAccountIdIndex}
+    APP_MAXIMUM_WORKSPACES_PER_ALB: ${self:custom.settings.maximumWorkspacesPerAlb}
     APP_DB_STUDIES_ACCOUNTID_INDEX: ${self:custom.settings.dbStudiesAccountIdIndex}
     APP_STUDY_DATA_BUCKET_NAME: ${self:custom.settings.studyDataBucketName}
     APP_WORKFLOW_ROLE_ARN: ${self:custom.settings.workflowLoopRunnerRoleArn}
@@ -202,6 +204,8 @@ workflowLoopRunner:
     APP_JWT_OPTIONS: ${self:custom.settings.jwtOptions}
     APP_DB_STUDIES_CATEGORY_INDEX: ${self:custom.settings.dbStudiesCategoryIndex}
     APP_DB_STUDIES_ACCOUNTID_INDEX: ${self:custom.settings.dbStudiesAccountIdIndex}
+    APP_DB_LOAD_BALANCERS_ACCOUNTID_INDEX: ${self:custom.settings.dbLoadBalancersAccountIdIndex}
+    APP_MAXIMUM_WORKSPACES_PER_ALB: ${self:custom.settings.maximumWorkspacesPerAlb}
     APP_STUDY_DATA_BUCKET_NAME: ${self:custom.settings.studyDataBucketName}
     APP_ARTIFACTS_BUCKET_NAME: ${self:custom.settings.deploymentBucketName}
     APP_ENVIRONMENT_INSTANCE_FILES: ${self:custom.settings.environmentInstanceFiles}
