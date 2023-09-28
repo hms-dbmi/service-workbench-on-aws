@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
-## [5.0.0_1.1.2](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.1.1...v5.0.0_1.1.2) (08/10/2023)
+
+## [5.0.0_1.2.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.1.2...v5.0.0_1.2.0) (09/28/2023)
+- Allow more than 100 RStudio instances to be launched in one host account, by dynamically creating load balancers-
+  bypassing AWS 100 target group limit.
+  - Added support for multiple ALBs. New ALB will be created when the limit for existing ALB exceeds
+  - Added a new table called loadBalancers
+  - Reading load balancer details from loadBalancers instead of depoymentItem table
+  - Added a new entry loadBalancerId to environmentsSc table
+
+## [5.0.0_1.1.2](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.1.1...v5.0.0_1.1.2) (09/25/2023)
 
 - Fix bug introduced in 5.0.0_1.1.0 where create workspace button does not display if user does not have any exisitng workspaces.
 - Remove inline python libraries from infrastructure proxy lambda handler.
