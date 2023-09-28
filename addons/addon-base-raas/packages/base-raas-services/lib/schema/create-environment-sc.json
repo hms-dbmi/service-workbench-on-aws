@@ -38,6 +38,9 @@
           "minLength": 1
         }
       ]
+    },
+    "loadBalancerId": {
+      "type": "string"
     }
   },
   "required": ["name", "envTypeId", "envTypeConfigId"]

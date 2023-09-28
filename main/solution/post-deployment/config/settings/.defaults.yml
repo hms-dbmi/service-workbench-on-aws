@@ -185,6 +185,12 @@ dbStudiesCategoryIndex: CategoryIndex
 # DynamoDB table global secondary index name for the "accountId" field
 dbStudiesAccountIdIndex: AccountIdIndex
 
+# DynamoDB table name for LoadBalancers
+dbLoadBalancers: ${self:custom.settings.dbPrefix}-LoadBalancers
+
+# DynamoDB table global secondary index name for the "awsAccountId" field
+dbLoadBalancersAccountIdIndex: AwsAccountIdIndex
+
 # DynamoDB table name for Environments
 dbEnvironments: ${self:custom.settings.dbPrefix}-Environments
 

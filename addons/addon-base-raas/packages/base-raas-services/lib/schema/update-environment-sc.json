@@ -54,6 +54,9 @@
           }
         }
       ]
+    },
+    "loadBalancerId": {
+      "type": "string"
     }
   },
   "required": ["id", "rev"]

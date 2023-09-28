@@ -1,0 +1,74 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 60,
+    "total": 60,
+    "workspacePrefix": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws"
+  },
+  "1 debug pnpm:lifecycle": {
+    "depPath": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates",
+    "optional": false,
+    "script": "pnpm run babel",
+    "stage": "build",
+    "wd": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates"
+  },
+  "2 debug pnpm:lifecycle": {
+    "depPath": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates",
+    "line": "> @aws-ee/base-raas-cfn-templates@1.0.0 babel /home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates",
+    "stage": "build",
+    "stdio": "stdout",
+    "wd": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates"
+  },
+  "3 debug pnpm:lifecycle": {
+    "depPath": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates",
+    "line": "> babel src/ --out-dir dist/ --source-maps",
+    "stage": "build",
+    "stdio": "stdout",
+    "wd": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates"
+  },
+  "4 debug pnpm:lifecycle": {
+    "depPath": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates",
+    "line": "sh: 1: babel: not found",
+    "stage": "build",
+    "stdio": "stderr",
+    "wd": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates"
+  },
+  "5 debug pnpm:lifecycle": {
+    "depPath": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates",
+    "line": " ERROR  Command failed.",
+    "stage": "build",
+    "stdio": "stdout",
+    "wd": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates"
+  },
+  "6 debug pnpm:lifecycle": {
+    "depPath": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates",
+    "exitCode": 1,
+    "optional": false,
+    "stage": "build",
+    "wd": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates"
+  },
+  "7 info pnpm": {
+    "err": {
+      "name": "Error",
+      "message": "@aws-ee/base-raas-cfn-templates@1.0.0 build: `pnpm run babel`\nExit status 1",
+      "code": "ELIFECYCLE",
+      "stack": "Error: @aws-ee/base-raas-cfn-templates@1.0.0 build: `pnpm run babel`\nExit status 1\n    at EventEmitter.<anonymous> (/usr/local/lib/node_modules/pnpm/dist/pnpm.js:102608:18)\n    at EventEmitter.emit (node:events:513:28)\n    at ChildProcess.<anonymous> (/usr/local/lib/node_modules/pnpm/dist/pnpm.js:87658:16)\n    at ChildProcess.emit (node:events:513:28)\n    at maybeClose (node:internal/child_process:1100:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)"
+    }
+  },
+  "8 error pnpm": {
+    "message": {
+      "errno": 1,
+      "code": "ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL",
+      "pkgid": "@aws-ee/base-raas-cfn-templates@1.0.0",
+      "stage": "build",
+      "script": "pnpm run babel",
+      "pkgname": "@aws-ee/base-raas-cfn-templates",
+      "prefix": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws/addons/addon-base-raas/packages/base-raas-cfn-templates"
+    },
+    "err": {
+      "name": "Error",
+      "message": "@aws-ee/base-raas-cfn-templates@1.0.0 build: `pnpm run babel`\nExit status 1",
+      "code": "ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL",
+      "stack": "Error: @aws-ee/base-raas-cfn-templates@1.0.0 build: `pnpm run babel`\nExit status 1\n    at EventEmitter.<anonymous> (/usr/local/lib/node_modules/pnpm/dist/pnpm.js:102608:18)\n    at EventEmitter.emit (node:events:513:28)\n    at ChildProcess.<anonymous> (/usr/local/lib/node_modules/pnpm/dist/pnpm.js:87658:16)\n    at ChildProcess.emit (node:events:513:28)\n    at maybeClose (node:internal/child_process:1100:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)"
+    }
+  }
+}

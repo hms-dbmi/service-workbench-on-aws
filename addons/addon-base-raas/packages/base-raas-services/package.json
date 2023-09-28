@@ -10,6 +10,7 @@
     "@aws-ee/base-services": "workspace:*",
     "@aws-ee/base-services-container": "workspace:*",
     "@aws-ee/key-pair-mgmt-services": "workspace:*",
+    "@aws-ee/environment-sc-workflow-steps": "workspace:*",
     "is-cidr": "^3.1.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",

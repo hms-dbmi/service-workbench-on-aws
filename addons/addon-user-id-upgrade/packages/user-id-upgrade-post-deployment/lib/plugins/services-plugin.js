@@ -67,6 +67,7 @@ function getStaticSettings(existingStaticSettings, settings, pluginRegistry) {
   table('dbProjectsDepreciated', 'DbProjects');
   table('dbStudyPermissionsDepreciated', 'DbStudyPermissions');
   table('dbStudiesDepreciated', 'DbStudies');
+  table('dbLoadBalancers', 'LoadBalancers');
 
   return staticSettings;
 }

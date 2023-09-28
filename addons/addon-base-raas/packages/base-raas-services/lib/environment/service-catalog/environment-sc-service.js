@@ -104,6 +104,21 @@ class EnvironmentScService extends Service {
     return this.augmentWithConnectionInfo(requestContext, envs);
   }
 
+  async listEnvWithStatus(requestContext, status, limit = 10000) {
+    // Make sure the user has permissions to "list" environments
+    // The following will result in checking permissions by calling the condition function "this._allowAuthorized" first
+    await this.assertAuthorized(requestContext, { action: 'list-sc', conditions: [this._allowAuthorized] });
+
+    const envs = await this._scanner()
+      .limit(limit)
+      .names({ '#s': 'status' })
+      .values({ ':v': status })
+      .filter('#s = :v')
+      .scan();
+
+    return envs;
+  }
+
   async markAppStreamConfigured(requestContext, envs) {
     const projectService = await this.service('projectService');
     const projects = await projectService.list(requestContext);

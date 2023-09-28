@@ -1,0 +1,24 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1,
+    "workspacePrefix": "/home/manikanddan/Mani/code/aws_swb/SWB-HMS/service-workbench-on-aws"
+  },
+  "1 error pnpm": {
+    "message": {
+      "code": "ELIFECYCLE",
+      "errno": "ENOENT",
+      "syscall": "spawn",
+      "file": "sh",
+      "pkgid": "@aws-ee/base-raas-cfn-templates@1.0.0",
+      "stage": "babel",
+      "script": "babel src/ --out-dir dist/ --source-maps",
+      "pkgname": "@aws-ee/base-raas-cfn-templates"
+    },
+    "err": {
+      "name": "Error",
+      "message": "@aws-ee/base-raas-cfn-templates@1.0.0 babel: `babel src/ --out-dir dist/ --source-maps`\nspawn ENOENT",
+      "code": "ELIFECYCLE",
+      "stack": "Error: @aws-ee/base-raas-cfn-templates@1.0.0 babel: `babel src/ --out-dir dist/ --source-maps`\nspawn ENOENT\n    at ChildProcess.<anonymous> (/usr/local/lib/node_modules/pnpm/dist/pnpm.js:87651:20)\n    at ChildProcess.emit (node:events:513:28)\n    at maybeClose (node:internal/child_process:1100:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)"
+    }
+  }
+}

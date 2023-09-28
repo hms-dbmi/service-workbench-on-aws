@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
 /*
  *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -14,9 +16,18 @@
  */
 
 const _ = require('lodash');
+const { v4: uuid } = require('uuid');
 const Service = require('@aws-ee/base-services-container/lib/service');
+const { runAndCatch } = require('@aws-ee/base-services/lib/helpers/utils');
+const environmentStatusEnum = require('@aws-ee/environment-sc-workflow-steps/lib/helpers/environment-status-enum');
+
+const createSchema = require('../schema/create-load-balancer.json');
+const updateSchema = require('../schema/update-load-balancer.json');
 
 const settingKeys = {
+  tableName: 'dbLoadBalancers',
+  accountIdIndexName: 'dbLoadBalancersAccountIdIndex',
+  maximumWorkspacesPerAlb: 'maximumWorkspacesPerAlb',
   domainName: 'domainName',
   isAppStreamEnabled: 'isAppStreamEnabled',
   loggingBucketName: 'loggingBucketName',
@@ -33,45 +44,209 @@ class ALBService extends Service {
       'deploymentStoreService',
       'awsAccountsService',
       'cfnTemplateService',
+      'dbService',
+      'jsonSchemaValidationService',
     ]);
   }
 
   async init() {
     await super.init();
+    const [dbService] = await this.service(['dbService']);
+    const table = this.settings.get(settingKeys.tableName);
+
+    this._getter = () => dbService.helper.getter().table(table);
+    this._updater = () => dbService.helper.updater().table(table);
+    this._query = () => dbService.helper.query().table(table);
+    this._deleter = () => dbService.helper.deleter().table(table);
+    this._scanner = () => dbService.helper.scanner().table(table);
+
+    this.accountIdIndex = this.settings.get(settingKeys.accountIdIndexName);
+    this.maximumWorkspacesPerAlb = Number(this.settings.get(settingKeys.maximumWorkspacesPerAlb));
+  }
+
+  async find(requestContext, { id, fields = [] }) {
+    const result = await this._getter()
+      .key({ id })
+      .projection(fields)
+      .get();
+
+    return this._fromDbToDataObject(result);
+  }
+
+  async create(requestContext, rawData) {
+    // Validate input
+    const [validationService] = await this.service(['jsonSchemaValidationService']);
+    await validationService.ensureValid(rawData, createSchema);
+
+    // For now, we assume that 'createdBy' and 'updatedBy' are always users and not groups
+    const by = _.get(requestContext, 'principalIdentifier.uid');
+    // Generate environment ID
+    const id = uuid();
+    // Prepare the db object
+    const date = new Date().toISOString();
+    const dbObject = this._fromRawToDbObject(rawData, {
+      rev: 0,
+      createdAt: date,
+      updatedAt: date,
+      createdBy: by,
+      updatedBy: by,
+    });
+
+    // Time to save the the db object
+    const result = await runAndCatch(
+      async () => {
+        return this._updater()
+          .condition('attribute_not_exists(id)') // yes we need this
+          .key({ id })
+          .item(dbObject)
+          .update();
+      },
+      async () => {
+        throw this.boom.badRequest(`load balancer with id "${id}" already exists`, true);
+      },
+    );
+
+    // Write audit event
+    await this.audit(requestContext, { action: 'create-load-balancer', body: result });
+
+    return result;
+  }
+
+  async update(requestContext, rawData) {
+    // Validate input
+    const [validationService] = await this.service(['jsonSchemaValidationService']);
+    await validationService.ensureValid(rawData, updateSchema);
+
+    // For now, we assume that 'updatedBy' is always a user and not a group
+    const by = _.get(requestContext, 'principalIdentifier.uid');
+    const date = new Date().toISOString();
+    const { id, rev } = rawData;
+
+    // Prepare the db object
+    const dbObject = _.omit(this._fromRawToDbObject(rawData, { updatedBy: by, updatedAt: date }), ['rev']);
+
+    // Time to save the the db object
+    const result = await runAndCatch(
+      async () => {
+        return this._updater()
+          .condition('attribute_exists(id)') // yes we need this
+          .key({ id })
+          .rev(rev)
+          .item(dbObject)
+          .update();
+      },
+      async () => {
+        // There are two scenarios here:
+        // 1 - The load balancer does not exist
+        // 2 - The "rev" does not match
+        // We will display the appropriate error message accordingly
+        const existing = await this.find(requestContext, { id, fields: ['id', 'updatedBy'] });
+        if (existing) {
+          throw this.boom.badRequest(
+            `load balancer information changed just before your request is processed, please try again`,
+            true,
+          );
+        }
+        throw this.boom.notFound(`load balancer with id "${id}" does not exist`, true);
+      },
+    );
+
+    // Write audit event
+    await this.audit(requestContext, { action: 'update-load-balancer', body: result });
+
+    return result;
+  }
+
+  async delete(requestContext, { id }) {
+    const result = await runAndCatch(
+      async () => {
+        return this._deleter()
+          .condition('attribute_exists(id)') // yes we need this
+          .key({ id })
+          .delete();
+      },
+      async () => {
+        throw this.boom.notFound(`load balancer with id "${id}" does not exist`, true);
+      },
+    );
+
+    // Write audit event
+    await this.audit(requestContext, { action: 'delete-load-balancer', body: { id } });
+
+    return result;
   }
 
   /**
    * Method to get the count of workspaces that are dependent on ALB
    *
    * @param requestContext
-   * @param projectId
+   * @param loadBalancerId
    * @returns {Promise<int>}
    */
-  async albDependentWorkspacesCount(requestContext, projectId) {
-    const deploymentItem = await this.getAlbDetails(requestContext, projectId);
-    if (!_.isEmpty(deploymentItem) && !_.isEmpty(deploymentItem.value)) {
-      const albRecord = JSON.parse(deploymentItem.value);
-      return albRecord.albDependentWorkspacesCount;
-    }
-    return 0;
+  async albDependentWorkspacesCount(requestContext, loadBalancerId) {
+    const albDetails = await this.find(requestContext, { id: loadBalancerId });
+    return _.get(albDetails, 'albDependentWorkspacesCount', 0);
   }
 
   /**
-   * Method to check if ALB exists in the AWS account. Returns false if there is no record or
-   * if albArn is null
+   * Method to get the available ALB to use for an environment
+   * Returns null if no ALB is available with free space
    *
    * @param requestContext
    * @param projectId
-   * @returns {Promise<boolean>}
+   * @returns {Promise<>}
    */
-  async checkAlbExists(requestContext, projectId) {
-    const deploymentItem = await this.getAlbDetails(requestContext, projectId);
-    if (!_.isEmpty(deploymentItem) && !_.isEmpty(deploymentItem.value)) {
-      const albRecord = JSON.parse(deploymentItem.value);
-      const albArn = _.get(albRecord, 'albArn', null);
-      return !_.isEmpty(albArn);
+  async getAvailableAlb(requestContext, environmentScService, projectId) {
+    const accountId = await this.findAwsAccountId(requestContext, projectId);
+    const loadBalancers = await this.listLoadBalancersForAccount(requestContext, { accountId });
+    for (const loadBalancer of loadBalancers) {
+      const pendingEnvForLoadBalancer = await this.getPendingEnvForLoadBalancer(
+        requestContext,
+        environmentScService,
+        loadBalancer.id,
+      );
+      if (loadBalancer.albDependentWorkspacesCount + pendingEnvForLoadBalancer < this.maximumWorkspacesPerAlb) {
+        return loadBalancer;
+      }
     }
-    return false;
+    return null;
+  }
+
+  /**
+   * Method to list all the load balancers available for an account
+   * Returns empty array if no ALB is available
+   *
+   * @param requestContext
+   * @param accountId
+   * @param fields
+   * @returns {Promise<{}>}
+   */
+  async listLoadBalancersForAccount(requestContext, { accountId }, fields = []) {
+    const result = await this._query()
+      .index(this.accountIdIndex)
+      .key('awsAccountId', accountId)
+      .limit(4000)
+      .projection(fields)
+      .query();
+
+    return result;
+  }
+
+  /**
+   * Method to get count of environments in PENDING state using the given load balancer
+   * Returns zero if no environment is in pending state
+   *
+   * @param requestContext
+   * @param environmentScService
+   * @param loadBalancerId
+   * @returns {Promise<{}>}
+   */
+  async getPendingEnvForLoadBalancer(requestContext, environmentScService, loadBalancerId) {
+    const envs = await environmentScService.listEnvWithStatus(requestContext, environmentStatusEnum.PENDING);
+    const pendingEnvs = envs.filter(env => {
+      return env.loadBalancerId === loadBalancerId;
+    });
+    return pendingEnvs.length;
   }
 
   /**
@@ -130,36 +305,6 @@ class ALBService extends Service {
   }
 
   /**
-   * Method to save the ALB details in database. Stringifies the details before storing in the table
-   *
-   * @param awsAccountId
-   * @param details
-   * @returns {Promise<>}
-   */
-  async saveAlbDetails(awsAccountId, details) {
-    const [deploymentStore] = await this.service(['deploymentStoreService']);
-    const result = await deploymentStore.createOrUpdate({
-      type: 'account-workspace-details',
-      id: awsAccountId,
-      value: JSON.stringify(details),
-    });
-    return result;
-  }
-
-  /**
-   * Method to get the ALB details.
-   *
-   * @param requestContext
-   * @param projectId
-   * @returns {Promise<>}
-   */
-  async getAlbDetails(requestContext, projectId) {
-    const awsAccountId = await this.findAwsAccountId(requestContext, projectId);
-    const deploymentItem = await this.findDeploymentItem({ id: awsAccountId });
-    return deploymentItem;
-  }
-
-  /**
    * Method to find the AWS account details for a project.
    *
    * @param requestContext
@@ -189,18 +334,6 @@ class ALBService extends Service {
     return awsAccountId;
   }
 
-  /**
-   * Method to find deployment item from the deployment store table.
-   *
-   * @param id
-   * @returns {Promise<>}
-   */
-  async findDeploymentItem({ id }) {
-    const [deploymentStore] = await this.service(['deploymentStoreService']);
-    const deploymentItem = await deploymentStore.find({ type: 'account-workspace-details', id });
-    return deploymentItem;
-  }
-
   checkIfAppStreamEnabled() {
     return this.settings.getBoolean(settingKeys.isAppStreamEnabled);
   }
@@ -213,14 +346,13 @@ class ALBService extends Service {
    * @param requestContext
    * @param resolvedVars
    * @param targetGroupArn
+   * @param albDetails
    * @returns {Promise<string>}
    */
-  async createListenerRule(prefix, requestContext, resolvedVars, targetGroupArn) {
+  async createListenerRule(prefix, requestContext, resolvedVars, targetGroupArn, albDetails) {
     const isAppStreamEnabled = this.checkIfAppStreamEnabled();
-    const deploymentItem = await this.getAlbDetails(requestContext, resolvedVars.projectId);
-    const albRecord = JSON.parse(deploymentItem.value);
-    const listenerArn = albRecord.listenerArn;
-    const priority = await this.calculateRulePriority(requestContext, resolvedVars, albRecord.listenerArn);
+    const listenerArn = albDetails.listenerArn;
+    const priority = await this.calculateRulePriority(requestContext, resolvedVars, albDetails.listenerArn);
     const subdomain = this.getHostname(prefix, resolvedVars.envId);
     let params;
     if (isAppStreamEnabled) {
@@ -277,7 +409,7 @@ class ALBService extends Service {
 
       // Get current rule count on ALB and set it in DB
       const albRules = await albClient.describeRules({ ListenerArn: listenerArn }).promise();
-      await this.updateAlbDependentWorkspaceCount(requestContext, resolvedVars.projectId, albRules.Rules.length);
+      await this.updateAlbDependentWorkspaceCount(requestContext, albDetails, albRules.Rules.length);
     } catch (err) {
       throw new Error(`Error creating rule. Rule creation failed with message - ${err.message}`);
     }
@@ -293,9 +425,10 @@ class ALBService extends Service {
    * @param resolvedVars
    * @param ruleArn
    * @param listenerArn
+   * @param albDetails
    * @returns {Promise<>}
    */
-  async deleteListenerRule(requestContext, resolvedVars, ruleArn, listenerArn) {
+  async deleteListenerRule(requestContext, resolvedVars, ruleArn, listenerArn, albDetails) {
     const params = {
       RuleArn: ruleArn,
     };
@@ -307,7 +440,7 @@ class ALBService extends Service {
 
       // Get current rule count on ALB and set it in DB
       const albRules = await albClient.describeRules({ ListenerArn: listenerArn }).promise();
-      await this.updateAlbDependentWorkspaceCount(requestContext, resolvedVars.projectId, albRules.Rules.length);
+      await this.updateAlbDependentWorkspaceCount(requestContext, albDetails, albRules.Rules.length);
     } catch (err) {
       throw new Error(`Error deleting rule. Rule deletion failed with message - ${err.message}`);
     }
@@ -320,16 +453,21 @@ class ALBService extends Service {
    * One default rule exists for the ALB for port 443, so subtracting that to form workspace count
    *
    * @param requestContext
-   * @param projectId
+   * @param albDetails
+   * @param currRuleCount
    * @returns {Promise<>}
    */
-  async updateAlbDependentWorkspaceCount(requestContext, projectId, currRuleCount) {
-    const awsAccountId = await this.findAwsAccountId(requestContext, projectId);
-    const deploymentItem = await this.getAlbDetails(requestContext, projectId);
-    const albRecord = JSON.parse(deploymentItem.value);
-    albRecord.albDependentWorkspacesCount = currRuleCount - 1;
-    const result = await this.saveAlbDetails(deploymentItem.id, albRecord);
-    await this.audit(requestContext, { action: `update-alb-count-account-${awsAccountId}`, body: result });
+  async updateAlbDependentWorkspaceCount(requestContext, albDetails, currRuleCount) {
+    const id = albDetails.id;
+    const existing = await this.find(requestContext, { id, fields: ['id', 'rev'] });
+    const count = currRuleCount - 1;
+    const dbEntry = {
+      id: albDetails.id,
+      rev: existing.rev || 0,
+      albDependentWorkspacesCount: count,
+    };
+    const result = await this.update(requestContext, dbEntry);
+    await this.audit(requestContext, { action: `update-alb-count-account-${albDetails.id}`, body: result });
   }
 
   /**
@@ -533,6 +671,21 @@ class ALBService extends Service {
       if (e.message) throw this.boom.unauthorized(`${e.message}`, true);
       return e.message;
     }
+  }
+
+  // Do some properties renaming to prepare the object to be saved in the database
+  _fromRawToDbObject(rawObject, overridingProps = {}) {
+    const dbObject = { ...rawObject, ...overridingProps };
+    return dbObject;
+  }
+
+  // Do some properties renaming to restore the object that was saved in the database
+  _fromDbToDataObject(rawDb, overridingProps = {}) {
+    if (_.isNil(rawDb)) return rawDb; // important, leave this if statement here, otherwise, your update methods won't work correctly
+    if (!_.isObject(rawDb)) return rawDb;
+
+    const dataObject = { ...rawDb, ...overridingProps };
+    return dataObject;
   }
 }
 

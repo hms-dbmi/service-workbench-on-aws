@@ -211,7 +211,7 @@ async function updateEnvOnProvisioningSuccess({
 
   const existingEnvRecord = await environmentScService.mustFind(requestContext, {
     id: envId,
-    fields: ['rev', 'indexId'],
+    fields: ['rev', 'indexId', 'loadBalancerId'],
   });
 
   // Create DNS record for RStudio workspaces
@@ -237,23 +237,19 @@ async function updateEnvOnProvisioningSuccess({
       }
     } else if (connectionTypeValue.toLowerCase() === 'rstudiov2') {
       const albService = await container.find('albService');
-      const deploymentItem = await albService.getAlbDetails(requestContext, resolvedVars.projectId);
-      if (!deploymentItem) {
+      const albDetails = await albService.find(requestContext, { id: existingEnvRecord.loadBalancerId });
+      if (!albDetails) {
         throw new Error(`Error provisioning environment. Reason: No ALB found for this AWS account`);
       }
-      const deploymentValue = JSON.parse(deploymentItem.value);
-      const dnsName = deploymentValue.albDnsName;
+      // const deploymentValue = JSON.parse(deploymentItem.value);
+      const dnsName = albDetails.albDnsName;
       const targetGroupArn = _.find(outputs, o => o.OutputKey === 'TargetGroupARN').OutputValue;
       // Create DNS record for RStudio workspaces
       const environmentDnsService = await container.find('environmentDnsService');
       const settings = await container.find('settings');
       if (settings.getBoolean(settingKeys.isAppStreamEnabled)) {
         const hostedZoneId = await getHostedZone(requestContext, environmentScService, existingEnvRecord);
-        const albHostedZoneId = await albService.getAlbHostedZoneID(
-          requestContext,
-          resolvedVars,
-          deploymentValue.albArn,
-        );
+        const albHostedZoneId = await albService.getAlbHostedZoneID(requestContext, resolvedVars, albDetails.albArn);
         await environmentDnsService.createPrivateRecordForDNS(
           requestContext,
           'rstudio',
@@ -269,8 +265,14 @@ async function updateEnvOnProvisioningSuccess({
       const lockService = await container.find('lockService');
       let ruleARN;
       // Locking the rule creation for an ALB, so two rules wont have same priority
-      await lockService.tryWriteLockAndRun({ id: `alb-rule-${deploymentItem.id}` }, async () => {
-        ruleARN = await albService.createListenerRule('rstudio', requestContext, resolvedVars, targetGroupArn);
+      await lockService.tryWriteLockAndRun({ id: `alb-rule-${albDetails.id}` }, async () => {
+        ruleARN = await albService.createListenerRule(
+          'rstudio',
+          requestContext,
+          resolvedVars,
+          targetGroupArn,
+          albDetails,
+        );
       });
       // Save the Rule ARN as an output in DB
       const ruleRecord = {
@@ -281,7 +283,7 @@ async function updateEnvOnProvisioningSuccess({
       outputs.push(ruleRecord);
       // Create Instance security group ingress rule with ALB security group ID to allow only traffic from ALB
       const environmentScCidrService = await container.find('environmentScCidrService');
-      const albSecurityGroup = JSON.parse(deploymentItem.value).albSecurityGroup;
+      const albSecurityGroup = albDetails.albSecurityGroup;
       const instanceSecurityGroup = _.find(outputs, o => o.OutputKey === 'InstanceSecurityGroupId').OutputValue;
       const updateRule = {
         fromPort: 443,

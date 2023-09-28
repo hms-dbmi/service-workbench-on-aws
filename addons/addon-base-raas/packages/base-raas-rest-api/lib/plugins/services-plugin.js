@@ -165,6 +165,7 @@ function getStaticSettings(existingStaticSettings, settings, pluginRegistry) {
   table('dbEgressStore', 'EgressStore');
   table('StorageGateway', 'StorageGateway');
   table('dbDeploymentStore', 'DeploymentStore');
+  table('dbLoadBalancers', 'LoadBalancers');
 
   return staticSettings;
 }

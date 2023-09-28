@@ -332,14 +332,14 @@ describe('envProvisioningPlugin', () => {
         throw Error(`${key} not found`);
       });
       const albDetails = {
-        createdAt: '2021-05-21T13:06:58.216Z',
         id: 'test-id',
-        type: 'account-workspace-details',
-        updatedAt: '2021-05-31T13:32:15.503Z',
-        value:
-          '{"id":"test-id","albStackName":null,"albArn":"arn:test-arn","listenerArn":"alb-listener-arn","albDnsName":"albDNSName","albDependentWorkspacesCount":1}',
+        albStackName: null,
+        albArn: 'arn:test-arn',
+        listenerArn: 'alb-listener-arn',
+        albDnsName: 'albDNSName',
+        albDependentWorkspacesCount: 1,
       };
-      albService.getAlbDetails = jest.fn(() => {
+      albService.find = jest.fn(() => {
         return albDetails;
       });
       albService.createListenerRule = jest.fn(() => {
@@ -403,17 +403,17 @@ describe('envProvisioningPlugin', () => {
         throw Error(`${key} not found`);
       });
       const albDetails = {
-        createdAt: '2021-05-21T13:06:58.216Z',
         id: 'test-id',
-        type: 'account-workspace-details',
-        updatedAt: '2021-05-31T13:32:15.503Z',
-        value:
-          '{"id":"test-id","albStackName":null,"albArn":"arn:test-arn","listenerArn":"alb-listener-arn","albDnsName":"albDNSName","albDependentWorkspacesCount":1}',
+        albStackName: null,
+        albArn: 'arn:test-arn',
+        listenerArn: 'alb-listener-arn',
+        albDnsName: 'albDNSName',
+        albDependentWorkspacesCount: 1,
       };
       albService.getAlbHostedZoneID = jest.fn(() => {
         return 'albHostedZoneId';
       });
-      albService.getAlbDetails = jest.fn(() => {
+      albService.find = jest.fn(() => {
         return albDetails;
       });
       albService.createListenerRule = jest.fn(() => {
