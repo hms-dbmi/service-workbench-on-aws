@@ -55,7 +55,7 @@ const StudyPermissionsStore = BaseStore.named('StudyPermissionsStore')
         superCleanup();
       },
 
-      update: async (selectedUserIds, staleUserIds) => {
+      usersToUpdate: (selectedUserIds, staleUserIds) => {
         const updateRequest = { usersToAdd: [], usersToRemove: [] };
 
         const parent = getParent(self, 1);
@@ -79,7 +79,10 @@ const StudyPermissionsStore = BaseStore.named('StudyPermissionsStore')
           // Add staleUserIds to usersToRemove
           updateRequest.usersToRemove.push(..._.map(staleUserIds[type], userToRequestFormat));
         });
+        return updateRequest;
+      },
 
+      update: async updateRequest => {
         // Perform update and reload store
         await updateStudyPermissions(self.studyId, updateRequest);
         await self.load();
