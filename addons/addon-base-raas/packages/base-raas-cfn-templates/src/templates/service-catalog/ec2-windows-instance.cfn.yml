@@ -411,9 +411,6 @@ Resources:
           '@
           Set-Content -Path c:\workdir\start-s3-synchronizer.ps1 -Value $startS3SyncScriptContent
 
-          # Source the script to start the s3 synchronizer process
-          ."c:\workdir\start-s3-synchronizer.ps1"
-
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
           $uri = [System.Uri]"${EnvironmentInstanceFiles}"
@@ -434,6 +431,17 @@ Resources:
           Invoke-WebRequest 'https://github.com/hms-dbmi/Access-to-Data-using-PIC-SURE-API/archive/refs/heads/master.zip' -OutFile .\picsure.zip
           Expand-Archive .\picsure.zip .\
           Remove-Item .\picsure.zip
+
+          # Create script to Auto-Start the s3 synchronizer process after every restart
+          $autostartS3SyncScriptContent = @'
+          $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument '-Windowstyle Hidden -File C:\workdir\start-s3-synchronizer.ps1' 
+          $trigger = New-ScheduledTaskTrigger -AtLogOn
+          Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "RunS3Synchronizer" 
+          '@
+          Set-Content -Path c:\workdir\auto-start-s3-synchronizer.ps1 -Value $autostartS3SyncScriptContent
+
+          # Source the script to start the s3 synchronizer process
+          ."c:\workdir\auto-start-s3-synchronizer.ps1"
 
           cfn-signal.exe -e $lastexitcode --stack ${AWS::StackId} --resource EC2Instance --region ${AWS::Region}
           </powershell>
