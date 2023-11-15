@@ -326,6 +326,5 @@ export default inject(
   'projectsStore',
   'envTypesStore',
   'userDisplayName',
-  'envTypesStore',
   'userStore',
 )(withRouter(observer(ScEnvironmentsList)));
