@@ -31,7 +31,7 @@ export default function FilterBox({ mode = 'or', filters = [], fields, onFilter 
   }
 
   return (
-    <Segment color={active && 'blue'}>
+    <Segment color={active ? 'blue' : undefined}>
       <Accordion fluid>
         <Accordion.Title index={0} active={active} onClick={toggleActive()}>
           <Icon name="filter" />

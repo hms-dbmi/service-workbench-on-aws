@@ -77,6 +77,10 @@ class ScEnvironmentDetailPage extends React.Component {
       swallowError(store.load());
       store.startHeartbeat();
     }
+
+    if (!isStoreReady(this.envTypesStore)) {
+      swallowError(this.envTypesStore.load());
+    }
   }
 
   componentWillUnmount() {

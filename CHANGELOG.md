@@ -2,8 +2,15 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
+## [5.0.0_1.2.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.2.0...v5.0.0_1.2.1) (11/15/2023)
+
+- Update windows sync to auto-start on user login.
+- Add message for windows users when a study is attached to note that study files will take time to sync on start and before stop.
+- Add a modal notice on study permission edit when a user would be impacted by permission change/removal.
+- Fix bug where workspace configuration deprecation notice errantly shows on workspace view page on reload.
 
 ## [5.0.0_1.2.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.1.2...v5.0.0_1.2.0) (09/28/2023)
+
 - Allow more than 100 RStudio instances to be launched in one host account, by dynamically creating load balancers-
   bypassing AWS 100 target group limit.
   - Added support for multiple ALBs. New ALB will be created when the limit for existing ALB exceeds
@@ -19,6 +26,7 @@ All notable changes to this project will be documented in this file. As our fork
 - Update to build proxy lambda layer and with requirements.
 
 ## [5.0.0_1.1.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.1.0...v5.0.0_1.1.1) (08/10/2023)
+
 - Update serverless templates to use an empty string for aws profile.
 - Update nodejs and aws-sdk versions.
   - Cherry pick [a0c7eeed34eea02ec56f49411cf499d1c59f0d3a](https://github.com/awslabs/service-workbench-on-aws/commit/a0c7eeed34eea02ec56f49411cf499d1c59f0d3a) to upgrade nodejs version and dependencies for lambda runtimes.
