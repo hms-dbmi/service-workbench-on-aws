@@ -292,36 +292,33 @@ Resources:
         - Content:
             Fn::Base64: !Sub |
               #!/usr/bin/env bash
+              # Save and run kernel installation/loading script as ec2-user
               sudo -u ec2-user -i <<'EOF'
 
-              # Save and run kernel installation/loading script
-              aws s3 cp "${EnvironmentInstanceFiles}/install_kernel.sh" "/home/ec2-user/SageMaker/.install_kernel.sh"
-              chmod +x /home/ec2-user/SageMaker/.install_kernel.sh
-              /home/ec2-user/SageMaker/.install_kernel.sh "${EnvironmentInstanceFiles}"
+              export BUCKET_URI="${EnvironmentInstanceFiles}"
+              export WORKING_DIR="/tmp/user_data_init"
+              aws s3 cp "$BUCKET_URI/install_kernel.sh" "$WORKING_DIR/"
+              cd $WORKING_DIR
+              chmod +x install_kernel.sh
+              ./install_kernel.sh "$BUCKET_URI"
 
               EOF
       OnStart:
         - Content:
             Fn::Base64: !Sub |
               #!/usr/bin/env bash
-
-              # Run kernel installation/loading script
-              /home/ec2-user/SageMaker/.install_kernel.sh "${EnvironmentInstanceFiles}"
+              export BUCKET_URI="${EnvironmentInstanceFiles}"
+              export AUTO_STOP_IDLE_TIME="${AutoStopIdleTimeInMinutes}"
+              export WORKING_DIR="/tmp/user_data_init"
+              export S3_MOUNTS='${S3Mounts}'
 
               # Download and execute bootstrap script
-              aws s3 cp "${EnvironmentInstanceFiles}/get_bootstrap.sh" "/tmp"
-              chmod 500 "/tmp/get_bootstrap.sh"
-              /tmp/get_bootstrap.sh "${EnvironmentInstanceFiles}" '${S3Mounts}' >> "/var/log/get_bootstrap.log"
-
-              # Stop Idle Script
-              if [ "${AutoStopIdleTimeInMinutes}" != "0" ]; then
-                echo "Fetching the autostop script"
-                aws s3 cp "${EnvironmentInstanceFiles}/offline-packages/sagemaker/autostop.py" "/usr/local/bin"
-                chmod a+x /usr/local/bin/autostop.py
-                IDLE_TIME=`expr ${AutoStopIdleTimeInMinutes} \* 60`
-                echo "Starting the SageMaker autostop script in cron"
-                (crontab -l 2>/dev/null; echo "*/1 * * * * /usr/bin/python /usr/local/bin/autostop.py --time $IDLE_TIME --ignore-connections >> /var/log/autostop.log") | crontab -
-              fi
+              aws s3 cp "$BUCKET_URI/bootstrap_test.sh" "$WORKING_DIR/"
+              cd $WORKING_DIR
+              chmod 500 bootstrap_test.sh
+              (time ./bootstrap_test.sh) 2>&1 | tee "/var/log/bootstrap.log"
+              
+              systemctl restart jupyter-server
 
 Outputs:
   NotebookInstanceName:

@@ -13,8 +13,6 @@ function pmngr(){
 }
 export -f pmngr
 
-pmngr install jq
-
 if [ -d "/home/ec2-user/SageMaker" ]
   then
     # Notebook meta-data file: https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-metadata.html
@@ -65,7 +63,7 @@ if [[ ! -z "$SECRETS_ARN" ]] && [[ ! -z "$PROJECT" ]] && [[ ! -z "$BUCKET" ]]; t
     export -f add_tag
   fi
 
-  $SCRIPTS/security_agents.sh 2>&1 >> "/var/log/security_agent_install.log"
+  $SCRIPTS/security_agents.sh
 
   # Remove key and scripts folder
   rm -r "$SCRIPTS"
