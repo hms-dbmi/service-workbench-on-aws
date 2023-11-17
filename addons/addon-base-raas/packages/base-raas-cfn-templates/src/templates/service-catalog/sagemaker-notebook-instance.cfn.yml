@@ -313,10 +313,10 @@ Resources:
               export S3_MOUNTS='${S3Mounts}'
 
               # Download and execute bootstrap script
-              aws s3 cp "$BUCKET_URI/bootstrap_test.sh" "$WORKING_DIR/"
+              aws s3 cp "$BUCKET_URI/bootstrap.sh" "$WORKING_DIR/"
               cd $WORKING_DIR
-              chmod 500 bootstrap_test.sh
-              (time ./bootstrap_test.sh) 2>&1 | tee "/var/log/bootstrap.log"
+              chmod 500 bootstrap.sh
+              (time ./bootstrap.sh) 2>&1 | tee "/var/log/bootstrap.log"
               
               systemctl restart jupyter-server
 
