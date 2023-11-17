@@ -27,11 +27,11 @@ if [ -s "$security_agents" ]; then
     sudo $security_agents "$INSTALL_DIR/lz-cicd-ec2-scripts" >> /var/log/security_agents.log
 fi
 
-bootstrap_script="$INSTALL_DIR/bootstrap.sh"
+bootstrap_script="$INSTALL_DIR/bootstrap_deprecated.sh"
 if [ -s "$bootstrap_script" ]
 then
     sudo chmod 500 "$bootstrap_script"
-    sudo "$bootstrap_script" "$s3_mounts" >> /var/log/bootstrap.log
+    sudo "$bootstrap_script" "$s3_mounts" >> /var/log/bootstrap_deprecated.log
 fi
 
 exit 0
