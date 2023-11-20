@@ -306,18 +306,16 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/usr/bin/env bash
-          # Download and execute bootstrap script
-          aws s3 cp --region "${AWS::Region}" "${EnvironmentInstanceFiles}/get_bootstrap.sh" "/tmp"
-          chmod 500 "/tmp/get_bootstrap.sh"
-          /tmp/get_bootstrap.sh "${EnvironmentInstanceFiles}" '${S3Mounts}' "${AWS::Region}" 2>&1 >> "/var/log/bootstrap.log"
+          export BUCKET_URI="${EnvironmentInstanceFiles}"
+          export AUTO_STOP_IDLE_TIME="${AutoStopIdleTimeInMinutes}"
+          export WORKING_DIR="/tmp/user_data_init"
+          export S3_MOUNTS='${S3Mounts}'
 
-          # Customize workspace
-          IDLE_TIME="${AutoStopIdleTimeInMinutes}"
-          SESSION_TIME=$(($(expr $IDLE_TIME \* 2) > 720 ? $(expr $IDLE_TIME \* 2) : 720)) # minimum 720 or 2(IDLE_TIME)
-          sed -i "/^MAX_IDLE_MINUTES /s/=.*$/= $IDLE_TIME/" /usr/local/bin/check-idle
-          echo "auth-timeout-minutes=$SESSION_TIME" >> /etc/rstudio/rserver.conf
-          mkdir -p /home/rstudio-user/.config/rstudio
-          echo '{"initial_working_directory":"~","auto_save_on_blur":true,"auto_save_on_idle":"commit","posix_terminal_shell":"bash"}' > /home/rstudio-user/.config/rstudio/rstudio-prefs.json
+          # Download and execute bootstrap script
+          aws s3 cp "$BUCKET_URI/bootstrap.sh" "$WORKING_DIR/"
+          cd $WORKING_DIR
+          chmod 500 bootstrap.sh
+          (time ./bootstrap.sh) 2>&1 | tee "/var/log/bootstrap.log"
 
           # Signal result to CloudFormation
           /opt/aws/bin/cfn-signal -e $? --stack "${AWS::StackName}" --resource "EC2Instance" --region "${AWS::Region}"

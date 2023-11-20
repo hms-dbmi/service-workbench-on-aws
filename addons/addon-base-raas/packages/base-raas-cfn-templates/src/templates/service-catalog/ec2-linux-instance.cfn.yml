@@ -270,11 +270,16 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/usr/bin/env bash
+          export BUCKET_URI="${EnvironmentInstanceFiles}"
+          export SUBNET_CIDR="${SubnetCIDR}"
+          export WORKING_DIR="/tmp/user_data_init"
+          export S3_MOUNTS='${S3Mounts}'
+
           # Download and execute bootstrap script
-          aws s3 cp "${EnvironmentInstanceFiles}/get_bootstrap.sh" "/tmp"
-          chmod 500 "/tmp/get_bootstrap.sh"
-          /tmp/get_bootstrap.sh "${EnvironmentInstanceFiles}" '${S3Mounts}' >> "/var/log/get_bootstrap.log"
-          iptables -A INPUT -s ${SubnetCIDR} -j DROP
+          aws s3 cp "$BUCKET_URI/bootstrap.sh" "$WORKING_DIR/"
+          cd $WORKING_DIR
+          chmod 500 bootstrap.sh
+          (time ./bootstrap.sh) 2>&1 | tee "/var/log/bootstrap.log"
 
           # Signal result to CloudFormation
           /opt/aws/bin/cfn-signal -e $? --stack "${AWS::StackName}" --resource "EC2Instance" --region "${AWS::Region}"
