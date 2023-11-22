@@ -82,26 +82,44 @@ class EnvironmentScService extends Service {
       environmentAuthzService.authorize(requestContext, { resource, action, effect, reason }, ...args);
   }
 
-  async list(requestContext, limit = 10000) {
+  async list(requestContext, params) {
+    const { limit = 1000, offsetId, since } = params;
+
     // Make sure the user has permissions to "list" environments
     // The following will result in checking permissions by calling the condition function "this._allowAuthorized" first
     await this.assertAuthorized(requestContext, { action: 'list-sc', conditions: [this._allowAuthorized] });
 
-    let envs = await this._scanner()
+    let envs;
+    let scanner = this._scanner()
       .limit(limit)
-      .scan()
-      .then(environments => {
-        if (isAdmin(requestContext)) {
-          return environments;
-        }
-        return environments.filter(env => isCurrentUser(requestContext, { uid: env.createdBy }));
-      });
+      .start(offsetId ? { id: offsetId } : undefined);
+
+    if (!isAdmin(requestContext)) {
+      const currentUser = _.get(requestContext, 'principalIdentifier.uid');
+      if (!currentUser) {
+        throw this.boom.badRequest(`Principal Identifier not found`, true);
+      }
+      scanner = await scanner
+        .names({ '#c': 'createdBy' })
+        .values({ ':c': currentUser })
+        .filter('#c = :c');
+    }
+
+    if (!!since) {
+      scanner = scanner
+        .names({ '#u': 'updatedAt' })
+        .values({ ':u': since })
+        .filter('#u > :u');
+    }
+
+    envs = await scanner.scan();
+    const newOffsetId = scanner.lastId();
 
     if (this.isAppStreamEnabled()) {
       envs = await this.markAppStreamConfigured(requestContext, envs);
     }
 
-    return this.augmentWithConnectionInfo(requestContext, envs);
+    return { offsetId: newOffsetId, result: await this.augmentWithConnectionInfo(requestContext, envs) };
   }
 
   async listEnvWithStatus(requestContext, status, limit = 10000) {

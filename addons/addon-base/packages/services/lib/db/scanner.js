@@ -67,6 +67,10 @@ class DbScanner {
     return this;
   }
 
+  lastId() {
+    return this.params.ExclusiveStartKey?.id;
+  }
+
   // same as FilterExpression
   filter(str) {
     if (this.params.FilterExpression) this.params.FilterExpression = `${this.params.FilterExpression} ${str}`;

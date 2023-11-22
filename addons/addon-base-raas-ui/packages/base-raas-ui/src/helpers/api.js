@@ -259,8 +259,14 @@ function getScEnvironmentCost(id, numberDaysInPast, groupByService = true, group
   );
 }
 
-function getScEnvironments() {
-  return httpApiGet(`api/workspaces/service-catalog/`);
+async function getScEnvironments(params) {
+  const queryParams = Object.entries(_.omitBy(params, x => !x))
+    .map(([key, value]) => `${key}=${value}`);
+
+  return await httpApiGet(
+    'api/workspaces/service-catalog'
+    + (queryParams.length > 0 ? '/?' + queryParams.join('&') : '')
+  );
 }
 
 function getScEnvironment(id) {

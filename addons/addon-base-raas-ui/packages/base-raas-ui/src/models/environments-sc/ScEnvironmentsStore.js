@@ -15,7 +15,7 @@
 import _ from 'lodash';
 import { values } from 'mobx';
 import { getEnv, types } from 'mobx-state-tree';
-import { consolidateToMap } from '@aws-ee/base-ui/dist/helpers/utils';
+import { updateMap } from '@aws-ee/base-ui/dist/helpers/utils';
 import { BaseStore } from '@aws-ee/base-ui/dist/models/BaseStore';
 
 import {
@@ -69,6 +69,7 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
     connectionStores: types.optional(types.map(ScEnvConnectionStore), {}),
     egressStoreDetailStore: types.optional(types.map(ScEnvironmentEgressStoreDetailStore), {}),
     tickPeriod: 30 * 1000, // 30 seconds
+    apiLimit: 200,
   })
 
   .actions(self => {
@@ -77,12 +78,19 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
 
     return {
       async doLoad() {
-        const environments = await getScEnvironments();
-        self.runInAction(() => {
-          consolidateToMap(self.environments, environments, (existing, newItem) => {
-            existing.setScEnvironment(newItem);
+        let offsetId;
+        do {
+          const { result = [], offsetId: newOffsetId } = await getScEnvironments({ limit: self.apiLimit, offsetId, since: self.since });
+
+          offsetId = newOffsetId;
+          self.runInAction(() => {
+            updateMap(self.environments, result, (existing, newItem) => { existing.setScEnvironment(newItem); });
+
+            // Remember last updated record's day, to get newer ones instead of refreshing everything every 30 seconds.
+            const lastUpdated = _.last(result.map(env => env.updatedAt).filter(x => x).sort());
+            self.since = (!self.since || (self.since && lastUpdated > self.since)) ? lastUpdated : self.since;
           });
-        });
+        } while (!!offsetId);
       },
 
       addScEnvironment(rawEnvironment) {
