@@ -118,6 +118,7 @@ class ScEnvAdvancedList extends React.Component {
     const statusOptions = statusMap.map(({ name }) => ({ text: name, value: name }));
 
     const fields = [
+      { key: 'id', label: 'ID', icon: 'hashtag', hidden: true },
       { key: 'name', label: 'Name', icon: 'info' },
       { key: 'user', label: 'Created By', icon: 'user', options: options.user },
       { key: 'createdAt', label: 'Created At', icon: 'calendar alternate outline', type: 'date', filterable: false },
@@ -243,7 +244,8 @@ class ScEnvAdvancedList extends React.Component {
       );
     } else if (isStoreNotEmpty(store)) {
       const fields = this.getEnvFields(store.list);
-      const tableColumns = fields.map(column => _.pick(column, ['key', 'label', 'sortable', 'type']));
+      const tableColumns = fields.filter(({ hidden = false }) => !hidden)
+        .map(column => _.pick(column, ['key', 'label', 'sortable', 'type']));
       const { paginatedEnvList, filteredEnvsCount } = this.getPaginatedEnvs();
       current = filteredEnvsCount;
       total = store.total;

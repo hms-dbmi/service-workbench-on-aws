@@ -47,6 +47,7 @@ function ModeToggle({ mode, onToggle }) {
 export default function FilterForm({ mode, filters, fields, onFilter }) {
   const [form, setForm] = useState(
     filters.reduce((acc, { key, value, match }) => ({ ...acc, [key]: { value: [...value], match } }), {
+      id: { value: [] },
       name: { value: [] },
       user: { value: [] },
       project: { value: [] },

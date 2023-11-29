@@ -253,6 +253,7 @@ class ScEnvironmentsList extends React.Component {
         !_.isEmpty(
           _.find(
             [
+              env.id,
               env.name,
               env.description,
               env.projectId,
