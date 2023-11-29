@@ -30,17 +30,23 @@ const Sort = types.model({
   order: types.enumeration('order', [ORDER.DESC, ORDER.ASC]),
 });
 
+const DEFAULT_LIMIT_PER_PAGE = 25;
+
 const ScEnvView = types
   .model('ScEnvView', {
-    activeFilters: types.optional(types.array(Filter), []),
-    activeMode: types.optional(types.string, 'and'),
+    filters: types.optional(types.array(Filter), []),
+    mode: types.optional(types.string, 'and'),
     sort: types.optional(Sort, { key: 'createdAt', order: ORDER.DESC }),
     view: types.optional(types.enumeration('view', [VIEW.ADVANCED, VIEW.NORMAL]), VIEW.NORMAL),
+    perPage: DEFAULT_LIMIT_PER_PAGE,
   })
   .actions(self => ({
     setFilters(filters = [], mode = 'or') {
-      self.activeFilters = cloneDeep(filters);
-      self.activeMode = mode;
+      self.filters = cloneDeep(filters);
+      self.mode = mode;
+    },
+    setPerPage(num) {
+      self.perPage = num;
     },
     setSort(key) {
       if (key === self.sort.key) {
@@ -52,14 +58,6 @@ const ScEnvView = types
     },
     toggleView() {
       self.view = self.view === VIEW.ADVANCED ? VIEW.NORMAL : VIEW.ADVANCED;
-    },
-  }))
-  .views(self => ({
-    get filters() {
-      return self.activeFilters;
-    },
-    get mode() {
-      return self.activeMode;
     },
   }));
 

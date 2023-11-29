@@ -44,21 +44,6 @@ const filterNames = {
   TERMINATED: 'terminated',
 };
 
-// A map, with the key being the filter name and the value being the function that will be used to filter the workspace
-const filters = {
-  [filterNames.ALL]: () => true,
-  [filterNames.AVAILABLE]: env => env.status === 'COMPLETED' || env.status === 'TAINTED',
-  [filterNames.STOPPED]: env => env.status === 'STOPPED',
-  [filterNames.PENDING]: env =>
-    env.status === 'PENDING' || env.status === 'TERMINATING' || env.status === 'STARTING' || env.status === 'STOPPING',
-  [filterNames.ERRORED]: env =>
-    env.status === 'FAILED' ||
-    env.status === 'TERMINATING_FAILED' ||
-    env.status === 'STARTING_FAILED' ||
-    env.status === 'STOPPING_FAILED',
-  [filterNames.TERMINATED]: env => env.status === 'TERMINATED',
-};
-
 // ==================================================================
 // ScEnvironmentsStore
 // ==================================================================
@@ -202,13 +187,7 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
     },
 
     get list() {
-      return _.orderBy(values(self.environments), ['createdAt', 'name'], ['desc', 'asc']);
-    },
-
-    filtered(filterName) {
-      const filter = filters[filterName] || (() => true);
-      const filtered = _.filter(values(self.environments), filter);
-      return _.orderBy(filtered, ['createdAt', 'name'], ['desc', 'asc']);
+      return values(self.environments);
     },
 
     getScEnvironment(id) {

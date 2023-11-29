@@ -17,11 +17,10 @@ import _ from 'lodash';
 import { decorate, computed, action, observable, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Container, Segment, Header, Icon, Form, Grid, Input, Dropdown } from 'semantic-ui-react';
+import { Container, Segment, Header, Icon, Grid, Input, Dropdown } from 'semantic-ui-react';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
-import { swallowError, storage } from '@aws-ee/base-ui/dist/helpers/utils';
-import storageKeys from '@aws-ee/base-ui/dist/models/constants/local-storage-keys';
+import { swallowError } from '@aws-ee/base-ui/dist/helpers/utils';
 import {
   isStoreLoading,
   isStoreEmpty,
@@ -32,10 +31,11 @@ import {
 import ErrorBox from '@aws-ee/base-ui/dist/parts/helpers/ErrorBox';
 import ProgressPlaceHolder from '@aws-ee/base-ui/dist/parts/helpers/BasicProgressPlaceholder';
 
-import { filterNames } from '../../models/environments-sc/ScEnvironmentsStore';
 import ScEnvironmentCard from './ScEnvironmentCard';
 import ScEnvironmentsFilterButtons from './parts/ScEnvironmentsFilterButtons';
 import EnvsHeader from './ScEnvsHeader';
+import Paginate from '../helpers/Paginate';
+import { filterNames } from '../../models/environments-sc/ScEnvironmentsStore';
 
 const envOptions = [
   { key: 'any', text: 'Any Attribute', value: 'any' },
@@ -55,13 +55,11 @@ class ScEnvironmentsList extends React.Component {
   constructor(props) {
     super(props);
     runInAction(() => {
-      const key = storageKeys.workspacesFilterName;
-      const name = storage.getItem(key) || filterNames.ALL;
-      storage.setItem(key, name);
-      this.selectedFilter = name;
+      this.statusFilter = filterNames.ALL;
       this.provisionDisabled = false;
       this.searchType = 'any';
       this.search = '';
+      this.page = 1;
     });
   }
 
@@ -121,21 +119,38 @@ class ScEnvironmentsList extends React.Component {
     goto(`/workspaces/create`);
   };
 
-  handleSelectedFilter = name => {
-    this.selectedFilter = name;
-    const key = storageKeys.workspacesFilterName;
-    storage.setItem(key, name);
-  };
-
   handleViewToggle() {
     return () => runInAction(() => this.viewStore.toggleView());
+  }
+
+  handleSearchAndFilter({ search, searchType, status }) {
+    runInAction(() => {
+      this.page = 1; // Reset page number on search/filter change
+      this.search = search || this.search;
+      this.searchType = searchType || this.searchType;
+      this.statusFilter = status || this.statusFilter;
+    });
+  }
+
+  handlePaginationChange() {
+    return (number) => runInAction(() => {
+      this.page = number;
+      window.scrollTo(0, 0);
+    });
+  }
+
+  handlePerPageChange() {
+    return (number) => runInAction(() => {
+      this.page = 1;
+      this.viewStore.setPerPage(number);
+    });
   }
 
   render() {
     const store = this.envsStore;
     let content = null;
-    let list = [];
     let total = 0;
+    let current = 0;
 
     const projects = this.getProjects();
     const appStreamProjectIds = _.map(
@@ -154,16 +169,17 @@ class ScEnvironmentsList extends React.Component {
     } else if (isStoreEmpty(store)) {
       content = this.renderEmpty();
     } else if (isStoreNotEmpty(store)) {
-      list = this.searchAndFilter();
-      content = this.renderMain(list);
+      const { paginatedEnvList, filteredEnvsCount } = this.getPaginatedEnvs();
+      current = filteredEnvsCount;
       total = store.total;
+      content = this.renderMain(paginatedEnvList, filteredEnvsCount);
     }
 
     return (
       <Container className="mt3 animated fadeIn">
         {this.provisionDisabled && this.renderMissingAppStreamConfig()}
         <EnvsHeader
-          current={list.length}
+          current={current}
           total={total}
           isAdmin={this.isAdmin}
           provisionDisabled={this.provisionDisabled}
@@ -192,9 +208,38 @@ class ScEnvironmentsList extends React.Component {
     );
   }
 
-  searchAndFilter() {
-    const list = this.envsStore.filtered(this.selectedFilter);
-    if (_.isEmpty(this.search)) return list;
+  getPaginatedEnvs() {
+    const searchFilter = this.searchFilterMethod();
+    const statusFilter = this.statusFilterMethod();
+    const filteredEnvs = _.filter(this.envsStore.list, env => searchFilter(env) && statusFilter(env));
+    const orderedEnvs = _.orderBy(filteredEnvs, ['createdAt', 'name'], ['desc', 'asc']);
+
+    const firstIndex = (this.page - 1) * this.viewStore.perPage;
+    const lastIndex = Math.min(this.page * this.viewStore.perPage, orderedEnvs.length);
+    return {
+      paginatedEnvList: orderedEnvs.slice(firstIndex, lastIndex),
+      filteredEnvsCount: filteredEnvs.length
+    };
+  }
+
+  statusFilterMethod() {
+    const matchStatus = (...A) => env => _.find(A, a => a.includes(env.status));
+    const filterMap = {
+      [filterNames.ALL]: () => true,
+      [filterNames.AVAILABLE]: matchStatus('COMPLETED', 'TAINTED'),
+      [filterNames.STOPPED]: matchStatus('STOPPED'),
+      [filterNames.PENDING]: matchStatus('PENDING', 'TERMINATING', 'STARTING', 'STOPPING'),
+      [filterNames.ERRORED]: matchStatus('FAILED', 'TERMINATING_FAILED', 'STARTING_FAILED', 'STOPPING_FAILED'),
+      [filterNames.TERMINATED]: matchStatus('TERMINATED'),
+    };
+    return filterMap[this.statusFilter];
+  }
+
+  searchFilterMethod() {
+    if (!this.search) {
+      return () => true;
+    }
+
     const searchString = `(${_.escapeRegExp(this.search).replace(' or ', '|')})`;
     const exp = new RegExp(searchString, 'i');
 
@@ -226,61 +271,60 @@ class ScEnvironmentsList extends React.Component {
       configType: env => exp.test(configName(env)),
       study: env => exp.test(env.studyIds.join(', ')),
     };
-
-    return _.filter(list, searchMap[this.searchType]);
+    return searchMap[this.searchType];
   }
 
-  renderMain(list) {
-    const isEmpty = _.isEmpty(list);
+  renderMain(paginatedEnvList, filteredEnvsCount) {
+    const isEmpty = _.isEmpty(paginatedEnvList);
+    const lastIndex = paginatedEnvList.length - 1;
 
     return (
       <div data-testid="workspaces">
-        <Form>
-          <Grid columns={2} stackable className="mt2">
-            <Grid.Row stretched>
-              <Grid.Column width={6}>
-                <Input
-                  fluid
-                  action={
-                    <Dropdown
-                      button
-                      basic
-                      floating
-                      defaultValue="any"
-                      options={envOptions}
-                      onChange={(e, data) =>
-                        runInAction(() => {
-                          this.searchType = data.value;
-                        })
-                      }
-                    />
-                  }
-                  placeholder="Search"
-                  icon="search"
-                  iconPosition="left"
-                  onChange={(e, data) =>
-                    runInAction(() => {
-                      this.search = data.value;
-                    })
-                  }
-                />
-              </Grid.Column>
-              <Grid.Column width={10}>
-                <ScEnvironmentsFilterButtons
-                  selectedFilter={this.selectedFilter}
-                  onSelectedFilter={this.handleSelectedFilter}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Form>
-        {!isEmpty &&
-          _.map(list, item => (
-            <Segment className="p3 mb4" clearing key={item.id}>
-              <ScEnvironmentCard scEnvironment={item} />
+        <Grid columns={2} stackable className="mt2">
+          <Grid.Row stretched>
+            <Grid.Column width={6}>
+              <Input
+                fluid
+                action={
+                  <Dropdown
+                    button
+                    basic
+                    floating
+                    defaultValue="any"
+                    options={envOptions}
+                    onChange={(e, data) => this.handleSearchAndFilter({ searchType: data.value }, e)}
+                  />
+                }
+                placeholder="Search"
+                icon="search"
+                iconPosition="left"
+                onChange={_.debounce((e, data) => this.handleSearchAndFilter({ search: data.value }, e), 500)}
+              />
+            </Grid.Column>
+            <Grid.Column width={10}>
+              <ScEnvironmentsFilterButtons
+                selectedFilter={this.statusFilter}
+                onSelectedFilter={name => this.handleSearchAndFilter({ status: name })}
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <Paginate
+          entriesPerPage={this.viewStore.perPage}
+          totalEntries={filteredEnvsCount}
+          currentPage={this.page}
+          onPageChange={this.handlePaginationChange()}
+          onPerPageChange={this.handlePerPageChange()}
+        >
+          {!isEmpty && _.map(paginatedEnvList, (env, index) => (
+            <Segment clearing
+              key={env.id}
+              className={index === lastIndex ? "p3" : "p3 mb2"}
+            >
+              <ScEnvironmentCard scEnvironment={env} />
             </Segment>
           ))}
-        {isEmpty && (
+          {isEmpty && (
           <Segment placeholder>
             <Header icon className="color-grey">
               <Icon name="server" />
@@ -289,6 +333,7 @@ class ScEnvironmentsList extends React.Component {
             </Header>
           </Segment>
         )}
+        </Paginate>
       </div>
     );
   }
@@ -308,16 +353,22 @@ class ScEnvironmentsList extends React.Component {
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
 decorate(ScEnvironmentsList, {
-  selectedFilter: observable,
-  provisionDisabled: observable,
   envsStore: computed,
   envTypesStore: computed,
   viewStore: computed,
   isAdmin: computed,
+
   handleCreateEnvironment: action,
-  handleSelectedFilter: action,
   handleViewToggle: action,
+  handlePaginationChange: action,
+  handlePerPageChange: action,
+  handleSearchAndFilter: action,
+
+  provisionDisabled: observable,
+  statusFilter: observable,
   search: observable,
+  searchType: observable,
+  page: observable,
 });
 
 export default inject(

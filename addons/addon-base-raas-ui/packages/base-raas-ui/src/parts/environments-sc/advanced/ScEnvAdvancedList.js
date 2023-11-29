@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { decorate, computed, action, runInAction } from 'mobx';
+import { decorate, computed, action, observable, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Container, Icon, Segment, Header } from 'semantic-ui-react';
@@ -21,6 +21,7 @@ import CompactTable from './CompactTable';
 import FilterBox from './FilterBox';
 import ActionButtons from './ActionButtons';
 import EnvsHeader from '../ScEnvsHeader';
+import Paginate from '../../helpers/Paginate';
 
 const statusMap = [
   { name: 'AVAILABLE', list: ['COMPLETED', 'TAINTED'] },
@@ -35,6 +36,21 @@ class ScEnvAdvancedList extends React.Component {
     super(props);
     runInAction(() => {
       this.goto = gotoFn(this);
+      this.page = 1;
+    });
+  }
+
+  handlePaginationChange() {
+    return (number) => runInAction(() => {
+      this.page = number;
+      window.scrollTo(0, 0);
+    });
+  }
+
+  handlePerPageChange() {
+    return (number) => runInAction(() => {
+      this.page = 1;
+      this.viewStore.setPerPage(number);
     });
   }
 
@@ -114,8 +130,8 @@ class ScEnvAdvancedList extends React.Component {
     return fields;
   }
 
-  getEnvs(envs, filters, sort) {
-    let envRow = _(envs).map(env => ({
+  getFilteredEnvs() {
+    let envRows = _(this.envsStore.list).map(env => ({
       id: env.id,
       name: env.name,
       user: this.userName(env),
@@ -141,22 +157,33 @@ class ScEnvAdvancedList extends React.Component {
       ),
     }));
 
-    if (filters.length > 0) {
+    if (this.viewStore.filters.length > 0) {
       const or = (list, predicate) => _.find(list, predicate);
       const and = (list, predicate) => _.reduce(list, (acc, value) => acc && predicate(value), true);
       const listMatcher = (A, b) => _.find(A, a => a === b);
       const regexMatcher = (a, b) => new RegExp(_.escapeRegExp(a), 'i').test(b);
 
-      envRow = envRow.filter(env => {
+      envRows = envRows.filter(env => {
         const operator = this.viewStore.mode === 'or' ? or : and;
-        return operator(filters, ({ key, value, match }) => {
+        return operator(this.viewStore.filters, ({ key, value, match }) => {
           const matcher = match === 'partial' ? regexMatcher : listMatcher;
           return matcher(value, env[key]);
         });
       });
     }
 
-    return envRow.orderBy(sort.key, sort.order).value();
+    return envRows.orderBy(this.viewStore.sort.key, this.viewStore.sort.order).value();
+  }
+
+  getPaginatedEnvs() {
+    const filteredEnvs = this.getFilteredEnvs();
+
+    const firstIndex = (this.page - 1) * this.viewStore.perPage;
+    const lastIndex = Math.min(this.page * this.viewStore.perPage, filteredEnvs.length);
+    return {
+      paginatedEnvList: filteredEnvs.slice(firstIndex, lastIndex),
+      filteredEnvsCount: filteredEnvs.length
+    };
   }
 
   handleAction() {
@@ -171,7 +198,10 @@ class ScEnvAdvancedList extends React.Component {
   }
 
   handleFilter() {
-    return ({ filters, mode }) => runInAction(() => this.viewStore.setFilters(filters, mode));
+    return ({ filters, mode }) => runInAction(() => {
+      this.page = 1;
+      this.viewStore.setFilters(filters, mode)
+    });
   }
 
   handleSort() {
@@ -192,15 +222,16 @@ class ScEnvAdvancedList extends React.Component {
   }
 
   render() {
+    const store = this.envsStore;
     let content = null;
-    let list = [];
     let total = 0;
+    let current = 0;
 
-    if (isStoreError(this.envsStore)) {
-      content = <ErrorBox error={this.envsStore.error} className="p0" />;
-    } else if (isStoreLoading(this.envsStore)) {
+    if (isStoreError(store)) {
+      content = <ErrorBox error={store.error} className="p0" />;
+    } else if (isStoreLoading(store)) {
       content = <ProgressPlaceHolder segmentCount={3} />;
-    } else if (isStoreEmpty(this.envsStore)) {
+    } else if (isStoreEmpty(store)) {
       content = (
         <Segment data-testid="workspaces" placeholder>
           <Header icon className="color-grey">
@@ -210,11 +241,12 @@ class ScEnvAdvancedList extends React.Component {
           </Header>
         </Segment>
       );
-    } else if (isStoreNotEmpty(this.envsStore)) {
-      const fields = this.getEnvFields(this.envsStore.list);
+    } else if (isStoreNotEmpty(store)) {
+      const fields = this.getEnvFields(store.list);
       const tableColumns = fields.map(column => _.pick(column, ['key', 'label', 'sortable', 'type']));
-      list = this.getEnvs(this.envsStore.list, this.viewStore.filters, this.viewStore.sort);
-      total = this.envsStore.total;
+      const { paginatedEnvList, filteredEnvsCount } = this.getPaginatedEnvs();
+      current = filteredEnvsCount;
+      total = store.total;
 
       content = (
         <>
@@ -224,7 +256,20 @@ class ScEnvAdvancedList extends React.Component {
             fields={fields}
             onFilter={this.handleFilter()}
           />
-          <CompactTable sort={this.viewStore.sort} columns={tableColumns} rows={list} onSort={this.handleSort()} />
+          <Paginate
+            entriesPerPage={this.viewStore.perPage}
+            totalEntries={filteredEnvsCount}
+            currentPage={this.page}
+            onPageChange={this.handlePaginationChange()}
+            onPerPageChange={this.handlePerPageChange()}
+          >
+            <CompactTable
+              sort={this.viewStore.sort}
+              columns={tableColumns}
+              rows={paginatedEnvList}
+              onSort={this.handleSort()}
+            />
+          </Paginate>
         </>
       );
     }
@@ -232,7 +277,7 @@ class ScEnvAdvancedList extends React.Component {
     return (
       <Container className="mt3 animated fadeIn">
         <EnvsHeader
-          current={list.length}
+          current={current}
           total={total}
           view={this.viewStore.view}
           isAdmin // We only get to this view if we're an admin, so this must be true
@@ -251,10 +296,15 @@ decorate(ScEnvAdvancedList, {
   envsStore: computed,
   envTypesStore: computed,
   userDisplayName: computed,
+
   handleFilter: action,
   handleSort: action,
   handleViewToggle: action,
   handleCreateEnvironment: action,
+  handlePaginationChange: action,
+  handlePerPageChange: action,
+
+  page: observable,
 });
 
 export default inject(
