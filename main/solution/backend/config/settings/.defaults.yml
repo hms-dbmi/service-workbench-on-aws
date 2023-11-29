@@ -321,5 +321,3 @@ dataSourceReachabilityHandlerRoleArn: 'arn:aws:iam::${self:custom.settings.awsAc
 
 # The stack name of the 'backend' serverless service
 backendStackName: ${self:custom.settings.namespace}-backend
-
-envMgmtRoleArn: ${self:custom.settings.backendStackName}.EnvMgmtRoleArn}
