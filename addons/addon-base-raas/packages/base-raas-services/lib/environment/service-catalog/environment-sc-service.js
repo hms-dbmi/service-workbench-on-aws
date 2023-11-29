@@ -42,6 +42,16 @@ const workflowIds = {
   startSagemaker: 'wf-start-sagemaker-environment-sc',
 };
 
+const isoTimestamp = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/;
+
+const allowedParameters = [
+  "id", "name", "desdcription", "status", "cidr", "createdBy",
+  "rev", "outputs", "inWorkflow", "createdAt", "updatedBy",
+  "studyIds", "updatedAt", "provisionedProductId",
+  "indexId", "studyRoles", "envTypeConfigId", "envTypeId",
+  "hasConnections"
+];
+
 /**
  * Analytics environments management service for AWS Service Catalog based environments
  */
@@ -83,7 +93,7 @@ class EnvironmentScService extends Service {
   }
 
   async list(requestContext, params) {
-    const { limit, offsetId, since } = params;
+    const { limit, offsetId, since, fields = '' } = params;
 
     // Make sure the user has permissions to "list" environments
     // The following will result in checking permissions by calling the condition function "this._allowAuthorized" first
@@ -91,8 +101,11 @@ class EnvironmentScService extends Service {
 
     let envs;
     let scanner = this._scanner()
-      .limit(limit)
-      .start(offsetId ? { id: offsetId } : undefined);
+      .limit(_.isNumber(limit) ? limit : 1000);
+
+    if (offsetId && /^[A-Za-z0-9-_ ]+$/.test(offsetId)) {
+      scanner = scanner.start({ id: offsetId });
+    }
 
     if (!isAdmin(requestContext)) {
       const currentUser = _.get(requestContext, 'principalIdentifier.uid');
@@ -105,11 +118,21 @@ class EnvironmentScService extends Service {
         .filter('#c = :c');
     }
 
-    if (!!since) {
+    if (since && isoTimestamp.test(since)) {
       scanner = scanner
         .names({ '#u': 'updatedAt' })
         .values({ ':u': since })
         .filter('#u > :u');
+    }
+
+    // Only accept fields from a list of allowed db fields
+    const projectFields = JSON.stringify(fields) // force to string
+      .replace(/[^A-Za-z0-9,]/g, '') // strip not alpha numeric
+      .split(',')
+      .filter(field => allowedParameters.includes(field));
+
+    if (projectFields.length > 0) {
+      scanner = scanner.projection(projectFields);
     }
 
     envs = await scanner.scan();
@@ -119,7 +142,12 @@ class EnvironmentScService extends Service {
       envs = await this.markAppStreamConfigured(requestContext, envs);
     }
 
-    return { offsetId: newOffsetId, result: await this.augmentWithConnectionInfo(requestContext, envs) };
+    // This enrichment step will add fields to the env objects, which we don't want if we project with fields query param
+    if (projectFields.length > 1) {
+      envs = await this.augmentWithConnectionInfo(requestContext, envs);
+    }
+
+    return { offsetId: newOffsetId, result: envs };
   }
 
   async listEnvWithStatus(requestContext, status, limit = 10000) {

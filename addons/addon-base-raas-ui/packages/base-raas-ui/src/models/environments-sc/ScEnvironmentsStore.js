@@ -44,6 +44,8 @@ const filterNames = {
   TERMINATED: 'terminated',
 };
 
+const API_LIMIT = 300;
+
 // ==================================================================
 // ScEnvironmentsStore
 // ==================================================================
@@ -54,7 +56,6 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
     connectionStores: types.optional(types.map(ScEnvConnectionStore), {}),
     egressStoreDetailStore: types.optional(types.map(ScEnvironmentEgressStoreDetailStore), {}),
     tickPeriod: 30 * 1000, // 30 seconds
-    apiLimit: 200,
   })
 
   .actions(self => {
@@ -65,7 +66,7 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
       async doLoad() {
         let offsetId;
         do {
-          const { result = [], offsetId: newOffsetId } = await getScEnvironments({ limit: self.apiLimit, offsetId, since: self.since });
+          const { result = [], offsetId: newOffsetId } = await getScEnvironments({ limit: API_LIMIT, offsetId, since: self.since });
 
           offsetId = newOffsetId;
           self.runInAction(() => {
@@ -214,4 +215,4 @@ function registerContextItems(appContext) {
   appContext.scEnvironmentsStore = ScEnvironmentsStore.create({}, appContext);
 }
 
-export { ScEnvironmentsStore, registerContextItems, filterNames };
+export { ScEnvironmentsStore, registerContextItems, filterNames, API_LIMIT };
