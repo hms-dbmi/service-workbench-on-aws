@@ -83,7 +83,7 @@ class EnvironmentScService extends Service {
   }
 
   async list(requestContext, params) {
-    const { limit = 1000, offsetId, since } = params;
+    const { limit, offsetId, since } = params;
 
     // Make sure the user has permissions to "list" environments
     // The following will result in checking permissions by calling the condition function "this._allowAuthorized" first
