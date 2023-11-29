@@ -303,6 +303,25 @@ function consolidateToMap(map, itemsArray, mergeExistingFn, idFieldName = 'id') 
   });
 }
 
+// Given a Map and an array of items (each item MUST have an "id" prop), consolidate
+// the array in the following manner:
+// - if an item in the array is not in the map, then add it to the map using the its "id" prop
+// - if an item in the array is also in the map, then call 'mergeExistingFn' with the existing item
+//   and the new item. It is expected that this 'mergeExistingFn', will know how to merge the
+//   properties of the new item into the existing item.
+function updateMap(map, itemsArray, mergeExistingFn, idFieldName = 'id') {
+  itemsArray.forEach(item => {
+    const id = item[idFieldName];
+    const existing = map.get(id);
+
+    if (!existing) {
+      map.set(item[idFieldName], item);
+    } else {
+      mergeExistingFn(existing, item);
+    }
+  });
+}
+
 /**
  * Converts an object graph into flat object with key/value pairs.
  * The rules of object graph to flat key value transformation are as follows.
@@ -552,6 +571,7 @@ export {
   isAbsoluteUrl,
   generateId,
   consolidateToMap,
+  updateMap,
   flattenObject,
   unFlattenObject,
   toUTCDate,
