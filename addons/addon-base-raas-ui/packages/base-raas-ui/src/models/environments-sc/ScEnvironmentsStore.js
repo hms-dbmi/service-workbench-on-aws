@@ -126,7 +126,6 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
         const env = self.getScEnvironment(id);
         if (!env) return;
         env.setStatus('STOPPING');
-        await stopScEnvironment(id);
       },
 
       getScEnvironmentStore(envId) {
