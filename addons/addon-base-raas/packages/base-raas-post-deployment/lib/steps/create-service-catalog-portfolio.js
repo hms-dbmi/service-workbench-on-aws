@@ -46,15 +46,14 @@ const productsToCreate = [
   `,
   },
   {
-    filename: 'emr-cluster',
-    displayName: 'EMR',
-    description: `An Amazon EMR research workspace that comes with: \n* Hail 0.2 \n* Jupyter Lab \n* Spark 2.4.4 \n* Hadoop 2.8.5
-`,
-  },
-  {
     filename: 'ec2-windows-instance',
     displayName: 'EC2 Windows',
     description: `* An EC2 Windows instance with RDP access \n* Secure compute in the cloud`,
+  },
+  {
+    filename: 'ec2-rstudio-instance',
+    displayName: 'EC2 RStudio Server',
+    description: `An RStudio instance accessible over SSL which comes with: \n* RStudio Server version 1.4.1717 \n* Connect securely via load balancer using Amazon issued certificates in ACM \n* Fully loaded with commonly used R packages`
   },
 ];
 
