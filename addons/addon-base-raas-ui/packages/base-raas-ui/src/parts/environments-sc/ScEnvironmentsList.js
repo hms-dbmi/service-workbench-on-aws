@@ -126,7 +126,7 @@ class ScEnvironmentsList extends React.Component {
   handleSearchAndFilter({ search, searchType, status }) {
     runInAction(() => {
       this.page = 1; // Reset page number on search/filter change
-      this.search = search || this.search;
+      this.search = search != undefined ? search : this.search;
       this.searchType = searchType || this.searchType;
       this.statusFilter = status || this.statusFilter;
     });

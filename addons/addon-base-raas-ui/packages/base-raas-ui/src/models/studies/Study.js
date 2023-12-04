@@ -16,6 +16,7 @@
 import { types, applySnapshot } from 'mobx-state-tree';
 
 import _ from 'lodash';
+import { values } from 'mobx';
 import { StudyFilesStore } from './StudyFilesStore';
 import { StudyPermissionsStore } from './StudyPermissionsStore';
 import { categories } from './categories';
@@ -106,6 +107,12 @@ const Study = types
 
     get isOrganizationStudy() {
       return self.category === categories.organization.name; // TODO the backend should really send an id and not a name
+    },
+
+    get isEditable() {
+      return self.isOrganizationStudy &&
+        self.state.canChangePermission &&
+        values(self.access).includes('admin')
     },
 
     get state() {

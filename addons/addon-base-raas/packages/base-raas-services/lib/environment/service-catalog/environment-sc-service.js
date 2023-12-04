@@ -109,7 +109,7 @@ class EnvironmentScService extends Service {
       scanner = scanner
         .names({ '#u': 'updatedAt' })
         .values({ ':u': since })
-        .filter('#u > :u');
+        .filter('#u >= :u');
     }
 
     envs = await scanner.scan();

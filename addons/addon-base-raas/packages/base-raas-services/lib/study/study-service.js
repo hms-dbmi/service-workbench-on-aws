@@ -508,52 +508,34 @@ class StudyService extends Service {
     return toStudyEntity(dbEntity);
   }
 
-  async list(requestContext, category, fields = []) {
-    const awsRegion = this.settings.get(settingKeys.awsRegion);
-    // Get studies allowed for user
+  async list(requestContext, category) {
+    const studies = await this._query()
+      .index(this.categoryIndex)
+      .key('category', category)
+      .limit(1000)
+      .query();
+
     let result = [];
-    switch (category) {
-      case 'Open Data':
-        // Readable by all
-        result = await this._query()
-          .index(this.categoryIndex)
-          .key('category', category)
-          .limit(1000)
-          .projection(fields)
-          .query();
-        // filter by aws region. Because the scraper might not run until after
-        // this code is deployed we want this filter to be permissive when it isn't
-        // clear if the study is in the correct region
-        result = result.filter(study => [awsRegion, 'unknown', undefined].includes(study.region));
-        break;
+    if (category == 'Open Data') {
+      // filter by aws region. Because the scraper might not run until after
+      // this code is deployed we want this filter to be permissive when it isn't
+      // clear if the study is in the correct region
+      const awsRegion = this.settings.get(settingKeys.awsRegion);
+      result = studies.filter(study => [awsRegion, 'unknown', undefined].includes(study.region));
+    } else {
+      const uid = _.get(requestContext, 'principalIdentifier.uid');
+      const userPermissions = await this.getUserPermissions(requestContext, uid);
+      const userStudyIds = getStudyIds(userPermissions);
+      const studyAccessMap = this._getStudyAccessMap(userPermissions);
 
-      default: {
-        // Generate results based on access
-        const uid = _.get(requestContext, 'principalIdentifier.uid');
-        const userPermissions = await this.getUserPermissions(requestContext, uid);
-        const studyIds = getStudyIds(userPermissions);
-        if (!_.isEmpty(studyIds)) {
-          // TODO - currently, DynamoDB will throw an exception if the number of
-          // items in the batch get > 100
-          const rawResult = await this._getter()
-            .keys(studyIds.map(studyId => ({ id: studyId })))
-            .projection(fields)
-            .get();
-
-          // Filter by category and inject requestor's access level
-          const studyAccessMap = this._getStudyAccessMap(userPermissions);
-
-          result = rawResult
-            .filter(study => study.category === category)
-            .map(study => ({
-              ...study,
-              access: studyAccessMap[study.id],
-            }));
-        }
-      }
+      // inject requestor's access level
+      result = studies.filter(study => userStudyIds.includes(study.id))
+        .map(study => ({
+          ...study,
+          access: studyAccessMap[study.id],
+        }));
     }
 
-    // Return result
     return _.map(result, toStudyEntity);
   }
 

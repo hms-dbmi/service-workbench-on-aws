@@ -143,18 +143,16 @@ function getEnvironments() {
   return httpApiGet('api/workspaces/built-in');
 }
 
-function getEnvironmentCost(id, numberDaysInPast, groupByService = true, groupByUser = false) {
-  return httpApiGet(
-    `api/costs?env=${id}&numberOfDaysInPast=${numberDaysInPast}&groupByService=${groupByService}&groupByUser=${groupByUser}`,
-  );
+function getEnvironmentCost(scEnv, numberOfDaysInPast, groupByService = true, groupByUser = false) {
+  return httpApiGet('api/costs', { params: { scEnv, numberOfDaysInPast, groupByService, groupByUser } });
 }
 
-function getAllProjCostGroupByUser(numberDaysInPast) {
-  return httpApiGet(`api/costs?proj=ALL&groupByUser=true&numberOfDaysInPast=${numberDaysInPast}`);
+function getAllProjCostGroupByUser(numberOfDaysInPast) {
+  return httpApiGet('api/costs', { params: { proj: 'ALL', numberOfDaysInPast, groupByUser: true } });
 }
 
-function getAllProjCostGroupByEnv(numberDaysInPast) {
-  return httpApiGet(`api/costs?proj=ALL&groupByEnv=true&numberOfDaysInPast=${numberDaysInPast}`);
+function getAllProjCostGroupByEnv(numberOfDaysInPast) {
+  return httpApiGet('api/costs', { params: { proj: 'ALL', numberOfDaysInPast, groupByEnv: true } });
 }
 
 function getEnvironment(id) {
@@ -253,20 +251,12 @@ function getClientIpAddress() {
   return httpApiGet(`api/ip`);
 }
 
-function getScEnvironmentCost(id, numberDaysInPast, groupByService = true, groupByUser = false) {
-  return httpApiGet(
-    `api/costs?scEnv=${id}&numberOfDaysInPast=${numberDaysInPast}&groupByService=${groupByService}&groupByUser=${groupByUser}`,
-  );
+function getScEnvironmentCost(scEnv, numberOfDaysInPast, groupByService = true, groupByUser = false) {
+  return httpApiGet('api/costs', { params: { scEnv, numberOfDaysInPast, groupByService, groupByUser } });
 }
 
 async function getScEnvironments(params) {
-  const queryParams = Object.entries(_.omitBy(params, x => !x))
-    .map(([key, value]) => `${key}=${value}`);
-
-  return await httpApiGet(
-    'api/workspaces/service-catalog'
-    + (queryParams.length > 0 ? '/?' + queryParams.join('&') : '')
-  );
+  return await httpApiGet('api/workspaces/service-catalog', { params });
 }
 
 function getScEnvironment(id) {
