@@ -44,12 +44,12 @@ const workflowIds = {
 
 const isoTimestamp = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/;
 
-const allowedParameters = [
+const allowedFields = [
   "id", "name", "desdcription", "status", "cidr", "createdBy",
   "rev", "outputs", "inWorkflow", "createdAt", "updatedBy",
   "studyIds", "updatedAt", "provisionedProductId",
   "indexId", "studyRoles", "envTypeConfigId", "envTypeId",
-  "hasConnections"
+  "hasConnections", "isAppStreamConfigured"
 ];
 
 /**
@@ -101,7 +101,7 @@ class EnvironmentScService extends Service {
 
     let envs;
     let scanner = this._scanner()
-      .limit(_.isNumber(limit) ? limit : 1000);
+      .limit(_.isNumber(Number(limit)) ? Number(limit) : 1000);
 
     if (offsetId && /^[A-Za-z0-9-_ ]+$/.test(offsetId)) {
       scanner = scanner.start({ id: offsetId });
@@ -129,21 +129,21 @@ class EnvironmentScService extends Service {
     const projectFields = JSON.stringify(fields) // force to string
       .replace(/[^A-Za-z0-9,]/g, '') // strip not alpha numeric
       .split(',')
-      .filter(field => allowedParameters.includes(field));
+      .filter(field => allowedFields.includes(field));
 
     if (projectFields.length > 0) {
-      scanner = scanner.projection(projectFields);
+      const projection = projectFields.filter(field => !['hasConnections', 'isAppStreamConfigured'].includes(field));
+      scanner = scanner.projection(projection);
     }
 
     envs = await scanner.scan();
     const newOffsetId = scanner.lastId();
 
-    if (this.isAppStreamEnabled()) {
+    // These enrichment steps will add properties to the env objects, so we need to make sure they're included in fields
+    if (this.isAppStreamEnabled() && (projectFields.length === 0 || projectFields.includes('isAppStreamConfigured'))) {
       envs = await this.markAppStreamConfigured(requestContext, envs);
     }
-
-    // This enrichment step will add fields to the env objects, which we don't want if we project with fields query param
-    if (projectFields.length > 1) {
+    if (projectFields.length === 0 || projectFields.includes('hasConnections')) {
       envs = await this.augmentWithConnectionInfo(requestContext, envs);
     }
 
