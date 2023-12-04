@@ -285,3 +285,18 @@
 }
 
 /* ====================================== Others ========================================= */
+
+.ReactTable .-cursor-pointer:before {
+  font-family: Icons;
+  content: "\f0dc";
+  float: right;
+  color: #767676;
+}
+
+.ReactTable .-cursor-pointer.-sort-desc:before {
+  content: "\f0d7";
+}
+
+.ReactTable .-cursor-pointer.-sort-asc:before {
+  content: "\f0d8";
+}
