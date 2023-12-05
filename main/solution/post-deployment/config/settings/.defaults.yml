@@ -323,5 +323,5 @@ postDeploymentHandlerRoleArn: 'arn:aws:iam::${self:custom.settings.awsAccountInf
 
 #===============================WAF=IP=Rate=Limit===========================================================
 # Per ip, per 5 minutes
-wafIpRateLimit: 1000
+wafIpRateLimit: 200
 
