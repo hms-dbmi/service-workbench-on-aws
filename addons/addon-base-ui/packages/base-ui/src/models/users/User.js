@@ -22,6 +22,7 @@ const User = types
     firstName: types.maybeNull(types.optional(types.string, '')),
     lastName: types.maybeNull(types.optional(types.string, '')),
     isAdmin: types.optional(types.boolean, false),
+    createdAt: '',
     username: '',
     ns: types.maybeNull(types.optional(types.string, '')),
     email: '',
