@@ -112,27 +112,27 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
       },
 
       async terminateScEnvironment(id) {
+        const env = self.getScEnvironment(id);
+        if (!env) return;
+        env.setStatus('TERMINATING');
         if (enableEgressStore) {
           await deleteEgressStore(id);
         }
         await deleteScEnvironment(id);
-        const env = self.getScEnvironment(id);
-        if (!env) return;
-        env.setStatus('TERMINATING');
       },
 
       async startScEnvironment(id) {
-        await startScEnvironment(id);
         const env = self.getScEnvironment(id);
         if (!env) return;
         env.setStatus('STARTING');
+        await startScEnvironment(id);
       },
 
       async stopScEnvironment(id) {
-        await stopScEnvironment(id);
         const env = self.getScEnvironment(id);
         if (!env) return;
         env.setStatus('STOPPING');
+        await stopScEnvironment(id);
       },
 
       getScEnvironmentStore(envId) {
