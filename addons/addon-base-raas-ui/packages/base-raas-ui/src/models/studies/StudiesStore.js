@@ -104,7 +104,7 @@ const StudiesStore = BaseStore.named('StudiesStore')
       const result = [];
       self.studies.forEach(study => result.push(study));
 
-      return _.reverse(_.sortBy(result, ['createdAt', 'name']));
+      return _.orderBy(result, ['createdAt', 'name'], ['desc', 'asc']);
     },
 
     hasStudy(id) {
