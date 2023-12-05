@@ -65,14 +65,18 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
     return {
       async doLoad() {
         let offsetId;
+        const params = { // Lock initial request parameters for this loop - only the offsetId can change.
+          limit: API_LIMIT,
+          since: self.since
+        };
         do {
-          const { result = [], offsetId: newOffsetId } = await getScEnvironments({ limit: API_LIMIT, offsetId, since: self.since });
+          const { result = [], offsetId: newOffsetId } = await getScEnvironments({ ...params, offsetId });
 
           offsetId = newOffsetId;
           self.runInAction(() => {
             updateMap(self.environments, result, (existing, newItem) => { existing.setScEnvironment(newItem); });
 
-            // Remember last updated record's day, to get newer ones instead of refreshing everything every 30 seconds.
+            // Remember last updated record's day, to get newer ones on next load loop instead of refreshing everything
             const lastUpdated = _.last(result.map(env => env.updatedAt).filter(x => x).sort());
             self.since = (!self.since || (self.since && lastUpdated > self.since)) ? lastUpdated : self.since;
           });

@@ -93,7 +93,7 @@ class EnvironmentScService extends Service {
   }
 
   async list(requestContext, params) {
-    const { limit, offsetId, since, fields = '' } = params;
+    const { limit, offsetId, since, fields = '' } = _.mapValues(params, decodeURIComponent);
 
     // Make sure the user has permissions to "list" environments
     // The following will result in checking permissions by calling the condition function "this._allowAuthorized" first
