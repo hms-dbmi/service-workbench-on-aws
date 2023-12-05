@@ -63,6 +63,8 @@ class EnvironmentScService extends Service {
       'indexesService',
       'studyService',
       'albService',
+      'envTypeService',
+      'envTypeConfigService',
     ]);
   }
 
@@ -457,10 +459,18 @@ class EnvironmentScService extends Service {
       );
     }
 
-    const [validationService, workflowTriggerService, projectService] = await this.service([
+    const [
+      validationService,
+      workflowTriggerService,
+      projectService,
+      envTypeService,
+      envTypeConfigService,
+    ] = await this.service([
       'jsonSchemaValidationService',
       'workflowTriggerService',
       'projectService',
+      'envTypeService',
+      'envTypeConfigService',
     ]);
 
     // Validate input
@@ -484,6 +494,19 @@ class EnvironmentScService extends Service {
 
     // const { name, envTypeId, envTypeConfigId, description, projectId, cidr, studyIds } = environment
     const { envTypeId, envTypeConfigId, projectId } = environment;
+
+    let instanceType = 'undefined';
+    try {
+      // Get instance type to save in env database for metrics reporting
+      const envType = await envTypeService.mustFind(requestContext, { id: envTypeId });
+      const listOfConfigs = await envTypeConfigService.getConfigsFromS3(envType.id);
+      const envConfigs = _.find(listOfConfigs, { id: envTypeConfigId });
+      instanceType = _.find(envConfigs.params, param => param.key === "InstanceType")?.value;
+    } catch (e) {
+      const error = this.boom.internalError(`Error retrieving instance type for ${envTypeId}`).cause(e);
+      this.log.error(error);
+      throw error;
+    }
 
     // Lets find the index id, by looking at the project and then get the index id
     // The isAppStreamConfigured attribute value will be returned by project service. No other fields needed to be added
@@ -511,6 +534,7 @@ class EnvironmentScService extends Service {
       createdAt: date,
       updatedAt: date,
       inWorkflow: 'true',
+      instanceType,
     });
     const dbResult = await runAndCatch(
       async () => {
