@@ -83,13 +83,16 @@ function updateUserApplication(user) {
   const data = removeNulls(
     _.omit(
       _.clone(user),
-      'uid',
-      'authenticationProviderId',
-      'identityProviderName',
-      'username',
-      'ns',
-      'createdBy',
-      'updatedBy',
+      [
+        'uid',
+        'authenticationProviderId',
+        'identityProviderName',
+        'username',
+        'ns',
+        'createdAt',
+        'createdBy',
+        'updatedBy',
+      ]
     ),
   );
   if (!data.userType) {
