@@ -26,10 +26,9 @@ async function configure(context) {
     '/',
     wrap(async (req, res) => {
       const requestContext = res.locals.requestContext;
-      const { limit = 1000, offsetId, since } = req.query;
 
       const [environmentScService] = await context.service(['environmentScService']);
-      const result = await environmentScService.list(requestContext, { limit, offsetId, since });
+      const result = await environmentScService.list(requestContext, req.query);
 
       res.status(200).json(result);
     }),

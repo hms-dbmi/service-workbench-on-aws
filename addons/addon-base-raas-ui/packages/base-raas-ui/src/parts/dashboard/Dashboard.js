@@ -20,12 +20,12 @@ import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Pie } from 'react-chartjs-2';
 import { Container, Header, Segment, Icon } from 'semantic-ui-react';
+
 import { displayError, displayWarning } from '@aws-ee/base-ui/dist/helpers/notification';
 import ProgressPlaceHolder from '@aws-ee/base-ui/dist/parts/helpers/BasicProgressPlaceholder';
 
-import { getEnvironments, getEnvironmentCost, getScEnvironments, getScEnvironmentCost } from '../../helpers/api';
-import { enableBuiltInWorkspaces } from '../../helpers/settings';
-
+import { getScEnvironments, getScEnvironmentCost } from '../../helpers/api';
+import { API_LIMIT } from '../../models/environments-sc/ScEnvironmentsStore';
 import { blueDatasets } from './graphs/graph-options';
 import BarGraph from './graphs/BarGraph';
 
@@ -46,8 +46,6 @@ class BaseDashboard extends React.Component {
   async componentDidMount() {
     window.scrollTo(0, 0);
     try {
-      const environmentFn = enableBuiltInWorkspaces ? getEnvironments : getScEnvironments;
-      const getEnvironmentCostFn = enableBuiltInWorkspaces ? getEnvironmentCost : getScEnvironmentCost;
       const {
         totalCost,
         indexNameToTotalCost,
@@ -55,7 +53,7 @@ class BaseDashboard extends React.Component {
         envIdToCostInfo,
         envIdToEnvMetadata,
         duplicateEnvNames,
-      } = await getCosts(environmentFn, getEnvironmentCostFn);
+      } = await getCosts(getScEnvironmentsFn, getScEnvironmentCost);
       this.setState({
         totalCost,
         indexNameToTotalCost,
@@ -221,6 +219,20 @@ class BaseDashboard extends React.Component {
       </>
     );
   }
+}
+
+async function getScEnvironmentsFn() {
+  const fields = 'id,name,indexId,updatedAt';
+
+  let offsetId;
+  let envs = [];
+  do {
+    const { result = [], offsetId: newOffsetId } = await getScEnvironments({ limit: API_LIMIT, offsetId, fields });
+
+    offsetId = newOffsetId;
+    envs = envs.concat(result);
+  } while (!!offsetId);
+  return envs;
 }
 
 async function getCosts(getEnvironmentsFn, getEnvironmentCostFn) {
