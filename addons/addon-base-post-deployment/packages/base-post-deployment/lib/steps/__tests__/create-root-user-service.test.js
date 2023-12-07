@@ -35,6 +35,7 @@ const CreateRootUserService = require('../create-root-user-service');
 describe('CreateRootUserService', () => {
   let service;
   let settings;
+  let logger;
   beforeAll(async () => {
     // Initialize services container and register dependencies
     const container = new ServicesContainer();

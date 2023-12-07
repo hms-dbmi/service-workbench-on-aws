@@ -248,18 +248,7 @@ function addUser(user) {
   if (user.identityProviderName) {
     params.identityProviderName = user.identityProviderName;
   }
-  const data = removeNulls(
-    _.omit(
-      _.clone(user),
-      [
-        'createdBy',
-        'createdAt',
-        'updatedBy',
-        'ns',
-        'userType',
-      ]
-    )
-  );
+  const data = removeNulls(_.omit(_.clone(user), ['createdBy', 'createdAt', 'updatedBy', 'ns', 'userType']));
   if (!data.userType) {
     // if userType is specified as empty string then make sure to delete it
     // the api requires this to be only one of the supported values (currently only supported value is 'root')

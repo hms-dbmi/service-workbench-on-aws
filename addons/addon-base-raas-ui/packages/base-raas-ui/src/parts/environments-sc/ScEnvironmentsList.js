@@ -126,24 +126,26 @@ class ScEnvironmentsList extends React.Component {
   handleSearchAndFilter({ search, searchType, status }) {
     runInAction(() => {
       this.page = 1; // Reset page number on search/filter change
-      this.search = search != undefined ? search : this.search;
+      this.search = search !== undefined ? search : this.search;
       this.searchType = searchType || this.searchType;
       this.statusFilter = status || this.statusFilter;
     });
   }
 
   handlePaginationChange() {
-    return (number) => runInAction(() => {
-      this.page = number;
-      window.scrollTo(0, 0);
-    });
+    return number =>
+      runInAction(() => {
+        this.page = number;
+        window.scrollTo(0, 0);
+      });
   }
 
   handlePerPageChange() {
-    return (number) => runInAction(() => {
-      this.page = 1;
-      this.viewStore.setPerPage(number);
-    });
+    return number =>
+      runInAction(() => {
+        this.page = 1;
+        this.viewStore.setPerPage(number);
+      });
   }
 
   render() {
@@ -218,7 +220,7 @@ class ScEnvironmentsList extends React.Component {
     const lastIndex = Math.min(this.page * this.viewStore.perPage, orderedEnvs.length);
     return {
       paginatedEnvList: orderedEnvs.slice(firstIndex, lastIndex),
-      filteredEnvsCount: filteredEnvs.length
+      filteredEnvsCount: filteredEnvs.length,
     };
   }
 
@@ -317,23 +319,21 @@ class ScEnvironmentsList extends React.Component {
           onPageChange={this.handlePaginationChange()}
           onPerPageChange={this.handlePerPageChange()}
         >
-          {!isEmpty && _.map(paginatedEnvList, (env, index) => (
-            <Segment clearing
-              key={env.id}
-              className={index === lastIndex ? "p3" : "p3 mb2"}
-            >
-              <ScEnvironmentCard scEnvironment={env} />
-            </Segment>
-          ))}
+          {!isEmpty &&
+            _.map(paginatedEnvList, (env, index) => (
+              <Segment clearing key={env.id} className={index === lastIndex ? 'p3' : 'p3 mb2'}>
+                <ScEnvironmentCard scEnvironment={env} />
+              </Segment>
+            ))}
           {isEmpty && (
-          <Segment placeholder>
-            <Header icon className="color-grey">
-              <Icon name="server" />
-              No research workspaces matching the selected filter or search.
-              <Header.Subheader>Select &apos;All&apos; to view all the workspaces</Header.Subheader>
-            </Header>
-          </Segment>
-        )}
+            <Segment placeholder>
+              <Header icon className="color-grey">
+                <Icon name="server" />
+                No research workspaces matching the selected filter or search.
+                <Header.Subheader>Select &apos;All&apos; to view all the workspaces</Header.Subheader>
+              </Header>
+            </Segment>
+          )}
         </Paginate>
       </div>
     );

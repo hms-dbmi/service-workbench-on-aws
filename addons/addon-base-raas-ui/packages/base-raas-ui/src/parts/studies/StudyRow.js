@@ -107,7 +107,12 @@ class StudyRow extends React.Component {
           <Header.Subheader>
             <span className="pt1 fs-8 color-grey">{study.id}</span>
             {study.projectId && <span className="fs-8 color-grey"> &middot; {study.projectId}</span>}
-            {study.createdAt && <span className="fs-8 color-grey"> &middot; Added <TimeAgo date={study.createdAt} /></span>}
+            {study.createdAt && (
+              <span className="fs-8 color-grey">
+                {' '}
+                &middot; Added <TimeAgo date={study.createdAt} />
+              </span>
+            )}
           </Header.Subheader>
         </Header>
       </div>
@@ -165,7 +170,7 @@ class StudyRow extends React.Component {
     const expanded = this.permissionsExpanded;
 
     if (!this.study.isEditable) {
-      return (<></>);
+      return <></>;
     }
 
     return (

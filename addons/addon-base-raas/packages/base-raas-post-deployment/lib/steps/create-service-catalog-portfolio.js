@@ -53,7 +53,7 @@ const productsToCreate = [
   {
     filename: 'ec2-rstudio-instance',
     displayName: 'EC2 RStudio Server',
-    description: `An RStudio instance accessible over SSL which comes with: \n* RStudio Server version 1.4.1717 \n* Connect securely via load balancer using Amazon issued certificates in ACM \n* Fully loaded with commonly used R packages`
+    description: `An RStudio instance accessible over SSL which comes with: \n* RStudio Server version 1.4.1717 \n* Connect securely via load balancer using Amazon issued certificates in ACM \n* Fully loaded with commonly used R packages`,
   },
 ];
 

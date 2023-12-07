@@ -28,7 +28,7 @@ describe('UsersStore', () => {
     firstName: 'exampleFn',
     lastName: 'exampleLn',
     username: 'example',
-    createdAt: "2023-12-07T16:11:30.989Z",
+    createdAt: '2023-12-07T16:11:30.989Z',
     ns: 'example',
     email: 'example@example.com',
     userType: 'Researcher',

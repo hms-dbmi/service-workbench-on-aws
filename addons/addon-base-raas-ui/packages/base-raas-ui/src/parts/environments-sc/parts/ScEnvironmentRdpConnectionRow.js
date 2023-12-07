@@ -184,12 +184,17 @@ class ScEnvironmentRdpConnectionRow extends React.Component {
       <>
         <Table.Row key={`${item.id}__2`}>
           <Table.Cell className="p3">
-            {studies.length > 0 && <Message warning>
-              <Message.Header>Study Syncing</Message.Header>
-              <p>Study sub-folders are located in the D drive of your Windows workspace and will begin syncing upon
-                system login. Please allow some time for this process to download all files. Please also allow for some
-                time before stopping your workspace to ensure any newly saved study data is synced to S3 properly.</p>
-            </Message>}
+            {studies.length > 0 && (
+              <Message warning>
+                <Message.Header>Study Syncing</Message.Header>
+                <p>
+                  Study sub-folders are located in the D drive of your Windows workspace and will begin syncing upon
+                  system login. Please allow some time for this process to download all files. Please also allow for
+                  some time before stopping your workspace to ensure any newly saved study data is synced to S3
+                  properly.
+                </p>
+              </Message>
+            )}
             <b>
               Your Windows workspace can be accessed via an RDP client by using the DNS host name and credentials
               defined below.

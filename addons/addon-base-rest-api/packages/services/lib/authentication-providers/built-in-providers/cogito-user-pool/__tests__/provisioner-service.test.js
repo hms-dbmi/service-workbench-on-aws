@@ -34,6 +34,7 @@ const ProvisionerService = require('../provisioner-service');
 describe('ProvisionerService', () => {
   let service;
   let settings;
+  let logger;
   beforeAll(async () => {
     // Initialize services container and register dependencies
     const container = new ServicesContainer();

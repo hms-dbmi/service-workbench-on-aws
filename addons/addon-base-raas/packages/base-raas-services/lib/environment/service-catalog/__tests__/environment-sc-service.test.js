@@ -60,10 +60,14 @@ const StudyService = require('../../../study/study-service');
 jest.mock('../../../alb/alb-service');
 const ALBService = require('../../../alb/alb-service');
 
-jest.mock('../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-service');
+jest.mock(
+  '../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-service',
+);
 const EnvTypeService = require('../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-service');
 
-jest.mock('../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-config-service');
+jest.mock(
+  '../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-config-service',
+);
 const EnvTypeConfigService = require('../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-config-service');
 
 const EnvironmentSCService = require('../environment-sc-service');
@@ -150,7 +154,7 @@ describe('EnvironmentSCService', () => {
   });
 
   describe('create function', () => {
-    const envInstanceType = "m2.large";
+    const envInstanceType = 'm2.large';
     it('should fail create since CIDR info is included when AppStream is enabled', async () => {
       // BUILD
       settings.getBoolean = jest.fn(key => {
@@ -211,11 +215,13 @@ describe('EnvironmentSCService', () => {
       envTypeConfigService.getConfigsFromS3 = jest.fn(() => [
         {
           id: newEnv.envTypeConfigId,
-          params: [{
-            key: "InstanceType",
-            value: envInstanceType
-          }]
-        }
+          params: [
+            {
+              key: 'InstanceType',
+              value: envInstanceType,
+            },
+          ],
+        },
       ]);
 
       // OPERATE
@@ -293,11 +299,13 @@ describe('EnvironmentSCService', () => {
       envTypeConfigService.getConfigsFromS3 = jest.fn(() => [
         {
           id: newEnv.envTypeConfigId,
-          params: [{
-            key: "InstanceType",
-            value: envInstanceType
-          }]
-        }
+          params: [
+            {
+              key: 'InstanceType',
+              value: envInstanceType,
+            },
+          ],
+        },
       ]);
       dbService.table.update.mockImplementationOnce(() => {
         throw error;
@@ -337,11 +345,13 @@ describe('EnvironmentSCService', () => {
       envTypeConfigService.getConfigsFromS3 = jest.fn(() => [
         {
           id: newEnv.envTypeConfigId,
-          params: [{
-            key: "InstanceType",
-            value: envInstanceType
-          }]
-        }
+          params: [
+            {
+              key: 'InstanceType',
+              value: envInstanceType,
+            },
+          ],
+        },
       ]);
 
       // OPERATE
@@ -377,11 +387,13 @@ describe('EnvironmentSCService', () => {
       envTypeConfigService.getConfigsFromS3 = jest.fn(() => [
         {
           id: newEnv.envTypeConfigId,
-          params: [{
-            key: "InstanceType",
-            value: envInstanceType
-          }]
-        }
+          params: [
+            {
+              key: 'InstanceType',
+              value: envInstanceType,
+            },
+          ],
+        },
       ]);
 
       // OPERATE
@@ -410,23 +422,23 @@ describe('EnvironmentSCService', () => {
       service.audit = jest.fn();
       wfService.triggerWorkflow = jest.fn();
       envTypeService.mustFind = jest.fn(() => ({ id: newEnv.envTypeId }));
-      envTypeConfigService.getConfigsFromS3 = jest.fn(() => ([
+      envTypeConfigService.getConfigsFromS3 = jest.fn(() => [
         {
           id: newEnv.envTypeConfigId,
-          params: [{
-            key: "InstanceType",
-            value: envInstanceType
-          }]
-        }
-      ]));
+          params: [
+            {
+              key: 'InstanceType',
+              value: envInstanceType,
+            },
+          ],
+        },
+      ]);
 
       // OPERATE
       await service.create(requestContext, newEnv);
 
       // CHECK
-      expect(dbService.table.item).toHaveBeenCalledWith(
-        expect.objectContaining({ instanceType: envInstanceType }),
-      );
+      expect(dbService.table.item).toHaveBeenCalledWith(expect.objectContaining({ instanceType: envInstanceType }));
     });
   });
 

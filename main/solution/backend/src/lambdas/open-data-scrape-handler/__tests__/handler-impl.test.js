@@ -24,7 +24,7 @@ const _ = require('lodash');
 const { fetchOpenData, saveOpenData } = require('../handler-impl');
 
 const consoleLogger = {
-  info: jest.fn()
+  info: jest.fn(),
 };
 
 describe('fetchAndSaveOpenData', () => {

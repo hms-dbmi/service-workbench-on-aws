@@ -12,6 +12,7 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
+/* eslint-disable no-await-in-loop */
 
 import React from 'react';
 import _ from 'lodash';
@@ -231,7 +232,7 @@ async function getScEnvironmentsFn() {
 
     offsetId = newOffsetId;
     envs = envs.concat(result);
-  } while (!!offsetId);
+  } while (offsetId);
   return envs;
 }
 

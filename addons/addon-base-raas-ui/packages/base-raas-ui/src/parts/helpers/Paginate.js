@@ -2,20 +2,20 @@ import _ from 'lodash';
 import React from 'react';
 import { Dropdown, Button } from 'semantic-ui-react';
 
-// There is a Pagination component from semantic-ui-react, but I don't like 
+// There is a Pagination component from semantic-ui-react, but I don't like
 // how it looked with the dropdown, so it was simple to make my own.
 const Paginate = ({
   entriesPerPage = 25,
   siblingRange = 4,
   totalEntries = 0,
   currentPage = 1,
-  onPageChange = () => { },
-  onPerPageChange = () => { },
-  children
+  onPageChange = () => {},
+  onPerPageChange = () => {},
+  children,
 }) => {
   const totalPages = Math.ceil(totalEntries / entriesPerPage);
   const perPageOptions = [5, 10, 25, 50].map(count => ({ value: count, text: `${count}  Items per page` }));
-  const compressSiblings = totalPages > (siblingRange * 2) + 1;
+  const compressSiblings = totalPages > siblingRange * 2 + 1;
 
   let pages = compressSiblings ? getSiblingPages() : _.range(1, totalPages + 1);
 
@@ -25,11 +25,13 @@ const Paginate = ({
         pages = getSiblingPages(number);
       }
       onPageChange(number);
-    }
+    };
   }
 
-  function handlePerPageChange(_, { value }) {
-    onPerPageChange(value);
+  function handlePerPageChange() {
+    return (event, { value }) => {
+      onPerPageChange(value);
+    };
   }
 
   function getSiblingPages(number = currentPage) {
@@ -68,28 +70,18 @@ const Paginate = ({
                 disabled={currentPage === 1}
                 onClick={handlePageChange(Math.max(1, currentPage - 1))}
               />
-              {leftCompressed() && (
-                <Button
-                  key="pagination-previous-hidden"
-                  icon="ellipsis horizontal"
-                  disabled={true}
-                />
-              )}
-              {pages.map((number) => (
+              {leftCompressed() && <Button key="pagination-previous-hidden" icon="ellipsis horizontal" disabled />}
+              {pages.map(number => (
                 <Button
                   key={`pagination-page-${number}`}
                   active={currentPage === number}
                   onClick={handlePageChange(number)}
                   title={`Page ${number}`}
-                >{number}</Button>
+                >
+                  {number}
+                </Button>
               ))}
-              {rightCompressed() && (
-                <Button
-                  key="pagination-next-hidden"
-                  icon="ellipsis horizontal"
-                  disabled={true}
-                />
-              )}
+              {rightCompressed() && <Button key="pagination-next-hidden" icon="ellipsis horizontal" disabled />}
               <Button
                 key="pagination-next"
                 title="Next page"
@@ -108,11 +100,7 @@ const Paginate = ({
             </>
           )}
           <Button>
-            <Dropdown inline
-              options={perPageOptions}
-              defaultValue={entriesPerPage}
-              onChange={handlePerPageChange}
-            />
+            <Dropdown inline options={perPageOptions} defaultValue={entriesPerPage} onChange={handlePerPageChange()} />
           </Button>
         </Button.Group>
       </div>

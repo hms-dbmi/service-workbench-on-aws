@@ -87,7 +87,7 @@ class StudyPermissionsTable extends React.Component {
     } else {
       this.confirmUpdate();
     }
-  }
+  };
 
   confirmUpdate = async () => {
     runInAction(() => {
@@ -151,7 +151,14 @@ class StudyPermissionsTable extends React.Component {
         <Modal size="small" open={this.modalOpen} onClose={this.closeModal()}>
           <Modal.Header>Potential workspace study impact</Modal.Header>
           <Modal.Content>
-            <Icon circular inverted name="info" size="large" color="red" style={{ float: 'left', marginRight: '10px' }} />
+            <Icon
+              circular
+              inverted
+              name="info"
+              size="large"
+              color="red"
+              style={{ float: 'left', marginRight: '10px' }}
+            />
             <p>
               Please ask the impacted user{this.userUpdates.length > 1 ? 's' : ''} below to terminate and recreate any
               workspaces that are associated with <b>{this.study.name}</b>, as they will no longer be able to access
@@ -162,9 +169,7 @@ class StudyPermissionsTable extends React.Component {
             </div>
           </Modal.Content>
           <Modal.Actions>
-            <Button onClick={this.closeModal()}>
-              Cancel Change
-            </Button>
+            <Button onClick={this.closeModal()}>Cancel Change</Button>
             <Button negative onClick={this.confirmUpdate}>
               Confirm and Submit Change
             </Button>
