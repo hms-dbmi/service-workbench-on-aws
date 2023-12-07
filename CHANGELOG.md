@@ -2,12 +2,29 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
-## [5.0.0_1.2.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.2.0...v5.0.0_1.2.1) (11/15/2023)
-
+## [5.0.0_1.2.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.2.0...v5.0.0_1.2.1) (12/05/2023)
+### Workspaces
 - Update windows sync to auto-start on user login.
+- Split bootstrap script by env type to speed up initialization and s3 downloads.
+
+## Workspace List
 - Add message for windows users when a study is attached to note that study files will take time to sync on start and before stop.
-- Add a modal notice on study permission edit when a user would be impacted by permission change/removal.
 - Fix bug where workspace configuration deprecation notice errantly shows on workspace view page on reload.
+- Add filtering/searching by id in normal and advanced workspace views.
+- Add api and ui pagination for workspaces to fix workspace page issue when large number of workspaces are in the database.
+  - Update workspaces to paginate api return until all workspaces details are returned.
+  - Paginate the workspace page to reduce page load times.
+- Fix loading bug on advanced workspace view when status changes to pending because of user start/stop.
+
+## User Management
+- Update user management page to fix sorting and filtering.
+- Update regex for user emails to be more in line with email conventions.
+- Remove permissins accordian from view if a user can't edit a studies permission.
+
+## Study management
+- Add a modal notice on study permission edit when a user would be impacted by permission change/removal.
+- Update studies api method to use query and filter instead of BatchGet so more than 100 studies can be returned.
+- Add created date to study card.
 
 ## [5.0.0_1.2.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.1.2...v5.0.0_1.2.0) (09/28/2023)
 
