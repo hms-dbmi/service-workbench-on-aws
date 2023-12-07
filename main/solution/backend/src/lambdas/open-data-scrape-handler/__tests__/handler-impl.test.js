@@ -24,10 +24,7 @@ const _ = require('lodash');
 const { fetchOpenData, saveOpenData } = require('../handler-impl');
 
 const consoleLogger = {
-  info(...args) {
-    // eslint-disable-next-line no-console
-    console.log(...args);
-  },
+  info: jest.fn()
 };
 
 describe('fetchAndSaveOpenData', () => {

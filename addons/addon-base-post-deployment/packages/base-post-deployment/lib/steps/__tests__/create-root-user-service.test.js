@@ -51,6 +51,10 @@ describe('CreateRootUserService', () => {
     // Get instance of the service we are testing
     service = await container.find('createRootUserService');
 
+    // Suppress console output for tests
+    logger = await container.find('log');
+    logger.logger = { info: jest.fn() };
+
     // Mock return for settings get
     settings = await container.find('settings');
   });

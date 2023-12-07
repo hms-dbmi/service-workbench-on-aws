@@ -72,6 +72,9 @@ const envTypesStore = {
 describe('ScEnvironmentCard', () => {
   let component = null;
   let wrapper = null;
+  beforeAll(() => {
+    jest.spyOn(console, 'error').mockImplementation(jest.fn());
+  });
   beforeEach(() => {
     // render component
     wrapper = shallow(

@@ -60,6 +60,12 @@ const StudyService = require('../../../study/study-service');
 jest.mock('../../../alb/alb-service');
 const ALBService = require('../../../alb/alb-service');
 
+jest.mock('../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-service');
+const EnvTypeService = require('../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-service');
+
+jest.mock('../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-config-service');
+const EnvTypeConfigService = require('../../../../../../../addon-environment-sc-api/packages/environment-type-mgmt-services/lib/environment-type/env-type-config-service');
+
 const EnvironmentSCService = require('../environment-sc-service');
 
 const workflowIds = {
@@ -78,6 +84,8 @@ describe('EnvironmentSCService', () => {
   let aws = null;
   let storageGatewayService = null;
   let settings = null;
+  let envTypeService = null;
+  let envTypeConfigService = null;
   const error = { code: 'ConditionalCheckFailedException' };
   beforeEach(async () => {
     const container = new ServicesContainer();
@@ -98,6 +106,8 @@ describe('EnvironmentSCService', () => {
     container.register('storageGatewayService', new StorageGatewayService());
     container.register('iamService', new IamService());
     container.register('studyService', new StudyService());
+    container.register('envTypeService', new EnvTypeService());
+    container.register('envTypeConfigService', new EnvTypeConfigService());
     await container.initServices();
 
     // suppress expected console errors
@@ -114,6 +124,8 @@ describe('EnvironmentSCService', () => {
     aws = await container.find('aws');
     storageGatewayService = await container.find('storageGatewayService');
     settings = await container.find('settings');
+    envTypeService = await container.find('envTypeService');
+    envTypeConfigService = await container.find('envTypeConfigService');
 
     // Skip authorization by default
     service.assertAuthorized = jest.fn();
@@ -128,7 +140,7 @@ describe('EnvironmentSCService', () => {
     awsAccountsService.mustFind = jest.fn(() => {
       return { roleArn: 'cfnExecutionRole', externalId: 'roleExternalId' };
     });
-    service._fromRawToDbObject = jest.fn(x => x);
+    // service._fromRawToDbObject = jest.fn(x => x);
     settings.getBoolean = jest.fn(key => {
       if (key === 'isAppStreamEnabled') {
         return false;
@@ -138,6 +150,7 @@ describe('EnvironmentSCService', () => {
   });
 
   describe('create function', () => {
+    const envInstanceType = "m2.large";
     it('should fail create since CIDR info is included when AppStream is enabled', async () => {
       // BUILD
       settings.getBoolean = jest.fn(key => {
@@ -194,6 +207,16 @@ describe('EnvironmentSCService', () => {
       };
       service.audit = jest.fn();
       wfService.triggerWorkflow = jest.fn();
+      envTypeService.mustFind = jest.fn(() => ({ id: newEnv.envTypeId }));
+      envTypeConfigService.getConfigsFromS3 = jest.fn(() => [
+        {
+          id: newEnv.envTypeConfigId,
+          params: [{
+            key: "InstanceType",
+            value: envInstanceType
+          }]
+        }
+      ]);
 
       // OPERATE
       await service.create(requestContext, newEnv);
@@ -266,6 +289,16 @@ describe('EnvironmentSCService', () => {
         envTypeId: 'exampleETI',
         envTypeConfigId: 'exampleETCI',
       };
+      envTypeService.mustFind = jest.fn(() => ({ id: newEnv.envTypeId }));
+      envTypeConfigService.getConfigsFromS3 = jest.fn(() => [
+        {
+          id: newEnv.envTypeConfigId,
+          params: [{
+            key: "InstanceType",
+            value: envInstanceType
+          }]
+        }
+      ]);
       dbService.table.update.mockImplementationOnce(() => {
         throw error;
       });
@@ -300,6 +333,16 @@ describe('EnvironmentSCService', () => {
       });
       // don't want to test update in the create() tests
       service.update = jest.fn();
+      envTypeService.mustFind = jest.fn(() => ({ id: newEnv.envTypeId }));
+      envTypeConfigService.getConfigsFromS3 = jest.fn(() => [
+        {
+          id: newEnv.envTypeConfigId,
+          params: [{
+            key: "InstanceType",
+            value: envInstanceType
+          }]
+        }
+      ]);
 
       // OPERATE
       try {
@@ -330,6 +373,16 @@ describe('EnvironmentSCService', () => {
       };
       service.audit = jest.fn();
       wfService.triggerWorkflow = jest.fn();
+      envTypeService.mustFind = jest.fn(() => ({ id: newEnv.envTypeId }));
+      envTypeConfigService.getConfigsFromS3 = jest.fn(() => [
+        {
+          id: newEnv.envTypeConfigId,
+          params: [{
+            key: "InstanceType",
+            value: envInstanceType
+          }]
+        }
+      ]);
 
       // OPERATE
       await service.create(requestContext, newEnv);
@@ -340,6 +393,40 @@ describe('EnvironmentSCService', () => {
         expect.objectContaining({ action: 'create-environment-sc' }),
       );
       expect(wfService.triggerWorkflow).toHaveBeenCalled();
+    });
+
+    it('should add instance type to db request', async () => {
+      // BUILD
+      const requestContext = {
+        principal: {
+          isExternalUser: false,
+        },
+      };
+      const newEnv = {
+        name: 'exampleName',
+        envTypeId: 'exampleETI',
+        envTypeConfigId: 'exampleETCI',
+      };
+      service.audit = jest.fn();
+      wfService.triggerWorkflow = jest.fn();
+      envTypeService.mustFind = jest.fn(() => ({ id: newEnv.envTypeId }));
+      envTypeConfigService.getConfigsFromS3 = jest.fn(() => ([
+        {
+          id: newEnv.envTypeConfigId,
+          params: [{
+            key: "InstanceType",
+            value: envInstanceType
+          }]
+        }
+      ]));
+
+      // OPERATE
+      await service.create(requestContext, newEnv);
+
+      // CHECK
+      expect(dbService.table.item).toHaveBeenCalledWith(
+        expect.objectContaining({ instanceType: envInstanceType }),
+      );
     });
   });
 
