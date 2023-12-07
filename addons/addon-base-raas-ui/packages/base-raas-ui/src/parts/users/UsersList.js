@@ -160,9 +160,14 @@ class UsersList extends React.Component {
           }}
           columns={[
             {
+              Header: 'Name',
+              accessor: 'displayName',
+              width: 150,
+            },
+            {
               Header: 'Email',
               accessor: 'email',
-              width: 275,
+              width: 215,
             },
             {
               Header: 'Identity Provider',
@@ -175,7 +180,7 @@ class UsersList extends React.Component {
             {
               Header: 'Type',
               accessor: 'isExternalUser',
-              width: 100,
+              width: 80,
               Cell: row => {
                 const user = row.original;
                 return user.isExternalUser ? 'External' : 'Internal';
