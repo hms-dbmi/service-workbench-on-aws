@@ -29,9 +29,9 @@ import BasicProgressPlaceholder from '@aws-ee/base-ui/dist/parts/helpers/BasicPr
 import UpdateUser from './UpdateUser';
 
 const statusSortOrder = {
-  "pending": 1,
-  "active": 2,
-  "inactive": 3
+  pending: 1,
+  active: 2,
+  inactive: 3,
 };
 
 class UsersList extends React.Component {
@@ -143,12 +143,15 @@ class UsersList extends React.Component {
         <Dimmer active={processing} inverted>
           <Loader inverted>Updating</Loader>
         </Dimmer>
-        <div style={{ fontStyle: "italic", color: "grey", textAlign: "right" }}>
+        <div style={{ fontStyle: 'italic', color: 'grey', textAlign: 'right' }}>
           To sort by multiple columns, press shift then click.
         </div>
         <ReactTable
           data={usersList}
-          defaultSorted={[{ id: 'status', asc: true }, { id: 'email', asc: true }]}
+          defaultSorted={[
+            { id: 'status', asc: true },
+            { id: 'email', asc: true },
+          ]}
           showPagination={showPagination}
           defaultPageSize={pageSize}
           className="-striped -highlight"
@@ -187,7 +190,7 @@ class UsersList extends React.Component {
               },
               filterMethod: (filter, row) => {
                 const type = row._original.isExternalUser ? 'external' : 'internal';
-                return type.indexOf(filter.value.toLowerCase()) === 0
+                return type.indexOf(filter.value.toLowerCase()) === 0;
               },
             },
             {
@@ -266,8 +269,8 @@ class UsersList extends React.Component {
               filterable: false,
               Cell: row => {
                 const created = row.original.createdAt;
-                return (<TimeAgo date={created} />);
-              }
+                return <TimeAgo date={created} />;
+              },
             },
             {
               Header: '',

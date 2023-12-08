@@ -158,6 +158,8 @@ describe('UserService', () => {
       'email@subdomain.domain.com',
       'firstname+lastname@domain.com',
       '1234567890@domain.com',
+      'canHaveCapital@aleXandre.cOm',
+      '1234567890@l.domain.com', // subdomain with at least one char is valid
       'email@domain-one.com', // Dash in domain name is valid
       '_______@domain.com', // Underscore in the address field is valid
       'email@domain.name',
@@ -193,11 +195,13 @@ describe('UserService', () => {
       'plainaddress',
       '#@%^%#$@#$@#.com', // Garbage
       '@domain.com', // Missing username
+      'user@', // Missing domain
       'Joe Smith <email@domain.com>', // Encoded html within email
       'email.domain.com', // Missing @
       'email@domain@domain.com', // Two @ sign
       '.email@domain.com', // Leading dot in address
-      'email.@domain.com', // Trailing dot in address
+      'email@.domain.com', // No period can start domain
+      'email@domain.com.', // No period can end domain
       'あいうえお@domain.com', // Unicode char as address
       'email@domain.com (Joe Smith)', // Text followed email is not allowed
       'email@domain', // Missing top level domain (.com/.net/.org/etc)

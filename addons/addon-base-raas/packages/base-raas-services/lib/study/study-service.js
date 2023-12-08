@@ -516,7 +516,7 @@ class StudyService extends Service {
       .query();
 
     let result = [];
-    if (category == 'Open Data') {
+    if (category === 'Open Data') {
       // filter by aws region. Because the scraper might not run until after
       // this code is deployed we want this filter to be permissive when it isn't
       // clear if the study is in the correct region
@@ -529,7 +529,8 @@ class StudyService extends Service {
       const studyAccessMap = this._getStudyAccessMap(userPermissions);
 
       // inject requestor's access level
-      result = studies.filter(study => userStudyIds.includes(study.id))
+      result = studies
+        .filter(study => userStudyIds.includes(study.id))
         .map(study => ({
           ...study,
           access: studyAccessMap[study.id],

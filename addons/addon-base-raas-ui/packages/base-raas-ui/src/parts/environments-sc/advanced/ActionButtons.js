@@ -22,7 +22,6 @@ import { Button, Modal } from 'semantic-ui-react';
 // - enabled, as { [action]: boolean }
 // - onAction(action, id)
 export default function ActionButtons({ id, pending = false, terminationLocked, can, onAction }) {
-
   function handleAction(action, value) {
     return () => onAction(action, value);
   }
@@ -34,7 +33,7 @@ export default function ActionButtons({ id, pending = false, terminationLocked, 
       {can.stop && <Button icon="stop circle" color="orange" loading={pending} onClick={handleAction('stop', id)} />}
       {can.terminate &&
         (terminationLocked ? (
-        <Button disabled icon="trash" color="red" loading={pending} />
+          <Button disabled icon="trash" color="red" loading={pending} />
         ) : (
           <Modal
             trigger={<Button icon="trash" color="red" loading={pending} />}

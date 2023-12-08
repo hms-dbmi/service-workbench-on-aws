@@ -81,19 +81,16 @@ function updateUserApplication(user) {
   // Remove nulls and omit extra fields from the payload before calling the API
   // The user is identified by the uid in the url
   const data = removeNulls(
-    _.omit(
-      _.clone(user),
-      [
-        'uid',
-        'authenticationProviderId',
-        'identityProviderName',
-        'username',
-        'ns',
-        'createdAt',
-        'createdBy',
-        'updatedBy',
-      ]
-    ),
+    _.omit(_.clone(user), [
+      'uid',
+      'authenticationProviderId',
+      'identityProviderName',
+      'username',
+      'ns',
+      'createdAt',
+      'createdBy',
+      'updatedBy',
+    ]),
   );
   if (!data.userType) {
     // if userType is specified as empty string then make sure to delete it
@@ -258,8 +255,8 @@ function getScEnvironmentCost(scEnv, numberOfDaysInPast, groupByService = true, 
   return httpApiGet('api/costs', { params: { scEnv, numberOfDaysInPast, groupByService, groupByUser } });
 }
 
-async function getScEnvironments(params) {
-  return await httpApiGet('api/workspaces/service-catalog', { params });
+function getScEnvironments(params) {
+  return httpApiGet('api/workspaces/service-catalog', { params });
 }
 
 function getScEnvironment(id) {

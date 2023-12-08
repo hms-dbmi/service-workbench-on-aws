@@ -41,17 +41,19 @@ class ScEnvAdvancedList extends React.Component {
   }
 
   handlePaginationChange() {
-    return (number) => runInAction(() => {
-      this.page = number;
-      window.scrollTo(0, 0);
-    });
+    return number =>
+      runInAction(() => {
+        this.page = number;
+        window.scrollTo(0, 0);
+      });
   }
 
   handlePerPageChange() {
-    return (number) => runInAction(() => {
-      this.page = 1;
-      this.viewStore.setPerPage(number);
-    });
+    return number =>
+      runInAction(() => {
+        this.page = 1;
+        this.viewStore.setPerPage(number);
+      });
   }
 
   componentDidMount() {
@@ -183,7 +185,7 @@ class ScEnvAdvancedList extends React.Component {
     const lastIndex = Math.min(this.page * this.viewStore.perPage, filteredEnvs.length);
     return {
       paginatedEnvList: filteredEnvs.slice(firstIndex, lastIndex),
-      filteredEnvsCount: filteredEnvs.length
+      filteredEnvsCount: filteredEnvs.length,
     };
   }
 
@@ -199,10 +201,11 @@ class ScEnvAdvancedList extends React.Component {
   }
 
   handleFilter() {
-    return ({ filters, mode }) => runInAction(() => {
-      this.page = 1;
-      this.viewStore.setFilters(filters, mode)
-    });
+    return ({ filters, mode }) =>
+      runInAction(() => {
+        this.page = 1;
+        this.viewStore.setFilters(filters, mode);
+      });
   }
 
   handleSort() {
@@ -244,7 +247,8 @@ class ScEnvAdvancedList extends React.Component {
       );
     } else if (isStoreNotEmpty(store)) {
       const fields = this.getEnvFields(store.list);
-      const tableColumns = fields.filter(({ hidden = false }) => !hidden)
+      const tableColumns = fields
+        .filter(({ hidden = false }) => !hidden)
         .map(column => _.pick(column, ['key', 'label', 'sortable', 'type']));
       const { paginatedEnvList, filteredEnvsCount } = this.getPaginatedEnvs();
       current = filteredEnvsCount;

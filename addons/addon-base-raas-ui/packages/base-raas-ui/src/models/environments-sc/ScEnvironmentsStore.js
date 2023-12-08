@@ -12,6 +12,7 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
+/* eslint-disable no-await-in-loop */
 import _ from 'lodash';
 import { values } from 'mobx';
 import { getEnv, types } from 'mobx-state-tree';
@@ -65,22 +66,30 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
     return {
       async doLoad() {
         let offsetId;
-        const params = { // Lock initial request parameters for this loop - only the offsetId can change.
+        const params = {
+          // Lock initial request parameters for this loop - only the offsetId can change.
           limit: API_LIMIT,
-          since: self.since
+          since: self.since,
         };
         do {
           const { result = [], offsetId: newOffsetId } = await getScEnvironments({ ...params, offsetId });
 
           offsetId = newOffsetId;
           self.runInAction(() => {
-            updateMap(self.environments, result, (existing, newItem) => { existing.setScEnvironment(newItem); });
+            updateMap(self.environments, result, (existing, newItem) => {
+              existing.setScEnvironment(newItem);
+            });
 
             // Remember last updated record's day, to get newer ones on next load loop instead of refreshing everything
-            const lastUpdated = _.last(result.map(env => env.updatedAt).filter(x => x).sort());
-            self.since = (!self.since || (self.since && lastUpdated > self.since)) ? lastUpdated : self.since;
+            const lastUpdated = _.last(
+              result
+                .map(env => env.updatedAt)
+                .filter(x => x)
+                .sort(),
+            );
+            self.since = !self.since || (self.since && lastUpdated > self.since) ? lastUpdated : self.since;
           });
-        } while (!!offsetId);
+        } while (offsetId);
       },
 
       addScEnvironment(rawEnvironment) {

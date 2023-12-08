@@ -19,7 +19,7 @@ const { v4: uuid } = require('uuid');
 const Service = require('@aws-ee/base-services-container/lib/service');
 const { runAndCatch } = require('@aws-ee/base-services/lib/helpers/utils');
 const { getSystemRequestContext } = require('@aws-ee/base-services/lib/helpers/system-context');
-const { isAdmin, isCurrentUser } = require('@aws-ee/base-services/lib/authorization/authorization-utils');
+const { isAdmin } = require('@aws-ee/base-services/lib/authorization/authorization-utils');
 
 const createSchema = require('../../schema/create-environment-sc.json');
 const updateSchema = require('../../schema/update-environment-sc.json');
@@ -45,11 +45,26 @@ const workflowIds = {
 const isoTimestamp = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/;
 
 const allowedFields = [
-  "id", "name", "desdcription", "status", "cidr", "createdBy",
-  "rev", "outputs", "inWorkflow", "createdAt", "updatedBy",
-  "studyIds", "updatedAt", "provisionedProductId",
-  "indexId", "studyRoles", "envTypeConfigId", "envTypeId",
-  "hasConnections", "isAppStreamConfigured"
+  'id',
+  'name',
+  'desdcription',
+  'status',
+  'cidr',
+  'createdBy',
+  'rev',
+  'outputs',
+  'inWorkflow',
+  'createdAt',
+  'updatedBy',
+  'studyIds',
+  'updatedAt',
+  'provisionedProductId',
+  'indexId',
+  'studyRoles',
+  'envTypeConfigId',
+  'envTypeId',
+  'hasConnections',
+  'isAppStreamConfigured',
 ];
 
 /**
@@ -102,8 +117,7 @@ class EnvironmentScService extends Service {
     await this.assertAuthorized(requestContext, { action: 'list-sc', conditions: [this._allowAuthorized] });
 
     let envs;
-    let scanner = this._scanner()
-      .limit(_.isNumber(Number(limit)) ? Number(limit) : 1000);
+    let scanner = this._scanner().limit(_.isNumber(Number(limit)) ? Number(limit) : 1000);
 
     if (offsetId && /^[A-Za-z0-9-_ ]+$/.test(offsetId)) {
       scanner = scanner.start({ id: offsetId });
@@ -529,7 +543,7 @@ class EnvironmentScService extends Service {
       const envType = await envTypeService.mustFind(requestContext, { id: envTypeId });
       const listOfConfigs = await envTypeConfigService.getConfigsFromS3(envType.id);
       const envConfigs = _.find(listOfConfigs, { id: envTypeConfigId });
-      instanceType = _.find(envConfigs.params, param => param.key === "InstanceType")?.value;
+      instanceType = _.find(envConfigs.params, param => param.key === 'InstanceType')?.value;
     } catch (e) {
       const error = this.boom.internalError(`Error retrieving instance type for ${envTypeId}`).cause(e);
       this.log.error(error);

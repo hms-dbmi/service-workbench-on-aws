@@ -57,6 +57,7 @@ describe('StartSageMakerEnvironmentStep', () => {
       setKey: jest.fn(),
       ...step.payload,
     };
+    jest.spyOn(console, 'error').mockImplementation(jest.fn());
   });
 
   beforeEach(async () => {

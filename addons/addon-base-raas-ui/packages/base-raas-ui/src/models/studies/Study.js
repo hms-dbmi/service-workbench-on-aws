@@ -110,9 +110,7 @@ const Study = types
     },
 
     get isEditable() {
-      return self.isOrganizationStudy &&
-        self.state.canChangePermission &&
-        values(self.access).includes('admin')
+      return self.isOrganizationStudy && self.state.canChangePermission && values(self.access).includes('admin');
     },
 
     get state() {
