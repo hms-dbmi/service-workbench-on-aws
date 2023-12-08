@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
-## [5.0.0_1.2.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.2.0...v5.0.0_1.2.1) (12/05/2023)
+## [5.0.0_1.3.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.2.0...v5.0.0_1.3.0) (12/08/2023)
 ### Workspaces
 - Update windows sync to auto-start on user login.
 - Split bootstrap script by env type to speed up initialization and s3 downloads.
