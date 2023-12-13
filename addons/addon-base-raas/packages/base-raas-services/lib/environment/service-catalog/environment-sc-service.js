@@ -123,22 +123,23 @@ class EnvironmentScService extends Service {
       scanner = scanner.start({ id: offsetId });
     }
 
+    const scannerFilters = [];
     if (!isAdmin(requestContext)) {
       const currentUser = _.get(requestContext, 'principalIdentifier.uid');
       if (!currentUser) {
         throw this.boom.badRequest(`Principal Identifier not found`, true);
       }
-      scanner = await scanner
-        .names({ '#c': 'createdBy' })
-        .values({ ':c': currentUser })
-        .filter('#c = :c');
+      scanner = await scanner.names({ '#c': 'createdBy' }).values({ ':c': currentUser });
+      scannerFilters.push('#c = :c');
     }
 
     if (since && isoTimestamp.test(since)) {
-      scanner = scanner
-        .names({ '#u': 'updatedAt' })
-        .values({ ':u': since })
-        .filter('#u >= :u');
+      scanner = scanner.names({ '#u': 'updatedAt' }).values({ ':u': since });
+      scannerFilters.push('#u >= :u');
+    }
+
+    if (scannerFilters.length > 0) {
+      scanner = scanner.filter(scannerFilters.join(' and '));
     }
 
     // Only accept fields from a list of allowed db fields
