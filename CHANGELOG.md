@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
+## [5.0.0_1.3.2](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.3.1...v5.0.0_1.3.2) (12/21/2023)
+- Update register page email regex validation: validatorjs schema regex fields need slashes before and after the regex, or else it returns a validation error.
+
 ## [5.0.0_1.3.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.3.0...v5.0.0_1.3.1) (12/13/2023)
 - Bugfix: Update to add 'and' to scanner filter when more than one filter condition exists.
 
