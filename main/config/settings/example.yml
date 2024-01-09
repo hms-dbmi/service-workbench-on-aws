@@ -160,5 +160,8 @@ HostedZoneId: 'Z02455261RJ9QQPVHFZGA'
 # Require the TOS to be accepted before registration can occur.
 #tosRequired: true
 
+# Should the TOS link be enabled on the landing page.
+#tosLinkOnLanding: true
+
 # URL for help link
 #helpUrl: about:blank
