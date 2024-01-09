@@ -30,6 +30,7 @@ const branding = {
     title: process.env.REACT_APP_USER_REGISTRATION_TITLE,
     summary: process.env.REACT_APP_USER_REGISTRATION_SUMMARY,
     success: process.env.REACT_APP_USER_REGISTRATION_SUCCESS,
+    tosRequired: process.env.REACT_APP_USER_REGISTRATION_TOS_REQUIRED === 'true',
   },
   main: {
     title: process.env.REACT_APP_BRAND_MAIN_TITLE,
