@@ -83,6 +83,32 @@ class Register extends React.Component {
     };
   }
 
+  renderTOS() {
+    return (
+      <>
+        {this.terms.value !== termsState.unset.value && <Icon name={this.terms.icon} color={this.terms.color} />}
+        {this.terms.label} &nbsp;
+        <TermsModal
+          trigger={
+            <button
+              id="terms-modal"
+              className="link"
+              type="button"
+              ref={ref => {
+                this.termsModalButton = ref;
+              }}
+            >
+              Terms of Service
+            </button>
+          }
+          closeOnDimmerClick
+          acceptAction={this.setTerms(termsState.accepted)}
+          declineAction={this.setTerms(termsState.declined)}
+        />
+      </>
+    );
+  }
+
   renderRegisterationForm() {
     return (
       <Form size="large" loading={this.loading} onSubmit={this.handleSubmit}>
@@ -101,28 +127,8 @@ class Register extends React.Component {
 
             {this.renderField('email')}
           </div>
+          {branding.register.tosRequired && <div className="center mt2">{this.renderTOS()}</div>}
           <div className="center mt3">
-            {this.terms.value !== termsState.unset.value && <Icon name={this.terms.icon} color={this.terms.color} />}
-            {this.terms.label} &nbsp;
-            <TermsModal
-              trigger={
-                <button
-                  id="terms-modal"
-                  className="link"
-                  type="button"
-                  ref={ref => {
-                    this.termsModalButton = ref;
-                  }}
-                >
-                  Terms of Service
-                </button>
-              }
-              closeOnDimmerClick
-              acceptAction={this.setTerms(termsState.accepted)}
-              declineAction={this.setTerms(termsState.declined)}
-            />
-          </div>
-          <div className="mt3 center">
             <div>
               <Form.Field>
                 {this.errors.form && (
@@ -130,11 +136,7 @@ class Register extends React.Component {
                     <Label prompt>{this.errors.form}</Label>
                   </div>
                 )}
-                <Form.Button
-                  id="register-submit"
-                  disabled={this.terms.value !== termsState.accepted.value}
-                  color="green"
-                >
+                <Form.Button id="register-submit" disabled={this.submitDisabled()} color="green">
                   Create a new Service Workbench account
                 </Form.Button>
               </Form.Field>
@@ -143,6 +145,10 @@ class Register extends React.Component {
         </Segment>
       </Form>
     );
+  }
+
+  submitDisabled() {
+    return branding.register.tosRequired ? this.terms.value !== termsState.accepted.value : false;
   }
 
   renderConfirmation() {
@@ -207,20 +213,24 @@ class Register extends React.Component {
         return;
       }
 
-      // Validate that the terms have been accepted
-      if (this.terms.value !== termsState.accepted.value) {
+      // Validate that the terms have been accepted, if required
+      let acceptedTerms;
+      if (branding.register.tosRequired && this.terms.value !== termsState.accepted.value) {
         runInAction(() => {
           this.errors.form = termsErrorText;
           this.formProcessing = false;
         });
         return;
       }
+      if (branding.register.tosRequired) {
+        acceptedTerms = new Date().toISOString();
+      }
 
       const result = await registerUser({
         firstName: this.user.firstName,
         lastName: this.user.lastName,
         email: this.user.email,
-        acceptedTerms: new Date().toISOString(),
+        acceptedTerms,
       });
       // if we encounter an error then don't continue to process the form and instead display a message
       if (result.error) {

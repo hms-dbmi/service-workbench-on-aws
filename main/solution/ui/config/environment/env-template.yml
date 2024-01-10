@@ -26,6 +26,8 @@ REACT_APP_USER_REGISTRATION_SUMMARY: ${self:custom.settings.userRegistrationSumm
 REACT_APP_USER_REGISTRATION_SUCCESS: ${self:custom.settings.userRegistrationSuccess}
 REACT_APP_LOGIN_WARNING: ${self:custom.settings.loginWarning}
 REACT_APP_HELP_URL: ${self:custom.settings.helpUrl}
+REACT_APP_USER_REGISTRATION_TOS_REQUIRED: ${self:custom.settings.tosRequired}
+REACT_APP_TOS_LINK_ON_LANDING: ${self:custom.settings.tosLinkOnLanding}
 
 # ========================================================================
 # Overrides for .env.local
