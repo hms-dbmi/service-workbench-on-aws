@@ -42,7 +42,8 @@ if (typeof fetch !== 'function' && fetch.default && typeof fetch.default === 'fu
   fetch = fetch.default;
 }
 
-const newHandler = async ({ studyService, log = consoleLogger } = {}) => {
+const newHandler = async ({ studyService, log = consoleLogger, settings } = {}) => {
+  const whitelist = settings.get('openDataScrapeWhitelist') || '';
   const scrape = {
     githubApiUrl: 'https://api.github.com',
     rawGithubUrl: 'https://raw.githubusercontent.com',
@@ -50,6 +51,7 @@ const newHandler = async ({ studyService, log = consoleLogger } = {}) => {
     repository: 'open-data-registry',
     ref: 'main',
     subtree: 'datasets',
+    studyWhitelist: whitelist.split(',').filter(x => x),
     filterTags: [
       'genetic',
       'genomic',
@@ -193,16 +195,18 @@ const newHandler = async ({ studyService, log = consoleLogger } = {}) => {
   return async () => fetchAndSaveOpenData(fetchDatasetFiles, scrape, log, fetchFile, basicProjection, studyService);
 };
 
-const fetchOpenData = async ({ fileUrls, requiredTags, log, fetchFile }) => {
+const fetchOpenData = async ({ fileUrls, requiredTags, studyWhitelist, log, fetchFile }) => {
   log.info(`Fetching ${fileUrls.length} metadata files`);
   const metadata = await Promise.all(fileUrls.map(fetchFile));
 
-  log.info(`Filtering for ${requiredTags} tags and resources with valid ARNs`);
+  log.info(`Filtering for ${requiredTags} tags, ${studyWhitelist} whitelist studies, and resources with valid ARNs`);
   const validS3Arn = new RegExp(/^arn:aws:s3:.*:.*:.+$/);
-  const filtered = metadata.filter(({ tags, resources }) => {
+  const filtered = metadata.filter(({ id, tags, resources }) => {
     return (
-      requiredTags.some(filterTag => tags.includes(filterTag)) &&
-      resources.every(resource => {
+      (
+        studyWhitelist.includes(id) ||
+        requiredTags.some(filterTag => tags.includes(filterTag))
+      ) && resources.every(resource => {
         return resource.type === 'S3 Bucket' && validS3Arn.test(resource.arn);
       })
     );
@@ -237,7 +241,13 @@ async function saveOpenData(log, simplified, studyService) {
 
 const fetchAndSaveOpenData = async (fetchDatasetFiles, scrape, log, fetchFile, basicProjection, studyService) => {
   const fileUrls = await fetchDatasetFiles();
-  const openData = await fetchOpenData({ fileUrls, requiredTags: scrape.filterTags, log, fetchFile });
+  const openData = await fetchOpenData({
+    fileUrls,
+    requiredTags: scrape.filterTags,
+    studyWhitelist: scrape.studyWhitelist,
+    log,
+    fetchFile
+  });
 
   const simplifiedStudyData = openData.map(basicProjection);
 
