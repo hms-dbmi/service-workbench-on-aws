@@ -165,3 +165,6 @@ HostedZoneId: 'Z02455261RJ9QQPVHFZGA'
 
 # URL for help link
 #helpUrl: about:blank
+
+# Jira support key
+#supportKey: ''
