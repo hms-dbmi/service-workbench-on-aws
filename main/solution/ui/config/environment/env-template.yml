@@ -28,7 +28,6 @@ REACT_APP_LOGIN_WARNING: ${self:custom.settings.loginWarning}
 REACT_APP_HELP_URL: ${self:custom.settings.helpUrl}
 REACT_APP_USER_REGISTRATION_TOS_REQUIRED: ${self:custom.settings.tosRequired}
 REACT_APP_TOS_LINK_ON_LANDING: ${self:custom.settings.tosLinkOnLanding}
-REACT_APP_SUPPORT_KEY: ${self:custom.settings.supportKey}
 
 # ========================================================================
 # Overrides for .env.local

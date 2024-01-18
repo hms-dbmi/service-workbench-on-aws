@@ -31,20 +31,6 @@ class AppContainer extends Component {
     document.title = branding.page.title;
     document.querySelector("link[rel='shortcut icon']").href = this.props.assets.images.faviconIcon;
     document.querySelector("link[rel='icon']").href = this.props.assets.images.faviconImage;
-
-    if (branding.main.supportKey) {
-      const supportScript = document.createElement("script");
-      supportScript.setAttribute("data-jsd-embedded", '');
-      supportScript.setAttribute("data-key", branding.main.supportKey);
-      supportScript.setAttribute("data-base-url", "https://jsd-widget.atlassian.com");
-      supportScript.src = "https://jsd-widget.atlassian.com/assets/embed.js";
-
-      const supportDiv = document.createElement("div");
-      supportDiv.id = "jira-support";
-      supportDiv.appendChild(supportScript);
-
-      document.body.appendChild(supportDiv);
-    }
   }
 
   render() {

@@ -40,6 +40,3 @@ tosRequired: true
 
 # Should the TOS link be enabled on the landing page.
 tosLinkOnLanding: true
-
-# If no support key is given, the jira support widget does not load
-supportKey: ''
