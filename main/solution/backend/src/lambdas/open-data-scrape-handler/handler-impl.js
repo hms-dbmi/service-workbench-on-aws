@@ -203,10 +203,8 @@ const fetchOpenData = async ({ fileUrls, requiredTags, studyWhitelist, log, fetc
   const validS3Arn = new RegExp(/^arn:aws:s3:.*:.*:.+$/);
   const filtered = metadata.filter(({ id, tags, resources }) => {
     return (
-      (
-        studyWhitelist.includes(id) ||
-        requiredTags.some(filterTag => tags.includes(filterTag))
-      ) && resources.every(resource => {
+      (studyWhitelist.includes(id) || requiredTags.some(filterTag => tags.includes(filterTag))) &&
+      resources.every(resource => {
         return resource.type === 'S3 Bucket' && validS3Arn.test(resource.arn);
       })
     );
@@ -246,7 +244,7 @@ const fetchAndSaveOpenData = async (fetchDatasetFiles, scrape, log, fetchFile, b
     requiredTags: scrape.filterTags,
     studyWhitelist: scrape.studyWhitelist,
     log,
-    fetchFile
+    fetchFile,
   });
 
   const simplifiedStudyData = openData.map(basicProjection);

@@ -113,33 +113,83 @@ describe('fetchOpenData', () => {
     sha: 'abc2',
   };
 
+  const whitelistStudy = {
+    name: 'Study 3',
+    description: 'Example study 3',
+    tags: ['other-tag'],
+    resources: [
+      {
+        description: 'Description for Study 3',
+        arn: 'arn:aws:s3:::study3',
+        region: 'us-east-1',
+        type: 'S3 Bucket',
+      },
+    ],
+    id: 'study-3',
+    sha: 'abc2',
+  };
+
   it('has invalid study (Invalid ARN)', async () => {
     const fileUrls = ['firstFileUrl'];
     const requiredTags = ['genetic'];
+    const studyWhitelist = [];
     const fetchFile = jest.fn();
     fetchFile.mockReturnValueOnce(invalidStudy);
 
-    const result = await fetchOpenData({ fileUrls, requiredTags, log: consoleLogger, fetchFile });
+    const result = await fetchOpenData({ fileUrls, requiredTags, studyWhitelist, log: consoleLogger, fetchFile });
     expect(result).toEqual([]);
   });
 
   it('has one valid study', async () => {
     const fileUrls = ['firstFileUrl'];
     const requiredTags = ['genetic'];
+    const studyWhitelist = [];
     const fetchFile = jest.fn();
     fetchFile.mockReturnValueOnce(validStudy);
 
-    const result = await fetchOpenData({ fileUrls, requiredTags, log: consoleLogger, fetchFile });
+    const result = await fetchOpenData({ fileUrls, requiredTags, studyWhitelist, log: consoleLogger, fetchFile });
     expect(result).toEqual([validStudyOpenData]);
   });
 
   it('has one valid study and one invalid study (Invalid ARN)', async () => {
-    const fileUrls = ['firstFileUrl'];
+    const fileUrls = ['firstFileUrl', 'fileUrl2'];
     const requiredTags = ['genetic'];
+    const studyWhitelist = [];
     const fetchFile = jest.fn();
     fetchFile.mockReturnValueOnce(validStudy).mockReturnValueOnce(invalidStudy);
 
-    const result = await fetchOpenData({ fileUrls, requiredTags, log: consoleLogger, fetchFile });
+    const result = await fetchOpenData({ fileUrls, requiredTags, studyWhitelist, log: consoleLogger, fetchFile });
     expect(result).toEqual([validStudyOpenData]);
+  });
+
+  it('has whitelisted study is included', async () => {
+    const fileUrls = ['firstFileUrl', 'fileUrl2', 'fileUrl3'];
+    const requiredTags = ['genetic'];
+    const studyWhitelist = ['study-3'];
+    const fetchFile = jest.fn();
+    fetchFile
+      .mockReturnValueOnce(validStudy)
+      .mockReturnValueOnce(invalidStudy)
+      .mockReturnValueOnce(whitelistStudy);
+
+    const result = await fetchOpenData({ fileUrls, requiredTags, studyWhitelist, log: consoleLogger, fetchFile });
+    expect(result).toEqual([
+      validStudyOpenData,
+      {
+        description: 'Example study 3',
+        id: 'study-3',
+        name: 'Study 3',
+        resources: [
+          {
+            arn: 'arn:aws:s3:::study3',
+            description: 'Description for Study 3',
+            region: 'us-east-1',
+            type: 'S3 Bucket',
+          },
+        ],
+        sha: 'abc2',
+        tags: ['other-tag'],
+      },
+    ]);
   });
 });
