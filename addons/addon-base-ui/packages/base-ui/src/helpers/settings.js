@@ -37,7 +37,7 @@ const branding = {
   },
   main: {
     title: process.env.REACT_APP_BRAND_MAIN_TITLE,
-    loginWarning: process.env.REACT_APP_LOGIN_WARNING
+    loginWarning: process.env.REACT_APP_LOGIN_WARNING,
   },
   page: {
     title: process.env.REACT_APP_BRAND_PAGE_TITLE,
