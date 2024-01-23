@@ -321,3 +321,6 @@ dataSourceReachabilityHandlerRoleArn: 'arn:aws:iam::${self:custom.settings.awsAc
 
 # The stack name of the 'backend' serverless service
 backendStackName: ${self:custom.settings.namespace}-backend
+
+# custom list of open studies to include when scraping that are not part in the filtered tag list
+openDataScrapeWhitelist: ''
