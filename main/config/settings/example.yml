@@ -163,5 +163,5 @@ HostedZoneId: 'Z02455261RJ9QQPVHFZGA'
 # Should the TOS link be enabled on the landing page.
 #tosLinkOnLanding: true
 
-# URL for help link
+# URL for help link. Can be empty, a single url, or a list like, "Some Link=https://www.google.com/?q=what,Other Link=https://www.example.com/"
 #helpUrl: about:blank
