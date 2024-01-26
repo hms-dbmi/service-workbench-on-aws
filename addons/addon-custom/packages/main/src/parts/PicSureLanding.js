@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { decorate, computed } from 'mobx';
-import { Button, Grid, Image, Modal } from 'semantic-ui-react';
+import { Button, Grid, Image, Modal, Header } from 'semantic-ui-react';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
@@ -26,6 +26,7 @@ class PicSureLanding extends React.Component {
       padding: '10px',
       backgroundColor: 'white',
     };
+    const h3 = { textTransform: 'uppercase', color: '#2A5FA3', textDecoration: 'underline' };
     const maxImageWidth = { height: 'auto', maxWidth: '600px', margin: 'auto' };
 
     return (
@@ -37,10 +38,20 @@ class PicSureLanding extends React.Component {
                 <Image fluid src={this.props.assets.images.registerLogo} style={maxImageWidth} />
               </Grid.Column>
             </Grid.Row>
+            <Grid.Row columns={1}>
+              <Grid.Column className="bodyText">
+                <div className="center">
+                  <Header as="h2" textAlign="center" className="header">
+                    {branding.register.title}
+                  </Header>
+                  <p>You are logged in to the Data Exploration + Analysis tool suite.</p>
+                </div>
+              </Grid.Column>
+            </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column>
                 <Button className="center" style={borders} onClick={this.gotoLogin()}>
-                  <h3 className="header" style={{ textTransform: 'uppercase' }}>
+                  <h3 className="header" style={h3}>
                     VISIT SERVICE WORKBENCH
                   </h3>
                   <p>Simple, accessible cloud computing & secure data storage.</p>
@@ -49,7 +60,7 @@ class PicSureLanding extends React.Component {
               <Grid.Column>
                 {/* <Button className="center" style={borders} onClick={this.gotoPicSure()}> */}
                 <Button as="a" href={branding.main.picsureUrl} className="center" style={borders}>
-                  <h3 className="header" style={{ textTransform: 'uppercase' }}>
+                  <h3 className="header" style={h3}>
                     VISIT PIC-SURE
                   </h3>
                   <p>A self-service, easily navigable patient-level clinical data search and cohort tool.</p>
