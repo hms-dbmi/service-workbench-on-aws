@@ -79,7 +79,7 @@ class MainLayout extends React.Component {
         })}
       </Menu>,
 
-      <Menu inverted color="black" fixed="top" className="box-shadow zindex-1500" key="ml2">
+      <Menu inverted color="black" fixed="top" className="box-shadow" key="ml2">
         <Menu.Item style={{ height: '50px', verticalAlign: 'middle' }}>
           <Image
             size="mini"
