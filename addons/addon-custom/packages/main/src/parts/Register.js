@@ -65,7 +65,7 @@ class Register extends React.Component {
   }
 
   renderHTML(content) {
-    const cleanContent = DOMPurify.sanitize(content, { USE_PROFILES: { html: true } });
+    const cleanContent = DOMPurify.sanitize(content, { USE_PROFILES: { html: true }, ADD_ATTR: ['target'] });
 
     // This method sets html from a string. We're pulling this from the config file made by
     // an approved admin, and we're sanitizing using dompurify package.
@@ -112,10 +112,6 @@ class Register extends React.Component {
   renderRegisterationForm() {
     return (
       <Form size="large" loading={this.loading} onSubmit={this.handleSubmit}>
-        <Header as="h2" textAlign="center" className="header">
-          {branding.register.title}
-        </Header>
-        {this.renderHTML(branding.register.summary)}
         <Segment basic className="ui fluid form">
           <Dimmer active={this.formProcessing} inverted>
             <Loader inverted>Submitting registration</Loader>
@@ -153,39 +149,89 @@ class Register extends React.Component {
 
   renderConfirmation() {
     return (
-      <div>
-        <Header as="h2" textAlign="center" style={styles.header}>
-          SUCCESS!
-        </Header>
-        {this.renderHTML(branding.register.success)}
-      </div>
+      <Grid.Row columns={1}>
+        <Grid.Column className="bodyText">
+          <div>
+            <Header as="h2" textAlign="center" style={styles.header}>
+              SUCCESS!
+            </Header>
+            {this.renderHTML(branding.register.success)}
+          </div>
+        </Grid.Column>
+      </Grid.Row>
+    );
+  }
+
+  renderRegister() {
+    const borders = { margin: '0px 10px', border: 'solid #2A5FA3 2px', borderRadius: '4px', padding: '10px' };
+    return (
+      <>
+        <Grid.Row columns={1}>
+          <Grid.Column className="bodyText">
+            <div className="center">
+              <Header as="h2" textAlign="center" className="header">
+                {branding.register.title}
+              </Header>
+              {this.renderHTML(branding.register.summary)}
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+        {branding.register.picsure && (
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <div className="bordered center" style={borders}>
+                <h3 className="header" style={{ textTransform: 'uppercase' }}>
+                  Service Workbench
+                </h3>
+                <p>Simple, accessible cloud computing & secure data storage.</p>
+                <a href="https://pic-sure.gitbook.io/service-workbench/" target="_blank" rel="noreferrer">
+                  Learn More
+                </a>
+              </div>
+            </Grid.Column>
+            <Grid.Column>
+              <div className="bordered center" style={borders}>
+                <h3 className="header" style={{ textTransform: 'uppercase' }}>
+                  PIC-Sure
+                </h3>
+                <p>A self-service, easily navigable patient-level clinical data search and cohort tool.</p>
+                <a href="https://pic-sure.gitbook.io/aim-ahead-pic-sure/" target="_blank" rel="noreferrer">
+                  Learn More
+                </a>
+              </div>
+            </Grid.Column>
+          </Grid.Row>
+        )}
+        <Grid.Row columns={1}>
+          <Grid.Column className="bodyText">{this.renderRegisterationForm()}</Grid.Column>
+        </Grid.Row>
+      </>
     );
   }
 
   renderContent() {
     const { location } = this.props;
+    const maxImageWidth = { height: 'auto', maxWidth: '600px', margin: 'auto' };
 
     return (
       <Grid
         id="register-user"
         verticalAlign="middle"
         className="animated fadeIn"
-        style={{ height: '100%', maxWidth: '800px', margin: '0 auto' }}
+        style={{ height: '100%', maxWidth: '800px', margin: '0 auto', fontSize: '1.2em' }}
       >
-        <Grid.Row columns={2}>
+        <Grid.Row columns={branding.register.picsure ? 1 : 2}>
           <Grid.Column>
-            <Image fluid src={this.props.assets.images.registerLogo} />
+            <Image fluid src={this.props.assets.images.registerLogo} style={maxImageWidth} />
           </Grid.Column>
-          <Grid.Column>
-            <Image fluid src={this.props.assets.images.registerAws} />
-          </Grid.Column>
+          {!branding.register.picsure && (
+            <Grid.Column>
+              <Image fluid src={this.props.assets.images.registerAws} style={maxImageWidth} />
+            </Grid.Column>
+          )}
         </Grid.Row>
-        <Grid.Row columns={1}>
-          <Grid.Column className="bodyText">
-            {location.pathname === '/register' && this.renderRegisterationForm()}
-            {location.pathname === '/register-confirmation' && this.renderConfirmation()}
-          </Grid.Column>
-        </Grid.Row>
+        {location.pathname === '/register' && this.renderRegister()}
+        {location.pathname === '/register-confirmation' && this.renderConfirmation()}
       </Grid>
     );
   }

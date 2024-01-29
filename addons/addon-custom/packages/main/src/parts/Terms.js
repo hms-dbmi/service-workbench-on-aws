@@ -8,7 +8,7 @@ const readableStyle = { fontSize: 'max(12pt, 1.2rem)', fontFamily: 'Calibri' };
 
 class Terms extends React.PureComponent {
   renderHTML(content) {
-    const cleanContent = DOMPurify.sanitize(content, { USE_PROFILES: { html: true } });
+    const cleanContent = DOMPurify.sanitize(content, { USE_PROFILES: { html: true }, ADD_ATTR: ['target'] });
 
     // This method sets html from a string. We're pulling this from the config file made by
     // an approved admin, and we're sanitizing using dompurify package.

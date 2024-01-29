@@ -29,10 +29,11 @@ versionAndDate: 'Version ${self:custom.settings.versionNumber} (${self:custom.se
 autoLogoutTimeoutInMinutes: 30
 
 # Registration page
-enableCustomRegistration: false
-userRegistrationTitle: "WELCOME TO SERVICE WORKBENCH"
-userRegistrationSummary: "<p>Service Workbench provides a self-service, three-click, on-demand service for researchers to build research environments in minutes without needing cloud infrastructure knowledge. Fill out the form below to create your account on Service Workbench hosted on AWS.</p>"
-userRegistrationSuccess: "<p>Your Service Workbench account has been successfully created. What you should expect next:</p><ol><li>The Service Workbench administrator will review your account.</li><li>Once your account is activated, you can login to Service Workbench and start your research.</li></ol>"
+enableCustomRegistration: true
+userRegistrationTitle: "WELCOME TO AIM-AHEAD!"
+userRegistrationSummary: "<p>Create a Data Exploration + Analysis Login to access available tools:</p>"
+userRegistrationSuccess: "<p>Your AIM-AHEAD account has been successfully created. What you should expect next:</p><ol><li>The AIM-AHEAD administrator will review your account.</li><li>You will receive an email sent from Okta to create a password.</li><li>Login to AIM-AHEAD and start your research.</li></ol><p><a href=\"https://pic-sure.gitbook.io/service-workbench/general-user-guide/introduction\" target=\"_blank\">AIM-AHEAD Service Workbench User Guide</a></p><p><a href=\"https://pic-sure.gitbook.io/aim-ahead-pic-sure/\" target=\"_blank\">AIM-AHEAD PIC-SURE User Guide</a></p>"
+userRegistrationPicsure: true # Should the register page also include a link to PIC-Sure
 loginWarning: ""
 
 # Require the TOS to be accepted before registration can occur.
