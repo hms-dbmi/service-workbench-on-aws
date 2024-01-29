@@ -31,6 +31,7 @@ const branding = {
     summary: process.env.REACT_APP_USER_REGISTRATION_SUMMARY,
     success: process.env.REACT_APP_USER_REGISTRATION_SUCCESS,
     tosRequired: process.env.REACT_APP_USER_REGISTRATION_TOS_REQUIRED === 'true',
+    picsure: process.env.REACT_APP_USER_REGISTRATION_PICSURE === 'true',
   },
   tos: {
     onLanding: process.env.REACT_APP_TOS_LINK_ON_LANDING === 'true',
