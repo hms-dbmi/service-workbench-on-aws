@@ -58,7 +58,6 @@ class PicSureLanding extends React.Component {
                 </Button>
               </Grid.Column>
               <Grid.Column>
-                {/* <Button className="center" style={borders} onClick={this.gotoPicSure()}> */}
                 <Button as="a" href={branding.main.picsureUrl} className="center" style={borders}>
                   <h3 className="header" style={h3}>
                     VISIT PIC-SURE
