@@ -12,11 +12,13 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
+import _ from 'lodash';
 
 import withAuth from '@aws-ee/base-ui/dist/withAuth';
 
 import TermsPage from '../parts/TermsPage';
 import Register from '../parts/Register';
+import PicSureLanding from '../parts/PicSureLanding';
 
 /**
  * Adds your routes to the given routesMap.
@@ -29,10 +31,35 @@ import Register from '../parts/Register';
  */
 // eslint-disable-next-line no-unused-vars
 function registerRoutes(routesMap, { location, appContext }) {
-  const routes = new Map([...routesMap, ['/register', withAuth(Register)], ['/legal', withAuth(TermsPage)]]);
+  const routes = new Map([
+    ...routesMap,
+    ['/landing', withAuth(PicSureLanding)],
+    ['/register', withAuth(Register)],
+    ['/legal', withAuth(TermsPage)],
+  ]);
   return routes;
 }
 
-const plugin = { registerRoutes };
+/**
+ * Returns default route. By default this method returns the
+ * '/dashboard' route as the default route for all non-root users and returns
+ * '/users' route for root user.
+ * @returns {{search: *, state: *, hash: *, pathname: string}}
+ */
+function getDefaultRouteLocation({ location, appContext }) {
+  const userStore = appContext.userStore;
+  const userDefaultLocation = _.get(userStore, 'defaultLocation');
+
+  const defaultLocation = {
+    pathname: userDefaultLocation,
+    search: location.search, // we want to keep any query parameters
+    hash: location.hash,
+    state: location.state,
+  };
+
+  return defaultLocation;
+}
+
+const plugin = { registerRoutes, getDefaultRouteLocation };
 
 export default plugin;
