@@ -8,6 +8,10 @@ import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 import BrandingHeader from './BrandingHeader';
 
 class PicSureLanding extends React.Component {
+  componentDidMount() {
+    document.title = branding.picsure.browserTitle;
+  }
+
   get userStore() {
     return this.props.userStore;
   }

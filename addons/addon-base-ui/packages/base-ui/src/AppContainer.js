@@ -20,15 +20,12 @@ import { inject, observer } from 'mobx-react';
 import { getEnv } from 'mobx-state-tree';
 import { Message, Container } from 'semantic-ui-react';
 
-import { branding } from './helpers/settings';
-
 // expected props
 // - pluginRegistry (via injection)
 // - app (via injection)
 // - location (from react router)
 class AppContainer extends Component {
   componentDidMount() {
-    document.title = branding.picsure.dualBranding ? branding.picsure.browserTitle : branding.main.browserTitle;
     document.querySelector("link[rel='shortcut icon']").href = this.props.assets.images.faviconIcon;
     document.querySelector("link[rel='icon']").href = this.props.assets.images.faviconImage;
   }
