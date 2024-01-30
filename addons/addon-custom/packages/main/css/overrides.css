@@ -38,3 +38,8 @@ button.link {
   margin: 0px !important;
   border-radius: 0px;
 }
+.center ol,
+.center ul,
+.left {
+  text-align: left;
+}
