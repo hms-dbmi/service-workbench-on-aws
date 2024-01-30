@@ -39,6 +39,8 @@ const branding = {
     dualBranding: process.env.REACT_APP_PICSURE_DUALBRANDING === 'true',
     url: process.env.REACT_APP_PICSURE_URL || '',
     browserTitle: process.env.REACT_APP_PICSURE_BROWSER_TITLE,
+    title: process.env.REACT_APP_PICSURE_TITLE,
+    subtitle: process.env.REACT_APP_PICSURE_SUBTITLE,
   },
   main: {
     browserTitle: process.env.REACT_APP_BROWSER_TITLE,

@@ -25,14 +25,16 @@ REACT_APP_LOGIN_TITLE: ${self:custom.settings.loginTitle}
 REACT_APP_LOGIN_SUBTITLE: ${self:custom.settings.loginSubtitle}
 REACT_APP_LOGIN_WARNING: ${self:custom.settings.loginWarning}
 REACT_APP_LOGIN_TOS: ${self:custom.settings.loginTos}
+REACT_APP_LOGIN_LINKS: ${self:custom.settings.loginLinks}
 REACT_APP_USER_REGISTRATION_TITLE: ${self:custom.settings.userRegistrationTitle}
 REACT_APP_USER_REGISTRATION_SUBTITLE: ${self:custom.settings.userRegistrationSummary}
 REACT_APP_USER_REGISTRATION_SUCCESS: ${self:custom.settings.userRegistrationSuccess}
 REACT_APP_USER_REGISTRATION_TOS_REQUIRED: ${self:custom.settings.tosRequired}
 REACT_APP_PICSURE_DUALBRANDING: ${self:custom.settings.picsureDualBranding}
 REACT_APP_PICSURE_URL: ${self:custom.settings.piscureUrl}
-REACT_APP_PICSURE_BROWSER_TITLE: ${picsureBrowserTitle}
-REACT_APP_LOGIN_LINKS: ${self:custom.settings.loginLinks}
+REACT_APP_PICSURE_BROWSER_TITLE: ${self:custom.settings.picsureBrowserTitle}
+REACT_APP_PICSURE_TITLE: ${self:custom.settings.picsureTitle}
+REACT_APP_PICSURE_SUBTITLE: ${self:custom.settings.picsureSubtitle}
 
 # ========================================================================
 # Overrides for .env.local

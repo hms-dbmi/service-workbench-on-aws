@@ -32,13 +32,7 @@ class PicSureLanding extends React.Component {
     return (
       <Modal id="picsure-landing" size="fullscreen" closeOnEscape open>
         <Modal.Content>
-          <BrandingHeader
-            copy={{
-              title: branding.register.title,
-              subtitle: '<p>You are logged in to the Data Exploration + Analysis tool suite.</p>',
-            }}
-            picsureBoxes={false}
-          />
+          <BrandingHeader copy={branding.picsure} picsureBoxes={false} />
           <Grid id="picsure-splash" verticalAlign="middle" style={{ maxWidth: '800px', margin: '0 auto' }}>
             <Grid.Row columns={2}>
               <Grid.Column>
