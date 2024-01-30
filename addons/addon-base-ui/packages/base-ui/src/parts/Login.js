@@ -18,7 +18,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { observable, action, decorate, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Button, Form, Grid, Header, Segment, Label, Input, Select, Image } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Label, Input, Select, Image } from 'semantic-ui-react';
 
 import { displayError } from '../helpers/notification';
 import { branding } from '../helpers/settings';
@@ -161,10 +161,27 @@ class Login extends React.Component {
 
     const additionalLoginComponents = this.props.AdditionalLoginComponents || (() => <></>);
     const collectUserNamePassword = this.props.authentication.shouldCollectUserNamePassword;
-    const renderBrandingLogo = <Image centered src={this.props.assets.images.loginImage} />;
+    const BrandingHeader = this.props.Header ? (
+      this.props.Header
+    ) : (
+      <>
+        <Image centered src={this.props.assets.images.loginImage} />
+        <Header as="h3" textAlign="center">
+          {branding.login.title}
+          <Header.Subheader>{branding.login.subtitle}</Header.Subheader>
+        </Header>
+      </>
+    );
+
     return (
       <div className="login-form animated fadeIn">
-        <Grid textAlign="center" style={{ height: '100%' }} verticalAlign="middle">
+        <BrandingHeader copy={branding.login} />
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+          className="animated fadeIn"
+          style={{ maxWidth: '800px', margin: '0 auto', fontSize: '1.2em' }}
+        >
           <Grid.Column style={{ maxWidth: 450 }}>
             <Form
               error={error}
@@ -175,68 +192,60 @@ class Login extends React.Component {
                 e.stopPropagation();
               }}
             >
-              <Segment stacked>
-                {renderBrandingLogo}
-                <Header as="h3" textAlign="center">
-                  {branding.login.title}
-                  <Header.Subheader>{branding.login.subtitle}</Header.Subheader>
-                </Header>
+              {renderAuthenticationProviders()}
 
-                {renderAuthenticationProviders()}
+              {collectUserNamePassword && (
+                <Form.Field error={!!this.usernameError} required>
+                  <Input
+                    fluid
+                    icon="user"
+                    iconPosition="left"
+                    placeholder="Username"
+                    data-testid="username"
+                    value={this.username}
+                    onChange={this.handleChange('username')}
+                  />
+                  {this.usernameError && (
+                    <Label basic color="red" pointing className="float-left mb2">
+                      {this.usernameError}
+                    </Label>
+                  )}
+                </Form.Field>
+              )}
 
-                {collectUserNamePassword && (
-                  <Form.Field error={!!this.usernameError} required>
-                    <Input
-                      fluid
-                      icon="user"
-                      iconPosition="left"
-                      placeholder="Username"
-                      data-testid="username"
-                      value={this.username}
-                      onChange={this.handleChange('username')}
-                    />
-                    {this.usernameError && (
-                      <Label basic color="red" pointing className="float-left mb2">
-                        {this.usernameError}
-                      </Label>
-                    )}
-                  </Form.Field>
-                )}
+              {collectUserNamePassword && (
+                <Form.Field error={!!this.passwordError} required>
+                  <Input
+                    fluid
+                    icon="lock"
+                    iconPosition="left"
+                    placeholder="Password"
+                    data-testid="password"
+                    value={this.password}
+                    type="password"
+                    onChange={this.handleChange('password')}
+                  />
+                  {this.passwordError && (
+                    <Label basic color="red" pointing className="float-left mb2">
+                      {this.passwordError}
+                    </Label>
+                  )}
+                </Form.Field>
+              )}
 
-                {collectUserNamePassword && (
-                  <Form.Field error={!!this.passwordError} required>
-                    <Input
-                      fluid
-                      icon="lock"
-                      iconPosition="left"
-                      placeholder="Password"
-                      data-testid="password"
-                      value={this.password}
-                      type="password"
-                      onChange={this.handleChange('password')}
-                    />
-                    {this.passwordError && (
-                      <Label basic color="red" pointing className="float-left mb2">
-                        {this.passwordError}
-                      </Label>
-                    )}
-                  </Form.Field>
-                )}
-
-                <Button
-                  data-testid="login"
-                  type="submit"
-                  color="blue"
-                  fluid
-                  basic
-                  size="large"
-                  className="mb2"
-                  onClick={this.handleLogin}
-                >
-                  Login
-                </Button>
-                {additionalLoginComponents(this)}
-              </Segment>
+              <Button
+                data-testid="login"
+                type="submit"
+                color="blue"
+                fluid
+                basic
+                size="large"
+                className="mb2"
+                onClick={this.handleLogin}
+              >
+                Login
+              </Button>
+              {additionalLoginComponents(this)}
             </Form>
           </Grid.Column>
         </Grid>

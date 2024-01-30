@@ -16,32 +16,8 @@ websiteCloudFrontId: ${cf:${self:custom.settings.infrastructureStackName}.CloudF
 # URL of the website
 websiteUrl: ${cf:${self:custom.settings.infrastructureStackName}.WebsiteUrl}
 
-# Branding
-brandPageTitle: 'Service Workbench'
-brandMainTitle: 'Service Workbench on AWS (${self:custom.settings.envName}/${self:custom.settings.awsRegion})'
-brandLoginTitle: 'Service Workbench'
-brandLoginSubtitle: 'Service Workbench on AWS (${self:custom.settings.envName}/${self:custom.settings.awsRegion})'
-
 versionAndDate: 'Version ${self:custom.settings.versionNumber} (${self:custom.settings.versionDate})'
 
 # After how many minutes should the auto logout dialog be displayed? once displayed the user has 1 minute to dismiss
 # the dialog, otherwise they will be automatically logged out
 autoLogoutTimeoutInMinutes: 30
-
-# Registration page
-enableCustomRegistration: true
-userRegistrationTitle: "WELCOME TO AIM-AHEAD!"
-userRegistrationSummary: "<p>Create a Data Exploration + Analysis Login to access available tools:</p>"
-userRegistrationSuccess: "<p>Your AIM-AHEAD account has been successfully created. What you should expect next:</p><ol><li>The AIM-AHEAD administrator will review your account.</li><li>You will receive an email sent from Okta to create a password.</li><li>Login to AIM-AHEAD and start your research.</li></ol><p><a href=\"https://pic-sure.gitbook.io/service-workbench/general-user-guide/introduction\" target=\"_blank\">AIM-AHEAD Service Workbench User Guide</a></p><p><a href=\"https://pic-sure.gitbook.io/aim-ahead-pic-sure/\" target=\"_blank\">AIM-AHEAD PIC-SURE User Guide</a></p>"
-userRegistrationPicsure: true # Should the register page also include a link to PIC-Sure
-loginWarning: ""
-
-# Require the TOS to be accepted before registration can occur.
-tosRequired: true
-
-# Should the TOS link be enabled on the login page.
-tosLinkOnLanding: true
-
-# Redirect to the pic-sure integrated landing page to allow users to select picsure or swb logins
-piscureLanding: false
-piscureUrl: ''

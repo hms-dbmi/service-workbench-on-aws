@@ -25,7 +25,7 @@ import { User } from './User';
 const UserStore = BaseStore.named('UserStore')
   .props({
     user: types.maybe(User),
-    picsureLanding: branding.main.picsureLanding,
+    picsureLanding: branding.picsure.dualBranding,
   })
   .actions(self => {
     // save the base implementation of cleanup

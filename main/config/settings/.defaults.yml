@@ -236,3 +236,39 @@ dbEnvironmentsSc: ${self:custom.settings.dbPrefix}-EnvironmentsSc
 useCustomAmi: false
 
 useAwsProfile: false
+
+# Custom Branding
+browserTitle: "Service Workbench"
+pageTitle: "Service Workbench on AWS (${self:custom.settings.envName}/${self:custom.settings.awsRegion})"
+
+# URL for help link. Can be empty, a single url, or comma seperated key value pairs like "Some Link=https://www.google.com/?q=what,Other Link=https://www.example.com/"
+helpUrl: "User Guide=https://pic-sure.gitbook.io/service-workbench/general-user-guide/introduction,Help Desk=https://bch-gic.atlassian.net/servicedesk/customer/portal/1"
+
+# Enable user registration
+enableCustomRegistration: true
+
+# Require the TOS to be accepted before registration can occur.
+tosRequired: false
+
+# Registration Copy
+userRegistrationTitle: "WELCOME TO AIM-AHEAD!"
+userRegistrationSummary: "<p>Create a Data Exploration + Analysis Login to access available tools:</p>"
+userRegistrationSuccess: '<div class="left"><p>Your AIM-AHEAD account has been successfully created. What you should expect next:</p><ol><li>The AIM-AHEAD administrator will review your account.</li><li>You will receive an email sent from Okta to create a password.</li><li>Login to AIM-AHEAD and start your research.</li></ol><p><a href="https://pic-sure.gitbook.io/service-workbench/general-user-guide/introduction" target="_blank">AIM-AHEAD Service Workbench User Guide</a><br /><a href="https://pic-sure.gitbook.io/aim-ahead-pic-sure/" target="_blank">AIM-AHEAD PIC-SURE User Guide</a></p></div>'
+
+# Login Copy
+loginTitle: "WELCOME TO AIM-AHEAD!"
+loginSubtitle: "The Data Exploration + Analysis Login gives you access to the following tools that enable researchers to search and analyze data."
+loginWarning: ""
+loginLinks: '<a href="https://login.srce.hms.harvard.edu/signin/forgot-password" target="_blank">Reset Password</a><br /><a href="https://hms-srce-okta-faq.s3.amazonaws.com/OktaFaq/AWSSWBFAQ.html" target="_blank">FAQ</a>'
+
+# Should the TOS link be enabled on the login page.
+loginTos: false
+
+# Should dual picsure and swb branding be shown
+picsureDualBranding: true
+piscureUrl: "https://pic-sure.aim-ahead-dev.host/"
+picsureBrowserTitle: "AIM-AHEAD"
+
+# PIC-Sure landing copy
+picsureTitle: "WELCOME TO AIM-AHEAD!"
+picsureSubtitle: '<p>You are logged in to the Data Exploration + Analysis tool suite.</p>'
