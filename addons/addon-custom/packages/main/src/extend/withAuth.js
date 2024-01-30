@@ -41,7 +41,6 @@ function RegisterLogin(enableCustomRegister) {
     function handleRegister() {
       gotoFn(selfRef)('/register');
     }
-    console.log('DEBUG BRANDING', branding);
 
     return (
       <>
