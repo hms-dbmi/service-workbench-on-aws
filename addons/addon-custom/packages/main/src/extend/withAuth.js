@@ -91,9 +91,13 @@ class AuthWrapper extends React.Component {
   }
 
   render() {
-    document.title = branding.main.browserTitle;
-
     const { app, location } = this.props;
+
+    document.title =
+      branding.picsure.dualBranding && !app.userAuthenticated
+        ? branding.picsure.browserTitle
+        : branding.main.browserTitle;
+
     if (app.userAuthenticated) {
       return this.renderAuthComp(true);
     }
