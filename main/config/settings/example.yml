@@ -149,24 +149,34 @@ HostedZoneId: 'Z02455261RJ9QQPVHFZGA'
 # Stack policies are applied here: addons/addon-stack-policy/packages/stack-policy/lib/steps/update-cfn-stack-policy.js
 #isAppStreamEnabled: false
 
-#--- Custom User Registration
-# Enable and customize the parameters below to customize the registration page.
-#enableCustomRegistration: false
-#userRegistrationTitle: "WELCOME TO SERVICE WORKBENCH"
-#userRegistrationSummary: "<p>Service Workbench provides a self-service, three-click, on-demand service for researchers to build research environments in minutes without needing cloud infrastructure knowledge. Fill out the form below to create your account on Service Workbench hosted on AWS.</p>"
-#userRegistrationSuccess: "<p>Your Service Workbench account has been successfully created. What you should expect next:</p><ol><li>The Service Workbench administrator will review your account.</li><li>Once your account is activated, you can login to Service Workbench and start your research.</li></ol>"
-#userRegistrationPicsure: true # Should the register page also include a link to PIC-Sure
-#loginWarning: "WARNING: You are entering a secure environment."
-
-# Require the TOS to be accepted before registration can occur.
-#tosRequired: true
-
-# Should the TOS link be enabled on the landing page.
-#tosLinkOnLanding: true
+# Custom Branding
+#browserTitle: "Service Workbench"
+#pageTitle: "Service Workbench"
 
 # URL for help link. Can be empty, a single url, or a list like, "Some Link=https://www.google.com/?q=what,Other Link=https://www.example.com/"
 #helpUrl: about:blank
 
-# Redirect to the pic-sure integrated landing page to allow users to select picsure or swb logins
-# piscureLanding: false
-# piscureUrl: ''
+# Enable user registration
+#enableCustomRegistration: false
+
+# Require the TOS to be accepted before registration can occur.
+#tosRequired: true
+
+# Registration Copy
+#userRegistrationTitle: "WELCOME TO SERVICE WORKBENCH"
+#userRegistrationSummary: "<p>Service Workbench provides a self-service, three-click, on-demand service for researchers to build research environments in minutes without needing cloud infrastructure knowledge. Fill out the form below to create your account on Service Workbench hosted on AWS.</p>"
+#userRegistrationSuccess: "<p>Your Service Workbench account has been successfully created. What you should expect next:</p><ol><li>The Service Workbench administrator will review your account.</li><li>Once your account is activated, you can login to Service Workbench and start your research.</li></ol>"
+
+# Login Copy
+#loginTitle: "WELCOME TO SERVICE WORKBENCH"
+#loginSubtitle: "Login to SWB to start launching analyis worksapces"
+#loginWarning: "WARNING: You are entering a secure environment."
+#loginLinks: ""
+
+# Should the TOS link be enabled on the login page.
+#loginTos: true
+
+# Should dual picsure and swb branding be shown
+#picsureDualBranding: true
+#piscureUrl: ''
+#picsureBrowserTitle: ""

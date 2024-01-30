@@ -27,7 +27,7 @@ class TermsPage extends React.Component {
         <Grid.Row columns={1}>
           <Grid.Column>
             <Header as="h2" textAlign="center" className="header">
-              {branding.main.title}
+              {branding.main.browserTitle}
             </Header>
           </Grid.Column>
         </Grid.Row>

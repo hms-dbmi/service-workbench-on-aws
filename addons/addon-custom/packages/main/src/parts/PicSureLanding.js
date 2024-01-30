@@ -1,10 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { decorate, computed } from 'mobx';
-import { Button, Grid, Image, Modal, Header } from 'semantic-ui-react';
+import { Button, Grid, Modal } from 'semantic-ui-react';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
+import BrandingHeader from './BrandingHeader';
 
 class PicSureLanding extends React.Component {
   get userStore() {
@@ -27,27 +28,18 @@ class PicSureLanding extends React.Component {
       backgroundColor: 'white',
     };
     const h3 = { textTransform: 'uppercase', color: '#2A5FA3', textDecoration: 'underline' };
-    const maxImageWidth = { height: 'auto', maxWidth: '600px', margin: 'auto' };
 
     return (
       <Modal id="picsure-landing" size="fullscreen" closeOnEscape open>
         <Modal.Content>
+          <BrandingHeader
+            copy={{
+              title: branding.register.title,
+              subtitle: '<p>You are logged in to the Data Exploration + Analysis tool suite.</p>',
+            }}
+            picsureBoxes={false}
+          />
           <Grid id="picsure-splash" verticalAlign="middle" style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <Grid.Row columns={1}>
-              <Grid.Column>
-                <Image fluid src={this.props.assets.images.registerLogo} style={maxImageWidth} />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={1}>
-              <Grid.Column className="bodyText">
-                <div className="center">
-                  <Header as="h2" textAlign="center" className="header">
-                    {branding.register.title}
-                  </Header>
-                  <p>You are logged in to the Data Exploration + Analysis tool suite.</p>
-                </div>
-              </Grid.Column>
-            </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column>
                 <Button className="center" style={borders} onClick={this.gotoLogin()}>
@@ -58,7 +50,7 @@ class PicSureLanding extends React.Component {
                 </Button>
               </Grid.Column>
               <Grid.Column>
-                <Button as="a" href={branding.main.picsureUrl} className="center" style={borders}>
+                <Button as="a" href={branding.picsure.url} className="center" style={borders}>
                   <h3 className="header" style={h3}>
                     VISIT PIC-SURE
                   </h3>

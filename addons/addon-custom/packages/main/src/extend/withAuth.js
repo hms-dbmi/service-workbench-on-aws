@@ -25,6 +25,8 @@ import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
 import TermsPage from '../parts/TermsPage';
 import Register from '../parts/Register';
+import BrandingHeader from '../parts/BrandingHeader';
+import { renderHTML } from '../helpers/utils';
 
 /* eslint-disable react/jsx-no-bind */
 
@@ -39,6 +41,7 @@ function RegisterLogin(enableCustomRegister) {
     function handleRegister() {
       gotoFn(selfRef)('/register');
     }
+    console.log('DEBUG BRANDING', branding);
 
     return (
       <>
@@ -56,17 +59,18 @@ function RegisterLogin(enableCustomRegister) {
             Register
           </Button>
         )}
-        {branding.tos.onLanding && (
+        {branding.login.tosLink && (
           <>
             <Link to="/legal">Terms of Service</Link>
             <br />
           </>
         )}
-        {branding.main.loginWarning}
+        {branding.login.links && renderHTML(branding.login.links)}
+        {branding.login.warning}
       </>
     );
   }
-  return <Login AdditionalLoginComponents={RegisterButton} />;
+  return <Login AdditionalLoginComponents={RegisterButton} Header={BrandingHeader} />;
 }
 
 class AuthWrapper extends React.Component {

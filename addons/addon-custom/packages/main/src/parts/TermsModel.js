@@ -55,7 +55,7 @@ class TermsModal extends React.Component {
       trigger,
       className = '',
       closeOnDimmerClick = false,
-      title = `${branding.main.title} Terms of Service`,
+      title = `${branding.main.browserTitle} Terms of Service`,
     } = this.props;
 
     return (

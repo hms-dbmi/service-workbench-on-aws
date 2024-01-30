@@ -28,7 +28,7 @@ import { branding } from './helpers/settings';
 // - location (from react router)
 class AppContainer extends Component {
   componentDidMount() {
-    document.title = branding.page.title;
+    document.title = branding.picsure.dualBranding ? branding.picsure.browserTitle : branding.main.browserTitle;
     document.querySelector("link[rel='shortcut icon']").href = this.props.assets.images.faviconIcon;
     document.querySelector("link[rel='icon']").href = this.props.assets.images.faviconImage;
   }
