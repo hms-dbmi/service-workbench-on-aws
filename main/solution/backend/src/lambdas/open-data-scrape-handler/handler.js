@@ -26,7 +26,8 @@ const initHandler = (async () => {
   await container.initServices();
   const studyService = await container.find('studyService');
   const log = await container.find('log');
-  return newHandler({ studyService, log });
+  const settings = await container.find('settings');
+  return newHandler({ studyService, log, settings });
 })();
 
 // eslint-disable-next-line import/prefer-default-export

@@ -20,6 +20,7 @@ openDataScrapeHandler:
     APP_STUDY_DATA_BUCKET_NAME: ${self:custom.settings.studyDataBucketName}
     APP_CUSTOM_USER_AGENT: ${self:custom.settings.customUserAgent}
     APP_IS_APP_STREAM_ENABLED: ${self:custom.settings.isAppStreamEnabled}
+    APP_OPEN_DATA_SCRAPE_WHITELIST: ${self:custom.settings.openDataScrapeWhitelist}
 
   events:
     - schedule:

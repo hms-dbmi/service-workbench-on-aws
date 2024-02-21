@@ -36,6 +36,12 @@ enableUserSignUps: true
 # Please also include the registration parameters to customize the registration page.
 enableCustomRegistration: false
 
+# Require the TOS to be accepted before registration can occur.
+tosRequired: true
+
+# Should the TOS link be enabled on the landing page.
+tosLinkOnLanding: true
+
 # Cognito domain prefix. Note random string will be padded at the end if specified domain is not available
 cognitoUserPoolDomainPrefix: ${self:custom.settings.envName}-${self:custom.settings.solutionName}
 

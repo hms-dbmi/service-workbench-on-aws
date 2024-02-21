@@ -56,8 +56,12 @@ function RegisterLogin(enableCustomRegister) {
             Register
           </Button>
         )}
-        <Link to="/legal">Terms of Service</Link>
-        <br />
+        {branding.tos.onLanding && (
+          <>
+            <Link to="/legal">Terms of Service</Link>
+            <br />
+          </>
+        )}
         {branding.main.loginWarning}
       </>
     );
