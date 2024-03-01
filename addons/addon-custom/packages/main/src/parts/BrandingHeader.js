@@ -8,7 +8,7 @@ import { renderHTML } from '../helpers/utils';
 
 export function BrandingHeader({ copy, assets, picsureBoxes = true }) {
   const borders = { margin: '0px 10px', border: 'solid #2A5FA3 2px', borderRadius: '4px', padding: '10px' };
-  const maxImageWidth = { height: 'auto', maxWidth: '500px', margin: 'auto' };
+  const maxImageWidth = { height: 'auto', maxWidth: '350px', margin: 'auto' };
 
   return (
     <>
