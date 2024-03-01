@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# DEPRECATED - use bootstrap.sh instead
+
 bootstrap_s3_location="$1"
 s3_mounts="$2"
 

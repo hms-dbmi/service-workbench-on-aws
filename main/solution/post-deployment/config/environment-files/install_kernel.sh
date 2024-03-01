@@ -23,3 +23,14 @@ if [ "$kernels" != "" ]; then
     fi
   done
 fi
+
+# --------------------------- Load Kernels to Conda -------------------------- #
+echo "Adding $KERNEL_PATH to conda configuration"
+mkdir -p $KERNEL_PATH
+chown ec2-user:ec2-user $KERNEL_PATH
+cat << EOF >> /home/ec2-user/.condarc
+envs_dirs:
+  - $KERNEL_PATH
+  - /home/ec2-user/anaconda3/envs
+EOF
+echo "Finished Adding $KERNEL_PATH to conda configuration"
