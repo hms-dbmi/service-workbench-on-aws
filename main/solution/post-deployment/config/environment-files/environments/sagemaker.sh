@@ -1,17 +1,5 @@
 #!/usr/bin/env bash
 
-# --------------------------- Load Kernels to Conda -------------------------- #
-KERNEL_PATH="/home/ec2-user/SageMaker/.kernels"
-echo "Adding $KERNEL_PATH to conda configuration"
-mkdir -p $KERNEL_PATH
-chown ec2-user:ec2-user $KERNEL_PATH
-cat << EOF >> /home/ec2-user/.condarc
-envs_dirs:
-  - $KERNEL_PATH
-  - /home/ec2-user/anaconda3/envs
-EOF
-echo "Finished Adding $KERNEL_PATH to conda configuration"
-
 # --------------------------------- Idle Stop -------------------------------- #
 if [ "$AUTO_STOP_IDLE_TIME" != "0" ]; then
   echo "Installing the idle stop script"
