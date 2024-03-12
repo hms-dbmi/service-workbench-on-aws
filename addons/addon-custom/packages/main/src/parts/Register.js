@@ -119,7 +119,7 @@ class Register extends React.Component {
                   </div>
                 )}
                 <Form.Button id="register-submit" disabled={this.submitDisabled()} color="green">
-                  Create a new Service Workbench account
+                  Register
                 </Form.Button>
               </Form.Field>
             </div>
