@@ -1,14 +1,15 @@
 import React from 'react';
 import { inject } from 'mobx-react';
 
-import { Grid, Image, Header } from 'semantic-ui-react';
+import { Grid, Image, Header, Message } from 'semantic-ui-react';
 import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
 import { renderHTML } from '../helpers/utils';
 
-export function BrandingHeader({ copy, assets, picsureBoxes = true }) {
+export function BrandingHeader({ copy, assets, picsureBoxes = true, authenticationProviderPublicConfigsStore }) {
   const borders = { margin: '0px 10px', border: 'solid #2A5FA3 2px', borderRadius: '4px', padding: '10px' };
   const maxImageWidth = { height: 'auto', maxWidth: '350px', margin: 'auto' };
+  const loginBlocking = authenticationProviderPublicConfigsStore.loginBlocking || false;
 
   return (
     <>
@@ -28,6 +29,11 @@ export function BrandingHeader({ copy, assets, picsureBoxes = true }) {
               <Header as="h2" textAlign="center" className="header">
                 {copy.title}
               </Header>
+              {loginBlocking && (
+                <div className="mb2">
+                  <Message negative icon="exclamation triangle" content={loginBlocking} />
+                </div>
+              )}
               {renderHTML(copy.subtitle)}
             </div>
           </Grid.Column>
@@ -63,4 +69,4 @@ export function BrandingHeader({ copy, assets, picsureBoxes = true }) {
   );
 }
 
-export default inject('assets')(BrandingHeader);
+export default inject('assets', 'authenticationProviderPublicConfigsStore')(BrandingHeader);

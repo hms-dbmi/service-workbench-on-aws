@@ -26,6 +26,7 @@ const deSerializeProviderConfig = providerConfigStr => JSON.parse(providerConfig
 
 const toProviderConfig = dbResultItem =>
   _.assign({}, dbResultItem, {
+    appAlerts: dbResultItem.appAlerts,
     config: dbResultItem && deSerializeProviderConfig(dbResultItem.config),
   });
 

@@ -130,7 +130,26 @@ class Login extends React.Component {
       );
   });
 
+  renderBrandingHeader = () =>
+    this.props.Header ? (
+      this.props.Header
+    ) : (
+      <>
+        <Image centered src={this.props.assets.images.loginImage} />
+        <Header as="h3" textAlign="center">
+          {branding.login.title}
+          <Header.Subheader>{branding.login.subtitle}</Header.Subheader>
+        </Header>
+      </>
+    );
+
   render() {
+    const loginBlocking = this.props.authenticationProviderPublicConfigsStore.loginBlocking;
+    const BrandingHeader = this.renderBrandingHeader();
+    if (loginBlocking) {
+      return <BrandingHeader copy={branding.login} />;
+    }
+
     const error = !!(this.usernameError || this.passwordError || this.authenticationProviderError);
 
     const authenticationProviderOptions = this.getStore().authenticationProviderOptions;
@@ -161,17 +180,6 @@ class Login extends React.Component {
 
     const additionalLoginComponents = this.props.AdditionalLoginComponents || (() => <></>);
     const collectUserNamePassword = this.props.authentication.shouldCollectUserNamePassword;
-    const BrandingHeader = this.props.Header ? (
-      this.props.Header
-    ) : (
-      <>
-        <Image centered src={this.props.assets.images.loginImage} />
-        <Header as="h3" textAlign="center">
-          {branding.login.title}
-          <Header.Subheader>{branding.login.subtitle}</Header.Subheader>
-        </Header>
-      </>
-    );
 
     return (
       <div className="login-form animated fadeIn">

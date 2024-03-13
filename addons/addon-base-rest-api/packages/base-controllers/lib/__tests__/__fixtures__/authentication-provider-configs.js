@@ -235,6 +235,42 @@ const cognitoType = {
           $id: '#/properties/customRegister',
           type: 'boolean',
         },
+        appAlerts: {
+          $id: '#/properties/appAlerts',
+          type: 'object',
+          properties: {
+            loginBlocking: {
+              $id: '#/properties/appAlerts/loginBlocking',
+              type: 'string',
+            },
+            banner: {
+              $id: '#/properties/appAlerts/banner',
+              type: 'array',
+              items: {
+                $id: '#/properties/appAlerts/banner/items',
+                type: 'object',
+                properties: {
+                  title: {
+                    $id: '#/properties/appAlerts/banner/items/title',
+                    type: 'string',
+                  },
+                  text: {
+                    $id: '#/properties/appAlerts/banner/items/text',
+                    type: 'string',
+                  },
+                  type: {
+                    $id: '#/properties/appAlerts/banner/items/type',
+                    type: 'string',
+                  },
+                  dismissable: {
+                    $id: '#/properties/appAlerts/banner/items/dismissable',
+                    type: 'boolean',
+                  },
+                },
+              },
+            },
+          },
+        },
         federatedIdentityProviders: {
           $id: '#/properties/providerConfig/properties/federatedIdentityProviders',
           type: 'array',
@@ -362,6 +398,7 @@ const publicConfigurations = [
       'https://test-raas1.auth.us-east-1.amazoncognito.com/oauth2/authorize?response_type=token&client_id=199999999991&redirect_uri=https://12345.cloudfront.net&idp_identifier=datalake.example.com',
     signOutUri:
       'https://test-raas1.auth.us-east-1.amazoncognito.com/logout?client_id=199999999991&logout_uri=https://12345.cloudfront.net',
+    customRegister: false,
   },
   {
     id: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_poolId2',
@@ -374,6 +411,7 @@ const publicConfigurations = [
     clientId: '28888888888882',
     enableNativeUserPoolUsers: false,
     customRegister: false,
+    appAlerts: undefined,
   },
   {
     id: 'datalake2.example.com',
@@ -384,6 +422,7 @@ const publicConfigurations = [
       'https://test-raas2.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=28888888888882&redirect_uri=https://12345.cloudfront.net&idp_identifier=datalake2.example.com',
     signOutUri:
       'https://test-raas2.auth.us-east-1.amazoncognito.com/logout?client_id=28888888888882&logout_uri=https://12345.cloudfront.net',
+    customRegister: false,
   },
 ];
 

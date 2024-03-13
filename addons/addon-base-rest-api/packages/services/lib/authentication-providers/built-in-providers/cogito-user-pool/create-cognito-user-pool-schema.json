@@ -50,6 +50,42 @@
       "$id": "#/properties/customRegister",
       "type": "boolean"
     },
+    "appAlerts": {
+      "$id": "#/properties/appAlerts",
+      "type": "object",
+      "properties": {
+        "loginBlocking": {
+          "$id": "#/properties/appAlerts/loginBlocking",
+          "type": "string"
+        },
+        "banner": {
+          "$id": "#/properties/appAlerts/banner",
+          "type": "array",
+          "items": {
+            "$id": "#/properties/appAlerts/banner/items",
+            "type": "object",
+            "properties": {
+              "title": {
+                "$id": "#/properties/appAlerts/banner/items/title",
+                "type": "string"
+              },
+              "text": {
+                "$id": "#/properties/appAlerts/banner/items/text",
+                "type": "string"
+              },
+              "type": {
+                "$id": "#/properties/appAlerts/banner/items/type",
+                "type": "string"
+              },
+              "dismissable": {
+                "$id": "#/properties/appAlerts/banner/items/dismissable",
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
     "federatedIdentityProviders": {
       "$id": "#/properties/providerConfig/properties/federatedIdentityProviders",
       "type": "array",
