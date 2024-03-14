@@ -129,6 +129,7 @@ class MainLayout extends React.Component {
                 error: 'exclamation triangle',
                 info: 'info circle',
                 success: 'check circle',
+                warning: 'exclamation triangle',
               };
               return (
                 <Message
