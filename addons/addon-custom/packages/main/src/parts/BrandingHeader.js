@@ -46,6 +46,20 @@ export function BrandingHeader({ copy, assets, picsureBoxes = true, authenticati
                   Service Workbench
                 </h3>
                 <p>Simple, accessible cloud computing & secure data storage.</p>
+                <span>Access to:</span>
+                <ul>
+                    <li>OCHIN Data (with appropriate data authorization)</li>
+                    <li>Amazon Web Services Open Access Datasets</li>
+                    <li>National Health and Nutrition Examination Survey Data</li>
+                    <li>Upload your own data into the FISMA-secure environment</li>
+                </ul>
+                <span>Computational environments available:</span>
+                <ul>
+                    <li>Rstudio</li>
+                    <li>SageMaker (Jupyter Notebooks)</li>
+                    <li>Linux EC2</li>
+                    <li>Remote WIndows Desktop</li>
+                </ul>
                 <a href="https://pic-sure.gitbook.io/service-workbench/" target="_blank" rel="noreferrer">
                   Learn More
                 </a>
@@ -57,6 +71,15 @@ export function BrandingHeader({ copy, assets, picsureBoxes = true, authenticati
                   PIC-Sure
                 </h3>
                 <p>A self-service, easily navigable patient-level clinical data search and cohort tool.</p>
+                <span>Explore:</span>
+                <ul>
+                    <li>National Health and Nutrition Examination Survey Data</li>
+                </ul>
+                <span>Export patient-level cohorts:</span>
+                <ul>
+                    <li>To your local machine</li>
+                    <li>To Service Workbench</li>
+                </ul>
                 <a href="https://pic-sure.gitbook.io/aim-ahead-pic-sure/" target="_blank" rel="noreferrer">
                   Learn More
                 </a>
