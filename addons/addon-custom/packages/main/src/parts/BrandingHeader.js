@@ -68,7 +68,7 @@ export function BrandingHeader({ copy, assets, picsureBoxes = true, authenticati
             <Grid.Column>
               <div className="bordered center" style={borders}>
                 <h3 className="header" style={{ textTransform: 'uppercase' }}>
-                  PIC-Sure
+                  PIC-SURE
                 </h3>
                 <p>A self-service, easily navigable patient-level clinical data search and cohort tool.</p>
                 <span>Explore:</span>
