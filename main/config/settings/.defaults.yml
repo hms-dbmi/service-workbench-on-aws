@@ -256,7 +256,7 @@ userRegistrationSummary: "<p>Create a Data Exploration + Analysis Login to acces
 userRegistrationSuccess: '<div class="left"><p>Your AIM-AHEAD account has been successfully created. What you should expect next:</p><ol><li>The AIM-AHEAD administrator will review your account.</li><li>You will receive an email sent from Okta to create a password.</li><li>Login to AIM-AHEAD and start your research.</li></ol><p><a href="https://pic-sure.gitbook.io/service-workbench/general-user-guide/introduction" target="_blank">AIM-AHEAD Service Workbench User Guide</a><br /><a href="https://pic-sure.gitbook.io/aim-ahead-pic-sure/" target="_blank">AIM-AHEAD PIC-SURE User Guide</a></p></div>'
 
 # Login Copy
-loginTitle: "WELCOME TO AIM-AHEAD!"
+loginTitle: "Welcome to the AIM-AHEAD Data Repository!"
 loginSubtitle: "The Data Exploration + Analysis Login gives you access to the following tools that enable researchers to search and analyze data."
 loginWarning: ""
 loginLinks: '<a href="https://login.srce.hms.harvard.edu/signin/forgot-password" target="_blank">Reset Password</a><br /><a href="https://hms-srce-okta-faq.s3.amazonaws.com/OktaFaq/AWSSWBFAQ.html" target="_blank">FAQ</a>'
