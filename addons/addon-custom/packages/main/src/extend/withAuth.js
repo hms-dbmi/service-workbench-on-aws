@@ -52,7 +52,7 @@ function RegisterLogin(enableCustomRegister) {
             fluid
             basic
             size="large"
-            className="mb2"
+            className="mb2 col-6 mr-auto ml-auto"
             onClick={handleRegister}
           >
             Register
