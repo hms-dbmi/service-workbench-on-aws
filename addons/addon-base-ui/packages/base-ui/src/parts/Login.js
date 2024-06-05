@@ -188,7 +188,7 @@ class Login extends React.Component {
           textAlign="center"
           verticalAlign="middle"
           className="animated fadeIn"
-          style={{ maxWidth: '1000px', margin: '0 auto', fontSize: '1.2em' }}
+          style={{ maxWidth: '1000px', height: '100%', margin: '0 auto', fontSize: '1.2em' }}
         >
           <Grid.Column style={{ width: '50%' }}>
             <Grid.Row>
