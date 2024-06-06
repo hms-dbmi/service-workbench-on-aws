@@ -270,7 +270,7 @@ class Login extends React.Component {
                     </h3>
                     <p>Simple, accessible cloud computing & secure data storage.</p>
                     <div className="info-row">
-                      <div className='col-6'>
+                      <div className="col-6">
                         <span>Access to:</span>
                         <ul>
                           <li>OCHIN Data (with appropriate data authorization)</li>
@@ -279,7 +279,7 @@ class Login extends React.Component {
                           <li>Upload your own data into the FISMA-secure environment</li>
                         </ul>
                       </div>
-                      <div className='col-6'>
+                      <div className="col-6">
                         <span>Computational environments available:</span>
                         <ul>
                           <li>Rstudio</li>
@@ -301,13 +301,13 @@ class Login extends React.Component {
                     </h3>
                     <p>A self-service, easily navigable patient-level clinical data search and cohort tool.</p>
                     <div className="info-row">
-                      <div className='col-6'>
+                      <div className="col-6">
                         <span>Explore:</span>
                         <ul>
                           <li>National Health and Nutrition Examination Survey Data</li>
                         </ul>
                       </div>
-                      <div className='col-6'>
+                      <div className="col-6">
                         <span>Export patient-level cohorts:</span>
                         <ul>
                           <li>To your local machine</li>
