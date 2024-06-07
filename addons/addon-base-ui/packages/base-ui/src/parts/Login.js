@@ -180,82 +180,149 @@ class Login extends React.Component {
 
     const additionalLoginComponents = this.props.AdditionalLoginComponents || (() => <></>);
     const collectUserNamePassword = this.props.authentication.shouldCollectUserNamePassword;
+    const borders = { margin: '0px 10px 10px', border: 'solid #2A5FA3 2px', borderRadius: '4px', padding: '10px' };
 
     return (
       <div className="login-form animated fadeIn">
-        <BrandingHeader copy={branding.login} />
         <Grid
           textAlign="center"
           verticalAlign="middle"
           className="animated fadeIn"
-          style={{ maxWidth: '800px', margin: '0 auto', fontSize: '1.2em' }}
+          style={{ maxWidth: '1000px', height: '100%', margin: '0 auto', fontSize: '1.2em' }}
         >
-          <Grid.Column style={{ maxWidth: 450 }}>
-            <Form
-              error={error}
-              size="large"
-              loading={this.loading}
-              onSubmit={e => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-            >
-              {renderAuthenticationProviders()}
-
-              {collectUserNamePassword && (
-                <Form.Field error={!!this.usernameError} required>
-                  <Input
-                    fluid
-                    icon="user"
-                    iconPosition="left"
-                    placeholder="Username"
-                    data-testid="username"
-                    value={this.username}
-                    onChange={this.handleChange('username')}
-                  />
-                  {this.usernameError && (
-                    <Label basic color="red" pointing className="float-left mb2">
-                      {this.usernameError}
-                    </Label>
-                  )}
-                </Form.Field>
-              )}
-
-              {collectUserNamePassword && (
-                <Form.Field error={!!this.passwordError} required>
-                  <Input
-                    fluid
-                    icon="lock"
-                    iconPosition="left"
-                    placeholder="Password"
-                    data-testid="password"
-                    value={this.password}
-                    type="password"
-                    onChange={this.handleChange('password')}
-                  />
-                  {this.passwordError && (
-                    <Label basic color="red" pointing className="float-left mb2">
-                      {this.passwordError}
-                    </Label>
-                  )}
-                </Form.Field>
-              )}
-
-              <Button
-                data-testid="login"
-                type="submit"
-                color="blue"
-                fluid
-                basic
+          <Grid.Column style={{ width: '50%' }}>
+            <Grid.Row>
+              <BrandingHeader copy={branding.login} />
+            </Grid.Row>
+            <Grid.Row>
+              <Form
+                error={error}
                 size="large"
-                className="mb2"
-                onClick={this.handleLogin}
+                loading={this.loading}
+                onSubmit={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
               >
-                Login
-              </Button>
-              {additionalLoginComponents(this)}
-            </Form>
+                {renderAuthenticationProviders()}
+
+                {collectUserNamePassword && (
+                  <Form.Field error={!!this.usernameError} required>
+                    <Input
+                      icon="user"
+                      iconPosition="left"
+                      placeholder="Username"
+                      data-testid="username"
+                      value={this.username}
+                      onChange={this.handleChange('username')}
+                    />
+                    {this.usernameError && (
+                      <Label basic color="red" pointing className="float-left mb2">
+                        {this.usernameError}
+                      </Label>
+                    )}
+                  </Form.Field>
+                )}
+
+                {collectUserNamePassword && (
+                  <Form.Field error={!!this.passwordError} required>
+                    <Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      placeholder="Password"
+                      data-testid="password"
+                      value={this.password}
+                      type="password"
+                      onChange={this.handleChange('password')}
+                    />
+                    {this.passwordError && (
+                      <Label basic color="red" pointing className="float-left mb2">
+                        {this.passwordError}
+                      </Label>
+                    )}
+                  </Form.Field>
+                )}
+
+                <Button
+                  data-testid="login"
+                  type="submit"
+                  color="blue"
+                  fluid
+                  basic
+                  size="large"
+                  className="mb2 col-6 mr-auto ml-auto"
+                  onClick={this.handleLogin}
+                >
+                  Login
+                </Button>
+                {additionalLoginComponents(this)}
+              </Form>
+            </Grid.Row>
           </Grid.Column>
+          {branding.picsure.dualBranding && (
+            <Grid.Column style={{ width: '50%' }}>
+              <Grid.Column>
+                <Grid.Row columns={1}>
+                  <div className="bordered center" style={borders}>
+                    <h3 className="header" style={{ textTransform: 'uppercase' }}>
+                      Service Workbench
+                    </h3>
+                    <p>Simple, accessible cloud computing & secure data storage.</p>
+                    <div className="info-row">
+                      <div className="col-6">
+                        <span>Access to:</span>
+                        <ul>
+                          <li>OCHIN Data (with appropriate data authorization)</li>
+                          <li>Amazon Web Services Open Access Datasets</li>
+                          <li>National Health and Nutrition Examination Survey Data</li>
+                          <li>Upload your own data into the FISMA-secure environment</li>
+                        </ul>
+                      </div>
+                      <div className="col-6">
+                        <span>Computational environments available:</span>
+                        <ul>
+                          <li>Rstudio</li>
+                          <li>SageMaker (Jupyter Notebooks)</li>
+                          <li>Linux EC2</li>
+                          <li>Remote WIndows Desktop</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <a href="https://pic-sure.gitbook.io/service-workbench/" target="_blank" rel="noreferrer">
+                      Learn More
+                    </a>
+                  </div>
+                </Grid.Row>
+                <Grid.Row columns={1}>
+                  <div className="bordered center" style={borders}>
+                    <h3 className="header" style={{ textTransform: 'uppercase' }}>
+                      PIC-SURE
+                    </h3>
+                    <p>A self-service, easily navigable patient-level clinical data search and cohort tool.</p>
+                    <div className="info-row">
+                      <div className="col-6">
+                        <span>Explore:</span>
+                        <ul>
+                          <li>National Health and Nutrition Examination Survey Data</li>
+                        </ul>
+                      </div>
+                      <div className="col-6">
+                        <span>Export patient-level cohorts:</span>
+                        <ul>
+                          <li>To your local machine</li>
+                          <li>To Service Workbench</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <a href="https://pic-sure.gitbook.io/aim-ahead-pic-sure/" target="_blank" rel="noreferrer">
+                      Learn More
+                    </a>
+                  </div>
+                </Grid.Row>
+              </Grid.Column>
+            </Grid.Column>
+          )}
         </Grid>
       </div>
     );
