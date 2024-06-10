@@ -251,7 +251,7 @@ enableCustomRegistration: true
 tosRequired: false
 
 # Registration Copy
-userRegistrationTitle: ""Welcome to the AIM AHEAD Data Repository!"
+userRegistrationTitle: "Welcome to the AIM AHEAD Data Repository!"
 userRegistrationSummary: "<p>Create a Secure Data Repository & Cloud Compute (SDRCC) Login to access available tools:</p>"
 userRegistrationSuccess: '<div class="left"><p>Your AIM-AHEAD account has been successfully created. What you should expect next:</p><ol><li>The AIM-AHEAD administrator will review your account.</li><li>You will receive an email sent from Okta to create a password.</li><li>Login to AIM-AHEAD and start your research.</li></ol><p><a href="https://pic-sure.gitbook.io/service-workbench/general-user-guide/introduction" target="_blank">AIM-AHEAD Service Workbench User Guide</a><br /><a href="https://pic-sure.gitbook.io/aim-ahead-pic-sure/" target="_blank">AIM-AHEAD PIC-SURE User Guide</a></p></div>'
 
