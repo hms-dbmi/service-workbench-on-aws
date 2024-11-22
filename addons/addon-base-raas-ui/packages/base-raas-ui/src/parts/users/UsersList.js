@@ -220,6 +220,69 @@ class UsersList extends React.Component {
               },
             },
             {
+              Header: 'AA Affiliation',
+              accessor: 'aaAffiliation',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.aaAffiliation || '<<none>>';
+              },
+            },
+            {
+              Header: 'PI Name',
+              accessor: 'piName',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.piName || '<<none>>';
+              },
+            },
+            {
+              Header: 'Project Name',
+              accessor: 'projectName',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.projectName || '<<none>>';
+              },
+            },
+            {
+              Header: 'Study Admin',
+              accessor: 'studyAdmin',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.studyAdmin.join(', ') || '<<none>>';
+              },
+            },
+            {
+              Header: 'Study Read/Write',
+              accessor: 'studyReadWrite',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.studyReadWrite.join(', ') || '<<none>>';
+              },
+            },
+            {
+              Header: 'Study Read',
+              accessor: 'studyRead',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.studyRead.join(', ') || '<<none>>';
+              },
+            },
+            {
+              Header: 'Data Source',
+              accessor: 'dataSource',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.dataSource || '<<none>>';
+              },
+            },
+            {
               Header: 'Status',
               accessor: 'status',
               width: 100,
