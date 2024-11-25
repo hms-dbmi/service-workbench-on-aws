@@ -21,7 +21,7 @@ import { removeNulls } from '@aws-ee/base-ui/dist/helpers/utils';
 
 function registerUser(user) {
   const params = {};
-  const data = removeNulls(_.clone(user), 'firstName', 'lastName', 'email');
+  const data = removeNulls(_.clone(user), 'firstName', 'lastName', 'email', 'affiliation', 'piName', 'projectName');
   return httpApiPost('api/register', { data, params });
 }
 

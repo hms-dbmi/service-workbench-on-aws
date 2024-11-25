@@ -3,7 +3,7 @@ import React from 'react';
 import { observable, action, decorate, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label, Icon } from 'semantic-ui-react';
+import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label, Icon, Popup } from 'semantic-ui-react';
 import * as DOMPurify from 'dompurify';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
@@ -48,16 +48,48 @@ class Register extends React.Component {
   renderField(name) {
     const field = this.registerFormFields[name];
     const error = !_.isEmpty(this.errors.validation.get(name));
+    
+    const labelWithHelp = (
+      <div>
+        {field.label}&nbsp;
+        {field.help && (
+          <Popup
+            trigger={<Icon name="info circle" color="blue" size="small" />}
+            content={field.help}
+            position="top center"
+          />
+        )}
+      </div>
+    );
+
+    if (field.type === 'dropdown') {
+      const handleDropdownChange = action((event, data) => {
+        this.user[name] = data.value;
+      });
+
+      return (
+        <Form.Select
+          fluid
+          label={labelWithHelp}
+          options={field.options}
+          placeholder={field.placeholder}
+          error={error}
+          onChange={handleDropdownChange}
+        />
+      );
+    }
 
     const handleChange = action(event => {
       this.user[name] = event.target.value;
     });
+    
     return (
       <Form.Input
         fluid
-        label={field.label}
+        label={labelWithHelp}
         defaultValue=""
         error={error}
+        type={field.type}
         placeholder={field.placeholder}
         onChange={handleChange}
       />
@@ -94,12 +126,19 @@ class Register extends React.Component {
           <Dimmer active={this.formProcessing} inverted>
             <Loader inverted>Submitting registration</Loader>
           </Dimmer>
-          <div style={{ maxWidth: 450, margin: '0 auto' }}>
-            {this.renderField('firstName')}
-
-            {this.renderField('lastName')}
-
-            {this.renderField('email')}
+          <div style={{ maxWidth: 900, margin: '0 auto' }}>
+            <Grid columns={2}>
+              <Grid.Column>
+                {this.renderField('firstName')}
+                {this.renderField('lastName')}
+                {this.renderField('email')}
+              </Grid.Column>
+              <Grid.Column>
+                {this.renderField('affiliation')}
+                {this.renderField('piName')}
+                {this.renderField('projectName')}
+              </Grid.Column>
+            </Grid>
           </div>
           <div className="center mt3">
             {this.terms.value !== termsState.unset.value && <Icon name={this.terms.icon} color={this.terms.color} />}
@@ -220,6 +259,9 @@ class Register extends React.Component {
         firstName: this.user.firstName,
         lastName: this.user.lastName,
         email: this.user.email,
+        affiliation: this.user.aaAffiliation,
+        piName: this.user.piName,
+        projectName: this.user.projectName,
         acceptedTerms: new Date().toISOString(),
       });
       // if we encounter an error then don't continue to process the form and instead display a message
