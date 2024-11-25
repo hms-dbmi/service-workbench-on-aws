@@ -3,7 +3,7 @@ import React from 'react';
 import { observable, action, decorate, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label, Icon, Popup } from 'semantic-ui-react';
+import { Form, Container, Grid, Dimmer, Loader, Header, Segment, Image, Label, Icon, Popup, Dropdown } from 'semantic-ui-react';
 import * as DOMPurify from 'dompurify';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
@@ -62,7 +62,27 @@ class Register extends React.Component {
       </div>
     );
 
-    if (field.type === 'dropdown') {
+    if (field.type === 'multiselect') {
+      const handleMultiSelectChange = action((event, data) => {
+        this.user[name] = data.value;
+      });
+
+      return (
+        <Form.Field error={error}>
+          {labelWithHelp}
+          <Dropdown
+            placeholder={field.placeholder}
+            fluid
+            multiple
+            selection
+            options={field.options}
+            onChange={handleMultiSelectChange}
+          />
+        </Form.Field>
+      );
+    }
+
+    if (field.type === 'select') {
       const handleDropdownChange = action((event, data) => {
         this.user[name] = data.value;
       });
@@ -137,6 +157,7 @@ class Register extends React.Component {
                 {this.renderField('affiliation')}
                 {this.renderField('piName')}
                 {this.renderField('projectName')}
+                {this.renderField('dataSources')}
               </Grid.Column>
             </Grid>
           </div>
@@ -259,9 +280,10 @@ class Register extends React.Component {
         firstName: this.user.firstName,
         lastName: this.user.lastName,
         email: this.user.email,
-        affiliation: this.user.aaAffiliation,
+        aaAffiliation: this.user.affiliation,
         piName: this.user.piName,
         projectName: this.user.projectName,
+        dataSources: this.user.dataSources,
         acceptedTerms: new Date().toISOString(),
       });
       // if we encounter an error then don't continue to process the form and instead display a message

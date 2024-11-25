@@ -39,7 +39,7 @@ const registerUserFormFields = {
   affiliation: {
     label: 'AIM-AHEAD Affiliation',
     rules: 'string|required',
-    type: 'dropdown',
+    type: 'select',
     help: 'Which AIM-AHEAD program do you belong to? If you are unsure about your AIM-AHEAD Affiliation, please contact your program coordinator.',
     options: [
       { key: 'federated-research-network-hub', value: 'federated-research-network-hub', text: 'Federated Research Network Hub' },
@@ -70,6 +70,18 @@ const registerUserFormFields = {
     help: 'What is the name of your project? This should match the submitted title name in your infoready application.',
     rules: 'string|required|between:1,500',
   },
+  dataSources: {
+    label: 'What Data Sources are you planning to use?',
+    help: 'Please select all that apply.',
+    rules: 'array|required',
+    type: 'multiselect',
+    options: [
+      { key: 'ochin', value: 'ochin', text: 'OCHIN' },
+      { key: 'aws-open-data', value: 'aws-open-data', text: 'AWS Open Data' },
+      { key: 'byod', value: 'byod', text: 'Bring Your Own Data (BYOD)' },
+      { key: 'other', value: 'other', text: 'Other / Not Sure' },
+    ],
+  }
 };
 
 function getRegisterFormFields() {
