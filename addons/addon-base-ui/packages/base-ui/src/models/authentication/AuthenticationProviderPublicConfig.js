@@ -51,6 +51,18 @@ function adjustRedirectUri(uri, redirectType = 'login') {
   return adjustedUri;
 }
 
+const BannerAlert = types.model({
+  title: types.maybeNull(types.string),
+  text: types.string,
+  type: types.optional(types.string, 'info'),
+  dismissable: types.optional(types.boolean, true),
+});
+
+const AppAlerts = types.model({
+  loginBlocking: types.maybeNull(types.string),
+  banner: types.optional(types.array(BannerAlert), []),
+});
+
 const AuthenticationProviderPublicConfig = types
   .model('AuthenticationProviderPublicConfig', {
     id: '',
@@ -61,6 +73,7 @@ const AuthenticationProviderPublicConfig = types
     signOutUri: '',
     enableNativeUserPoolUsers: types.maybeNull(types.boolean),
     customRegister: types.maybeNull(types.boolean),
+    appAlerts: types.maybeNull(AppAlerts),
   })
   .actions(self => ({
     cleanup() {

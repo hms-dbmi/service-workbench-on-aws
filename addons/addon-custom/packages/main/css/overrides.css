@@ -25,3 +25,27 @@ button.link {
   padding: 0px;
   cursor: pointer;
 }
+
+.ui.dimmer {
+  padding: 0px;
+  margin: 0px;
+}
+
+.ui.fullscreen.modal {
+  width: 100% !important;
+  height: 100%;
+  padding: 0px;
+  margin: 0px !important;
+  border-radius: 0px;
+}
+
+.center ol,
+.center ul,
+.left {
+  text-align: left;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: row;
+}

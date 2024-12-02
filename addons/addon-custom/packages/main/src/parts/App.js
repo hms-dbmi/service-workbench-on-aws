@@ -18,7 +18,7 @@ import { Switch, Redirect, withRouter } from 'react-router-dom';
 import { action, decorate, computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { getEnv } from 'mobx-state-tree';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Dropdown, DropdownMenu, DropdownItem } from 'semantic-ui-react';
 
 import { getRoutes, getMenuItems, getDefaultRouteLocation } from '@aws-ee/base-ui/dist/helpers/plugins-util';
 import MainLayout from '@aws-ee/base-ui/dist/parts/MainLayout';
@@ -73,14 +73,42 @@ class RegisterApp extends React.Component {
     }
   }
 
-  openHelp() {
-    window.open(branding.page.help, '_blank');
+  openHelp(url) {
+    return () => window.open(url, '_blank');
+  }
+
+  getLinks() {
+    const helpLinks = (branding.page.help || '').split(',').filter(x => x);
+    if (helpLinks.length < 2) {
+      return helpLinks;
+    }
+    return helpLinks.reduce((items, link) => {
+      const [text, ...urlParts] = link.split('=');
+      const url = urlParts.join('='); // if there are query params then we need to rebuild the url
+      if (!text || !url) {
+        console.error(`Poorly formed help link was provided: "${link}"`, 'Expected: "Text=URL"');
+        return items;
+      }
+      return [...items, { text, url }];
+    }, []);
   }
 
   appMenuItems() {
+    const links = this.getLinks();
     return (
       <>
-        {branding.page.help && <Menu.Item onClick={this.openHelp}>Help</Menu.Item>}
+        {links.length === 1 && <Menu.Item onClick={this.openHelp(links[0])}>Help</Menu.Item>}
+        {links.length > 1 && (
+          <Dropdown item text="Help">
+            <DropdownMenu>
+              {links.map(({ text, url }) => (
+                <DropdownItem key={text} onClick={this.openHelp(url)}>
+                  {text}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        )}
         <TermsModal // Clickable Terms menu item
           trigger={<Menu.Item>Terms of Service</Menu.Item>}
           closeOnDimmerClick

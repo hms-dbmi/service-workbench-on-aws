@@ -8,15 +8,12 @@ import * as DOMPurify from 'dompurify';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
+import BrandingHeader from './BrandingHeader';
 
 import { getRegisterFormFields, formValidationErrors } from '../models/RegisterForm';
 import { registerUser } from '../helpers/api';
 import TermsModal from './TermsModel';
 
-const styles = {
-  header: { fontFamily: 'Handel Gothic,Futura,Trebuchet MS,Arial,sans-serif' },
-  bodyText: { fontFamily: 'Futura,Trebuchet MS,Arial,sans-serif' },
-};
 const termsState = {
   accepted: { value: 'accepted', icon: 'check circle outline', color: 'green', label: 'I have read and accept the' },
   declined: { value: 'declined', icon: 'times circle outline', color: 'red', label: 'I have declined the' },
@@ -116,16 +113,6 @@ class Register extends React.Component {
     );
   }
 
-  renderHTML(content) {
-    const cleanContent = DOMPurify.sanitize(content, { USE_PROFILES: { html: true } });
-
-    // This method sets html from a string. We're pulling this from the config file made by
-    // an approved admin, and we're sanitizing using dompurify package.
-    // https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
-    // eslint-disable-next-line react/no-danger
-    return <div dangerouslySetInnerHTML={{ __html: cleanContent }} />;
-  }
-
   setTerms(terms) {
     return () => {
       this.termsModalButton.focus();
@@ -135,13 +122,35 @@ class Register extends React.Component {
     };
   }
 
+  renderTOS() {
+    return (
+      <>
+        {this.terms.value !== termsState.unset.value && <Icon name={this.terms.icon} color={this.terms.color} />}
+        {this.terms.label} &nbsp;
+        <TermsModal
+          trigger={
+            <button
+              id="terms-modal"
+              className="link"
+              type="button"
+              ref={ref => {
+                this.termsModalButton = ref;
+              }}
+            >
+              Terms of Service
+            </button>
+          }
+          closeOnDimmerClick
+          acceptAction={this.setTerms(termsState.accepted)}
+          declineAction={this.setTerms(termsState.declined)}
+        />
+      </>
+    );
+  }
+
   renderRegisterationForm() {
     return (
       <Form size="large" loading={this.loading} onSubmit={this.handleSubmit}>
-        <Header as="h2" textAlign="center" className="header">
-          {branding.register.title}
-        </Header>
-        {this.renderHTML(branding.register.summary)}
         <Segment basic className="ui fluid form">
           <Dimmer active={this.formProcessing} inverted>
             <Loader inverted>Submitting registration</Loader>
@@ -161,28 +170,8 @@ class Register extends React.Component {
               </Grid.Column>
             </Grid>
           </div>
+          {branding.register.tosRequired && <div className="center mt2">{this.renderTOS()}</div>}
           <div className="center mt3">
-            {this.terms.value !== termsState.unset.value && <Icon name={this.terms.icon} color={this.terms.color} />}
-            {this.terms.label} &nbsp;
-            <TermsModal
-              trigger={
-                <button
-                  id="terms-modal"
-                  className="link"
-                  type="button"
-                  ref={ref => {
-                    this.termsModalButton = ref;
-                  }}
-                >
-                  Terms of Service
-                </button>
-              }
-              closeOnDimmerClick
-              acceptAction={this.setTerms(termsState.accepted)}
-              declineAction={this.setTerms(termsState.declined)}
-            />
-          </div>
-          <div className="mt3 center">
             <div>
               <Form.Field>
                 {this.errors.form && (
@@ -190,12 +179,8 @@ class Register extends React.Component {
                     <Label prompt>{this.errors.form}</Label>
                   </div>
                 )}
-                <Form.Button
-                  id="register-submit"
-                  disabled={this.terms.value !== termsState.accepted.value}
-                  color="green"
-                >
-                  Create a new Service Workbench account
+                <Form.Button id="register-submit" disabled={this.submitDisabled()} color="green">
+                  Register
                 </Form.Button>
               </Form.Field>
             </div>
@@ -205,43 +190,48 @@ class Register extends React.Component {
     );
   }
 
+  submitDisabled() {
+    return branding.register.tosRequired ? this.terms.value !== termsState.accepted.value : false;
+  }
+
   renderConfirmation() {
     return (
-      <div>
-        <Header as="h2" textAlign="center" style={styles.header}>
-          SUCCESS!
-        </Header>
-        {this.renderHTML(branding.register.success)}
-      </div>
+      <BrandingHeader
+        copy={{
+          title: 'SUCCESS!',
+          subtitle: branding.register.success,
+        }}
+        picsureBoxes={false}
+      />
+    );
+  }
+
+  renderRegister() {
+    return (
+      <>
+        <BrandingHeader copy={branding.register} />
+        <Grid
+          id="register-user"
+          className="animated fadeIn"
+          style={{ maxWidth: '800px', margin: '0 auto', fontSize: '1.2em' }}
+        >
+          <Grid.Row columns={1}>
+            <Grid.Column className="bodyText">{this.renderRegisterationForm()}</Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </>
     );
   }
 
   renderContent() {
     const { location } = this.props;
-
-    return (
-      <Grid
-        id="register-user"
-        verticalAlign="middle"
-        className="animated fadeIn"
-        style={{ height: '100%', maxWidth: '800px', margin: '0 auto' }}
-      >
-        <Grid.Row columns={2}>
-          <Grid.Column>
-            <Image fluid src={this.props.assets.images.registerLogo} />
-          </Grid.Column>
-          <Grid.Column>
-            <Image fluid src={this.props.assets.images.registerAws} />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row columns={1}>
-          <Grid.Column className="bodyText">
-            {location.pathname === '/register' && this.renderRegisterationForm()}
-            {location.pathname === '/register-confirmation' && this.renderConfirmation()}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    );
+    if (location.pathname === '/register') {
+      return this.renderRegister();
+    }
+    if (location.pathname === '/register-confirmation') {
+      return this.renderConfirmation();
+    }
+    return <></>;
   }
 
   handleSubmit = action(async event => {
@@ -267,13 +257,17 @@ class Register extends React.Component {
         return;
       }
 
-      // Validate that the terms have been accepted
-      if (this.terms.value !== termsState.accepted.value) {
+      // Validate that the terms have been accepted, if required
+      let acceptedTerms;
+      if (branding.register.tosRequired && this.terms.value !== termsState.accepted.value) {
         runInAction(() => {
           this.errors.form = termsErrorText;
           this.formProcessing = false;
         });
         return;
+      }
+      if (branding.register.tosRequired) {
+        acceptedTerms = new Date().toISOString();
       }
 
       const result = await registerUser({

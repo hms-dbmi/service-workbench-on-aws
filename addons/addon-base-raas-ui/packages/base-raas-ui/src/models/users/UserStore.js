@@ -18,12 +18,14 @@ import { types } from 'mobx-state-tree';
 
 import { getUser } from '@aws-ee/base-ui/dist/helpers/api';
 import { BaseStore } from '@aws-ee/base-ui/dist/models/BaseStore';
+import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
 import { User } from './User';
 
 const UserStore = BaseStore.named('UserStore')
   .props({
     user: types.maybe(User),
+    picsureLanding: branding.picsure.dualBranding,
   })
   .actions(self => {
     // save the base implementation of cleanup
@@ -36,6 +38,11 @@ const UserStore = BaseStore.named('UserStore')
           self.user = User.create(user);
         });
       },
+      bypassLanding() {
+        self.runInAction(() => {
+          self.picsureLanding = false;
+        });
+      },
       cleanup: () => {
         self.user = undefined;
         superCleanup();
@@ -46,6 +53,10 @@ const UserStore = BaseStore.named('UserStore')
   .views(self => ({
     get empty() {
       return _.isEmpty(self.user);
+    },
+
+    get defaultLocation() {
+      return self.picsureLanding ? '/landing' : '/dashboard';
     },
 
     // TODO this method should really be moved to the User model and renamed to something like projectIdOptions

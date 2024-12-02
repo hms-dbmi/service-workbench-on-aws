@@ -1,0 +1,130 @@
+# Include all default templates from https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/
+include:
+  - template: Jobs/SAST.latest.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
+  - template: DAST.gitlab-ci.yml
+
+# Include default tags
+default:
+  tags:
+    - aim-ahead
+    - docker
+
+# Set PATH
+variables:
+  PATH: '/bin:/usr/bin:/usr/local/bin'
+
+# cache node modules
+cache:
+  paths:
+    - node_modules/
+    - addons/*/packages/*/node_modules/
+    - main/solution/*/node_modules/
+    - main/cicd/*/node_modules/
+    - main/integration-tests/node_modules/
+    - main/packages/*/node_modules
+
+# Run different stages
+stages:
+  - test
+  - dast
+  - build
+  - assume_role
+  - deploy
+
+#######################
+###### Templates ######
+#######################
+
+.assume_role:
+  stage: assume_role
+  inherit:
+    default: false
+  tags:
+    - aim-ahead
+    - shell
+  script:
+    - sh assume-role.sh > creds.env
+  artifacts:
+    reports:
+      dotenv: creds.env
+
+.build:
+  stage: build
+  inherit:
+    default: false
+  tags:
+    - aim-ahead
+    - shell
+  script:
+    - echo "Installing dependencies"
+    - ./scripts/install.sh
+    - echo "Building packages"
+    - ./scripts/build-all-packages.sh
+
+.deploy:
+  stage: deploy
+  inherit:
+    default: false
+  tags:
+    - aim-ahead
+    - shell
+  when: manual
+  script:
+    - ./scripts/environment-deploy.sh
+
+#####################
+####### Dev #########
+#####################
+build_dev:
+  environment: Development
+  extends: .build
+  only:
+    - srce-dev
+
+assume_role_dev:
+  extends: .assume_role
+  environment: Development
+  only:
+    - srce-dev
+
+deploy_dev:
+  environment: Development
+  extends: .deploy
+  needs:
+    - build_dev
+    - assume_role_dev
+  only:
+    - srce-dev
+
+dast_dev:
+  stage: dast
+  only:
+    - srce-dev
+  environment: "Development"
+  script: "echo running DAST on ${DAST_WEBSITE}"
+
+#####################
+####### Prod ########
+#####################
+build_prod:
+  environment: Production
+  extends: .build
+  only:
+    - srce-prod
+
+assume_role_prod:
+  extends: .assume_role
+  environment: Production
+  only:
+    - srce-prod
+
+deploy_prod:
+  environment: Production
+  extends: .deploy
+  needs:
+    - build_prod
+    - assume_role_prod
+  only:
+    - srce-prod

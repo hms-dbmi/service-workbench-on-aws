@@ -17,7 +17,7 @@ import _ from 'lodash';
 import React from 'react';
 import { action, decorate, observable, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { Button, Dimmer, Dropdown, Loader, Icon, Table } from 'semantic-ui-react';
+import { Button, Dimmer, Dropdown, Loader, Icon, Table, Modal } from 'semantic-ui-react';
 
 import { displayError, displaySuccess } from '@aws-ee/base-ui/dist/helpers/notification';
 import { swallowError } from '@aws-ee/base-ui/dist/helpers/utils';
@@ -37,6 +37,8 @@ class StudyPermissionsTable extends React.Component {
       this.permissionsStore = props.study.getPermissionsStore();
       this.currUser = props.userStore.user;
       this.usersStore = props.usersStore;
+      this.userUpdates = [];
+      this.modalOpen = false;
 
       this.resetForm();
     });
@@ -75,24 +77,49 @@ class StudyPermissionsTable extends React.Component {
   };
 
   submitUpdate = async () => {
+    const updates = this.permissionsStore.usersToUpdate(this.selectedUserIds, this.staleUserIds);
+
+    if (updates.usersToRemove.length > 0) {
+      runInAction(() => {
+        this.userUpdates = updates.usersToRemove;
+        this.modalOpen = true;
+      });
+    } else {
+      this.confirmUpdate();
+    }
+  };
+
+  confirmUpdate = async () => {
     runInAction(() => {
+      this.modalOpen = false;
       this.isProcessing = true;
     });
 
     // Perform update
     try {
-      await this.permissionsStore.update(this.selectedUserIds, this.staleUserIds);
-      displaySuccess('Update Succeeded');
+      const updates = this.permissionsStore.usersToUpdate(this.selectedUserIds, this.staleUserIds);
+
+      await this.permissionsStore.update(updates);
+
       runInAction(() => {
+        displaySuccess('Update Succeeded');
         this.resetForm();
       });
     } catch (error) {
       displayError('Update Failed', error);
-      runInAction(() => {
-        this.isProcessing = false;
-      });
     }
+
+    runInAction(() => {
+      this.isProcessing = false;
+    });
   };
+
+  closeModal() {
+    return () =>
+      runInAction(() => {
+        this.modalOpen = false;
+      });
+  }
 
   render() {
     // Render loading, error, or permissions table
@@ -121,6 +148,33 @@ class StudyPermissionsTable extends React.Component {
     }
     return (
       <>
+        <Modal size="small" open={this.modalOpen} onClose={this.closeModal()}>
+          <Modal.Header>Potential workspace study impact</Modal.Header>
+          <Modal.Content>
+            <Icon
+              circular
+              inverted
+              name="info"
+              size="large"
+              color="red"
+              style={{ float: 'left', marginRight: '10px' }}
+            />
+            <p>
+              Please ask the impacted user{this.userUpdates.length > 1 ? 's' : ''} below to terminate and recreate any
+              workspaces that are associated with <b>{this.study.name}</b>, as they will no longer be able to access
+              this study&apos;s data once you submit this change.
+            </p>
+            <div className="center">
+              <UserLabels users={this.usersStore.asUserObjects(this.userUpdates)} />
+            </div>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button onClick={this.closeModal()}>Cancel Change</Button>
+            <Button negative onClick={this.confirmUpdate}>
+              Confirm and Submit Change
+            </Button>
+          </Modal.Actions>
+        </Modal>
         <Dimmer.Dimmable dimmed={this.isProcessing}>
           <Dimmer active={this.isProcessing} inverted>
             <Loader size="big" />
@@ -212,11 +266,13 @@ function getStaleUsers(selectedUserIds, usersStore) {
 }
 
 decorate(StudyPermissionsTable, {
+  userUpdates: observable,
   editModeOn: observable,
+  modalOpen: observable,
   isProcessing: observable,
   selectedUserIds: observable,
   staleUserIds: observable,
-
+  closeModal: action,
   enableEditMode: action,
   resetForm: action,
   submitUpdate: action,

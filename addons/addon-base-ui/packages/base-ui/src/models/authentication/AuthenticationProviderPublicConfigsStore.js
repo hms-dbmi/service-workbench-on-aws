@@ -71,6 +71,12 @@ const AuthenticationProviderPublicConfigsStore = BaseStore.named('Authentication
       const configs = self.authenticationProviderPublicConfigs || [];
       return configs.find(({ type }) => type === nativeUserPool) || {};
     },
+    get loginBlocking() {
+      return _.get(this.nativeUserPool, 'appAlerts.loginBlocking', false);
+    },
+    get bannerAlerts() {
+      return _.get(this.nativeUserPool, 'appAlerts.banner', []).slice();
+    },
     toAuthenticationProviderFromId(authenticationProviderId) {
       return _.find(self.authenticationProviderPublicConfigs, { id: authenticationProviderId });
     },

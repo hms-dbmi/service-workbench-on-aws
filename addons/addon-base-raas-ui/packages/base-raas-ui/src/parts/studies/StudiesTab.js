@@ -92,8 +92,9 @@ class StudiesTab extends React.Component {
   renderContent() {
     const studiesStore = this.studiesStore;
     const isSelectable = this.canSelectStudy;
+
     return (
-      <div className="mt3 mr0 ml0">
+      <div className="mt1 mr0 ml0">
         {studiesStore.list.map(study => (
           <StudyRow key={study.id} study={study} isSelectable={isSelectable} />
         ))}

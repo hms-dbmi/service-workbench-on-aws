@@ -14,6 +14,7 @@
  */
 
 import React from 'react';
+import TimeAgo from 'react-timeago';
 import { decorate, action, computed, runInAction, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Header, Checkbox, Segment, Accordion, Icon, Popup, Label } from 'semantic-ui-react';
@@ -75,7 +76,7 @@ class StudyRow extends React.Component {
     if (isSelectable) onClickAttr.onClick = () => this.handleFileSelection(study);
 
     return (
-      <Segment clearing padded raised className="mb3" {...attrs}>
+      <Segment clearing className="mb1" {...attrs}>
         <div data-testid="study-card" className="flex">
           <div className="mr2" {...onClickAttr}>
             {isSelectable && <Checkbox checked={isSelected} style={{ marginTop: '17px' }} />}
@@ -106,6 +107,12 @@ class StudyRow extends React.Component {
           <Header.Subheader>
             <span className="pt1 fs-8 color-grey">{study.id}</span>
             {study.projectId && <span className="fs-8 color-grey"> &middot; {study.projectId}</span>}
+            {study.createdAt && (
+              <span className="fs-8 color-grey">
+                {' '}
+                &middot; Added <TimeAgo date={study.createdAt} />
+              </span>
+            )}
           </Header.Subheader>
         </Header>
       </div>
@@ -161,6 +168,10 @@ class StudyRow extends React.Component {
   renderPermissionsAccordion(study) {
     if (!study.isOrganizationStudy) return null;
     const expanded = this.permissionsExpanded;
+
+    if (!this.study.isEditable) {
+      return <></>;
+    }
 
     return (
       <Accordion className="mt0">

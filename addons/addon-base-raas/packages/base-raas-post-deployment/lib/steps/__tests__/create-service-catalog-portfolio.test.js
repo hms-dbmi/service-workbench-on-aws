@@ -103,9 +103,7 @@ describe('CreateServiceCatalogPortfolio', () => {
     };
     settings = await container.find('settings');
     loggingService = await container.find('log');
-    loggingService.log = jest.fn(msg => {
-      console.log(msg);
-    });
+    loggingService.log = jest.fn();
     // suppress expected messages
     jest.spyOn(console, 'info').mockImplementation();
 

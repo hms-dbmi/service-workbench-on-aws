@@ -15,10 +15,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { decorate, action } from 'mobx';
+import { decorate, action, observable, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Menu, Icon, Image } from 'semantic-ui-react';
+import { Menu, Icon, Image, Message } from 'semantic-ui-react';
 
 import { createLink } from '../helpers/routing';
 import { displayError } from '../helpers/notification';
@@ -27,6 +27,21 @@ import { branding, versionAndDate } from '../helpers/settings';
 // expected props
 // - userStore (via injection)
 class MainLayout extends React.Component {
+  constructor(props) {
+    super(props);
+
+    runInAction(() => {
+      this.banners = this.props.authenticationProviderPublicConfigsStore.bannerAlerts;
+    });
+  }
+
+  handleDismiss = bannerText => {
+    const index = this.banners.findIndex(({ text }) => text === bannerText);
+    if (index !== -1) {
+      this.banners.splice(index, 1);
+    }
+  };
+
   goto = pathname => () => {
     const location = this.props.location;
     const link = createLink({
@@ -79,7 +94,7 @@ class MainLayout extends React.Component {
         })}
       </Menu>,
 
-      <Menu inverted color="black" fixed="top" className="box-shadow zindex-1500" key="ml2">
+      <Menu inverted color="black" fixed="top" className="box-shadow" key="ml2">
         <Menu.Item style={{ height: '50px', verticalAlign: 'middle' }}>
           <Image
             size="mini"
@@ -87,7 +102,7 @@ class MainLayout extends React.Component {
             className="mr1"
             style={{ height: '40px', width: 'auto' }}
           />
-          <span style={{ paddingLeft: '5px' }}>{branding.main.title}</span>
+          <span style={{ paddingLeft: '5px' }}>{branding.page.title}</span>
           <span style={{ paddingLeft: '20px' }}>{versionAndDate}</span>
         </Menu.Item>
         <Menu.Menu position="right">
@@ -107,6 +122,32 @@ class MainLayout extends React.Component {
         }}
         key="ml3"
       >
+        {this.banners.length > 0 && (
+          <div className="ui container mt3">
+            {this.banners.map(({ title, text, type, dismissable }) => {
+              const icons = {
+                error: 'exclamation triangle',
+                info: 'info circle',
+                success: 'check circle',
+                warning: 'exclamation triangle',
+              };
+              return (
+                <Message
+                  className="mb2"
+                  key={text}
+                  negative={type === 'error'}
+                  info={type === 'info'}
+                  success={type === 'success'}
+                  warning={type === 'warning'}
+                  icon={icons[type] || false}
+                  onDismiss={dismissable ? () => this.handleDismiss(text) : undefined}
+                  header={title}
+                  content={text}
+                />
+              );
+            })}
+          </div>
+        )}
         {this.props.children}
       </div>,
     ];
@@ -115,7 +156,14 @@ class MainLayout extends React.Component {
 
 // see https://medium.com/@mweststrate/mobx-4-better-simpler-faster-smaller-c1fbc08008da
 decorate(MainLayout, {
+  banners: observable,
   handleLogout: action,
+  handleDismiss: action,
 });
 
-export default inject('authentication', 'userStore', 'assets')(withRouter(observer(MainLayout)));
+export default inject(
+  'authentication',
+  'userStore',
+  'assets',
+  'authenticationProviderPublicConfigsStore',
+)(withRouter(observer(MainLayout)));

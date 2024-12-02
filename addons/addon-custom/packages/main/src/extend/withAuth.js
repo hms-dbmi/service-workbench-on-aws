@@ -25,6 +25,8 @@ import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
 
 import TermsPage from '../parts/TermsPage';
 import Register from '../parts/Register';
+import BrandingHeader from '../parts/BrandingHeader';
+import { renderHTML } from '../helpers/utils';
 
 /* eslint-disable react/jsx-no-bind */
 
@@ -50,19 +52,24 @@ function RegisterLogin(enableCustomRegister) {
             fluid
             basic
             size="large"
-            className="mb2"
+            className="mb2 col-6 mr-auto ml-auto"
             onClick={handleRegister}
           >
             Register
           </Button>
         )}
-        <Link to="/legal">Terms of Service</Link>
-        <br />
-        {branding.main.loginWarning}
+        {branding.login.tosLink && (
+          <>
+            <Link to="/legal">Terms of Service</Link>
+            <br />
+          </>
+        )}
+        {branding.login.links && renderHTML(branding.login.links)}
+        {branding.login.warning}
       </>
     );
   }
-  return <Login AdditionalLoginComponents={RegisterButton} />;
+  return <Login AdditionalLoginComponents={RegisterButton} Header={BrandingHeader} />;
 }
 
 class AuthWrapper extends React.Component {
@@ -85,6 +92,12 @@ class AuthWrapper extends React.Component {
 
   render() {
     const { app, location } = this.props;
+
+    document.title =
+      branding.picsure.dualBranding && !app.userAuthenticated
+        ? branding.picsure.browserTitle
+        : branding.main.browserTitle;
+
     if (app.userAuthenticated) {
       return this.renderAuthComp(true);
     }

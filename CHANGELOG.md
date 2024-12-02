@@ -2,8 +2,52 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
+## [5.0.0_1.4.2](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.4.1...v5.0.0_1.4.2) (03/14/2024)
+- Emergency change to add login-blocking warning and system wide application warnings.
+
+## [5.0.0_1.4.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.4.0...v5.0.0_1.4.1) (03/01/2024)
+- Add copy changes and parameter for registration page.
+- Add PIC-SURE landing page if stage parameter is set.
+- Bugfix: Move conda env config to install_kernel script.
+
+## [5.0.0_1.4.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.3.2...v5.0.0_1.4.0) (01/25/2024)
+- Parameterize user register TOS acceptance.
+- Add comma separated study whitelist in stage file.
+- Add Jira support widget.
+- Add dropdown to help link if more than one url is given.
+
+## [5.0.0_1.3.2](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.3.1...v5.0.0_1.3.2) (12/21/2023)
+- Update register page email regex validation: validatorjs schema regex fields need slashes before and after the regex, or else it returns a validation error.
+
+## [5.0.0_1.3.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.3.0...v5.0.0_1.3.1) (12/13/2023)
+- Bugfix: Update to add 'and' to scanner filter when more than one filter condition exists.
+
+## [5.0.0_1.3.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.2.0...v5.0.0_1.3.0) (12/08/2023)
+### Workspaces
+- Update windows sync to auto-start on user login.
+- Split bootstrap script by env type to speed up initialization and s3 downloads.
+
+## Workspace List
+- Add message for windows users when a study is attached to note that study files will take time to sync on start and before stop.
+- Fix bug where workspace configuration deprecation notice errantly shows on workspace view page on reload.
+- Add filtering/searching by id in normal and advanced workspace views.
+- Add api and ui pagination for workspaces to fix workspace page issue when large number of workspaces are in the database.
+  - Update workspaces to paginate api return until all workspaces details are returned.
+  - Paginate the workspace page to reduce page load times.
+- Fix loading bug on advanced workspace view when status changes to pending because of user start/stop.
+
+## User Management
+- Update user management page to fix sorting and filtering.
+- Update regex for user emails to be more in line with email conventions.
+- Remove permissins accordian from view if a user can't edit a studies permission.
+
+## Study management
+- Add a modal notice on study permission edit when a user would be impacted by permission change/removal.
+- Update studies api method to use query and filter instead of BatchGet so more than 100 studies can be returned.
+- Add created date to study card.
 
 ## [5.0.0_1.2.0](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.1.2...v5.0.0_1.2.0) (09/28/2023)
+
 - Allow more than 100 RStudio instances to be launched in one host account, by dynamically creating load balancers-
   bypassing AWS 100 target group limit.
   - Added support for multiple ALBs. New ALB will be created when the limit for existing ALB exceeds
@@ -19,6 +63,7 @@ All notable changes to this project will be documented in this file. As our fork
 - Update to build proxy lambda layer and with requirements.
 
 ## [5.0.0_1.1.1](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.1.0...v5.0.0_1.1.1) (08/10/2023)
+
 - Update serverless templates to use an empty string for aws profile.
 - Update nodejs and aws-sdk versions.
   - Cherry pick [a0c7eeed34eea02ec56f49411cf499d1c59f0d3a](https://github.com/awslabs/service-workbench-on-aws/commit/a0c7eeed34eea02ec56f49411cf499d1c59f0d3a) to upgrade nodejs version and dependencies for lambda runtimes.

@@ -19,6 +19,7 @@ import { withRouter } from 'react-router-dom';
 import { decorate, observable, runInAction, action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import ReactTable from 'react-table';
+import TimeAgo from 'react-timeago';
 import { swallowError } from '@aws-ee/base-ui/dist/helpers/utils';
 import { isStoreError, isStoreLoading, isStoreReady } from '@aws-ee/base-ui/dist/models/BaseStore';
 import { createLink } from '@aws-ee/base-ui/dist/helpers/routing';
@@ -26,6 +27,12 @@ import ErrorBox from '@aws-ee/base-ui/dist/parts/helpers/ErrorBox';
 import BasicProgressPlaceholder from '@aws-ee/base-ui/dist/parts/helpers/BasicProgressPlaceholder';
 
 import UpdateUser from './UpdateUser';
+
+const statusSortOrder = {
+  pending: 1,
+  active: 2,
+  inactive: 3,
+};
 
 class UsersList extends React.Component {
   constructor(props) {
@@ -136,9 +143,15 @@ class UsersList extends React.Component {
         <Dimmer active={processing} inverted>
           <Loader inverted>Updating</Loader>
         </Dimmer>
+        <div style={{ fontStyle: 'italic', color: 'grey', textAlign: 'right' }}>
+          To sort by multiple columns, press shift then click.
+        </div>
         <ReactTable
           data={usersList}
-          defaultSorted={[{ id: 'lastName', desc: true }]}
+          defaultSorted={[
+            { id: 'status', asc: true },
+            { id: 'email', asc: true },
+          ]}
           showPagination={showPagination}
           defaultPageSize={pageSize}
           className="-striped -highlight"
@@ -151,13 +164,13 @@ class UsersList extends React.Component {
           columns={[
             {
               Header: 'Name',
-              accessor: 'username',
-              width: 200,
+              accessor: 'displayName',
+              width: 150,
             },
             {
               Header: 'Email',
               accessor: 'email',
-              width: 200,
+              width: 215,
             },
             {
               Header: 'Identity Provider',
@@ -170,16 +183,14 @@ class UsersList extends React.Component {
             {
               Header: 'Type',
               accessor: 'isExternalUser',
-              width: 100,
+              width: 80,
               Cell: row => {
                 const user = row.original;
                 return user.isExternalUser ? 'External' : 'Internal';
               },
-              filterMethod: filter => {
-                if (filter.value.toLowerCase().includes('ex')) {
-                  return false;
-                }
-                return true;
+              filterMethod: (filter, row) => {
+                const type = row._original.isExternalUser ? 'external' : 'internal';
+                return type.indexOf(filter.value.toLowerCase()) === 0;
               },
             },
             {
@@ -191,6 +202,10 @@ class UsersList extends React.Component {
                 const user = row.original;
                 return user.userRole || 'N/A';
               },
+              filterMethod: (filter, row) => {
+                const user = row._original.userRole || 'n/a';
+                return user.indexOf(filter.value.toLowerCase()) === 0;
+              },
             },
             {
               Header: 'Project',
@@ -199,10 +214,14 @@ class UsersList extends React.Component {
                 const user = row.original;
                 return user.projectId.join(', ') || '<<none>>';
               },
+              filterMethod: (filter, row) => {
+                const projectString = row._original.projectId.join(', ') || 'none';
+                return projectString.indexOf(filter.value.toLowerCase()) >= 0;
+              },
             },
             {
               Header: 'Status',
-              accessor: 'isActive',
+              accessor: 'status',
               width: 100,
               Cell: row => {
                 const user = row.original;
@@ -237,16 +256,26 @@ class UsersList extends React.Component {
                 }
                 return lable;
               },
+              sortMethod: (a, b) => {
+                return statusSortOrder[a] - statusSortOrder[b];
+              },
               filterMethod: (filter, row) => {
-                if (row._original.status.indexOf(filter.value.toLowerCase()) >= 0) {
-                  return true;
-                }
-                return false;
+                return row._original.status.indexOf(filter.value.toLowerCase()) === 0;
+              },
+            },
+            {
+              Header: 'Created',
+              accessor: 'createdAt',
+              filterable: false,
+              Cell: row => {
+                const created = row.original.createdAt;
+                return <TimeAgo date={created} />;
               },
             },
             {
               Header: '',
               filterable: false,
+              sortable: false,
               Cell: cell => {
                 const user = cell.original;
                 return (

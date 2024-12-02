@@ -28,7 +28,8 @@ async function configure(context) {
       const requestContext = res.locals.requestContext;
 
       const [environmentScService] = await context.service(['environmentScService']);
-      const result = await environmentScService.list(requestContext);
+      const result = await environmentScService.list(requestContext, req.query);
+
       res.status(200).json(result);
     }),
   );

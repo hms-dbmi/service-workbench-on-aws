@@ -18,7 +18,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { observable, action, decorate, runInAction } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Button, Form, Grid, Header, Segment, Label, Input, Select, Image } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Label, Input, Select, Image } from 'semantic-ui-react';
 
 import { displayError } from '../helpers/notification';
 import { branding } from '../helpers/settings';
@@ -130,7 +130,26 @@ class Login extends React.Component {
       );
   });
 
+  renderBrandingHeader = () =>
+    this.props.Header ? (
+      this.props.Header
+    ) : (
+      <>
+        <Image centered src={this.props.assets.images.loginImage} />
+        <Header as="h3" textAlign="center">
+          {branding.login.title}
+          <Header.Subheader>{branding.login.subtitle}</Header.Subheader>
+        </Header>
+      </>
+    );
+
   render() {
+    const loginBlocking = this.props.authenticationProviderPublicConfigsStore.loginBlocking;
+    const BrandingHeader = this.renderBrandingHeader();
+    if (loginBlocking) {
+      return <BrandingHeader copy={branding.login} />;
+    }
+
     const error = !!(this.usernameError || this.passwordError || this.authenticationProviderError);
 
     const authenticationProviderOptions = this.getStore().authenticationProviderOptions;
@@ -161,33 +180,35 @@ class Login extends React.Component {
 
     const additionalLoginComponents = this.props.AdditionalLoginComponents || (() => <></>);
     const collectUserNamePassword = this.props.authentication.shouldCollectUserNamePassword;
-    const renderBrandingLogo = <Image centered src={this.props.assets.images.loginImage} />;
+    const borders = { margin: '0px 10px 10px', border: 'solid #2A5FA3 2px', borderRadius: '4px', padding: '10px' };
+
     return (
       <div className="login-form animated fadeIn">
-        <Grid textAlign="center" style={{ height: '100%' }} verticalAlign="middle">
-          <Grid.Column style={{ maxWidth: 450 }}>
-            <Form
-              error={error}
-              size="large"
-              loading={this.loading}
-              onSubmit={e => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-            >
-              <Segment stacked>
-                {renderBrandingLogo}
-                <Header as="h3" textAlign="center">
-                  {branding.login.title}
-                  <Header.Subheader>{branding.login.subtitle}</Header.Subheader>
-                </Header>
-
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+          className="animated fadeIn"
+          style={{ maxWidth: '1000px', height: '100%', margin: '0 auto', fontSize: '1.2em' }}
+        >
+          <Grid.Column style={{ width: '50%' }}>
+            <Grid.Row>
+              <BrandingHeader copy={branding.login} />
+            </Grid.Row>
+            <Grid.Row>
+              <Form
+                error={error}
+                size="large"
+                loading={this.loading}
+                onSubmit={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
                 {renderAuthenticationProviders()}
 
                 {collectUserNamePassword && (
                   <Form.Field error={!!this.usernameError} required>
                     <Input
-                      fluid
                       icon="user"
                       iconPosition="left"
                       placeholder="Username"
@@ -230,15 +251,78 @@ class Login extends React.Component {
                   fluid
                   basic
                   size="large"
-                  className="mb2"
+                  className="mb2 col-6 mr-auto ml-auto"
                   onClick={this.handleLogin}
                 >
                   Login
                 </Button>
                 {additionalLoginComponents(this)}
-              </Segment>
-            </Form>
+              </Form>
+            </Grid.Row>
           </Grid.Column>
+          {branding.picsure.dualBranding && (
+            <Grid.Column style={{ width: '50%' }}>
+              <Grid.Column>
+                <Grid.Row columns={1}>
+                  <div className="bordered center" style={borders}>
+                    <h3 className="header" style={{ textTransform: 'uppercase' }}>
+                      Service Workbench
+                    </h3>
+                    <p>Simple, accessible cloud computing & secure data storage.</p>
+                    <div className="info-row">
+                      <div className="col-6">
+                        <span>Access to:</span>
+                        <ul>
+                          <li>OCHIN Data (with appropriate data authorization)</li>
+                          <li>Amazon Web Services Open Access Datasets</li>
+                          <li>National Health and Nutrition Examination Survey Data</li>
+                          <li>Upload your own data into the FISMA-secure environment</li>
+                        </ul>
+                      </div>
+                      <div className="col-6">
+                        <span>Computational environments available:</span>
+                        <ul>
+                          <li>Rstudio</li>
+                          <li>SageMaker (Jupyter Notebooks)</li>
+                          <li>Linux EC2</li>
+                          <li>Remote WIndows Desktop</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <a href="https://pic-sure.gitbook.io/service-workbench/" target="_blank" rel="noreferrer">
+                      Learn More
+                    </a>
+                  </div>
+                </Grid.Row>
+                <Grid.Row columns={1}>
+                  <div className="bordered center" style={borders}>
+                    <h3 className="header" style={{ textTransform: 'uppercase' }}>
+                      PIC-SURE
+                    </h3>
+                    <p>A self-service, easily navigable patient-level clinical data search and cohort tool.</p>
+                    <div className="info-row">
+                      <div className="col-6">
+                        <span>Explore:</span>
+                        <ul>
+                          <li>National Health and Nutrition Examination Survey Data</li>
+                        </ul>
+                      </div>
+                      <div className="col-6">
+                        <span>Export patient-level cohorts:</span>
+                        <ul>
+                          <li>To your local machine</li>
+                          <li>To Service Workbench</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <a href="https://pic-sure.gitbook.io/aim-ahead-pic-sure/" target="_blank" rel="noreferrer">
+                      Learn More
+                    </a>
+                  </div>
+                </Grid.Row>
+              </Grid.Column>
+            </Grid.Column>
+          )}
         </Grid>
       </div>
     );

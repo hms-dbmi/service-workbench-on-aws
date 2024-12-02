@@ -23,20 +23,30 @@ const autoLogoutTimeoutInMinutes = process.env.REACT_APP_AUTO_LOGOUT_TIMEOUT_IN_
 
 const branding = {
   login: {
-    title: process.env.REACT_APP_BRAND_LOGIN_TITLE,
-    subtitle: process.env.REACT_APP_BRAND_LOGIN_SUBTITLE,
+    title: process.env.REACT_APP_LOGIN_TITLE,
+    subtitle: process.env.REACT_APP_LOGIN_SUBTITLE,
+    warning: process.env.REACT_APP_LOGIN_WARNING,
+    tosLink: process.env.REACT_APP_LOGIN_TOS === 'true',
+    links: process.env.REACT_APP_LOGIN_LINKS,
   },
   register: {
     title: process.env.REACT_APP_USER_REGISTRATION_TITLE,
-    summary: process.env.REACT_APP_USER_REGISTRATION_SUMMARY,
+    subtitle: process.env.REACT_APP_USER_REGISTRATION_SUBTITLE,
     success: process.env.REACT_APP_USER_REGISTRATION_SUCCESS,
+    tosRequired: process.env.REACT_APP_USER_REGISTRATION_TOS_REQUIRED === 'true',
+  },
+  picsure: {
+    dualBranding: process.env.REACT_APP_PICSURE_DUALBRANDING === 'true',
+    url: process.env.REACT_APP_PICSURE_URL || '',
+    browserTitle: process.env.REACT_APP_PICSURE_BROWSER_TITLE,
+    title: process.env.REACT_APP_PICSURE_TITLE,
+    subtitle: process.env.REACT_APP_PICSURE_SUBTITLE,
   },
   main: {
-    title: process.env.REACT_APP_BRAND_MAIN_TITLE,
-    loginWarning: process.env.REACT_APP_LOGIN_WARNING,
+    browserTitle: process.env.REACT_APP_BROWSER_TITLE,
   },
   page: {
-    title: process.env.REACT_APP_BRAND_PAGE_TITLE,
+    title: process.env.REACT_APP_PAGE_TITLE,
     help: process.env.REACT_APP_HELP_URL,
   },
 };

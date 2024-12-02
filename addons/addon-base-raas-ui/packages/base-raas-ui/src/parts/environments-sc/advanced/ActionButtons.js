@@ -13,7 +13,7 @@
  *  permissions and limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 
 // expected props
@@ -22,27 +22,21 @@ import { Button, Modal } from 'semantic-ui-react';
 // - enabled, as { [action]: boolean }
 // - onAction(action, id)
 export default function ActionButtons({ id, pending = false, terminationLocked, can, onAction }) {
-  const [loading, setLoading] = useState(pending);
-
   function handleAction(action, value) {
-    return async () => {
-      setLoading(true);
-      await onAction(action, value);
-      setLoading(false);
-    };
+    return () => onAction(action, value);
   }
 
   return (
     <Button.Group size="mini" className="m1">
       <Button icon="eye" onClick={handleAction('view', `/workspaces/id/${id}`)} />
-      {can.start && <Button icon="play circle" color="green" loading={loading} onClick={handleAction('start', id)} />}
-      {can.stop && <Button icon="stop circle" color="orange" loading={loading} onClick={handleAction('stop', id)} />}
+      {can.start && <Button icon="play circle" color="green" loading={pending} onClick={handleAction('start', id)} />}
+      {can.stop && <Button icon="stop circle" color="orange" loading={pending} onClick={handleAction('stop', id)} />}
       {can.terminate &&
         (terminationLocked ? (
-          <Button disabled icon="trash" color="red" loading={loading} />
+          <Button disabled icon="trash" color="red" loading={pending} />
         ) : (
           <Modal
-            trigger={<Button icon="trash" color="red" loading={loading} />}
+            trigger={<Button icon="trash" color="red" loading={pending} />}
             header="Are you sure?"
             content="This action can not be reverted."
             actions={[
@@ -61,7 +55,7 @@ export default function ActionButtons({ id, pending = false, terminationLocked, 
         <Button
           icon={terminationLocked ? 'unlock' : 'lock'}
           color="teal"
-          loading={loading}
+          loading={pending}
           onClick={handleAction('toggleLock', id)}
         />
       )}

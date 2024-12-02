@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# DEPRECATED - use bootstrap.sh instead
+
 bootstrap_s3_location="$1"
 s3_mounts="$2"
 
@@ -7,6 +10,8 @@ export INSTALL_DIR="/usr/local/share/workspace-environment"
 # Download instance files and execute bootstrap script
 sudo mkdir "$INSTALL_DIR"
 sudo aws s3 sync "$bootstrap_s3_location" "$INSTALL_DIR"
+
+yum install jq
 
 clone_script="$INSTALL_DIR/clone_repos.sh"
 if [ -s "$clone_script" ]
@@ -25,11 +30,11 @@ if [ -s "$security_agents" ]; then
     sudo $security_agents "$INSTALL_DIR/lz-cicd-ec2-scripts" >> /var/log/security_agents.log
 fi
 
-bootstrap_script="$INSTALL_DIR/bootstrap.sh"
+bootstrap_script="$INSTALL_DIR/bootstrap_deprecated.sh"
 if [ -s "$bootstrap_script" ]
 then
     sudo chmod 500 "$bootstrap_script"
-    sudo "$bootstrap_script" "$s3_mounts" >> /var/log/bootstrap.log
+    sudo "$bootstrap_script" "$s3_mounts" >> /var/log/bootstrap_deprecated.log
 fi
 
 exit 0

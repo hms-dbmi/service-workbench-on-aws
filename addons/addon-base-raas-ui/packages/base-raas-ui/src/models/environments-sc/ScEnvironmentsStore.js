@@ -12,10 +12,11 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
+/* eslint-disable no-await-in-loop */
 import _ from 'lodash';
 import { values } from 'mobx';
 import { getEnv, types } from 'mobx-state-tree';
-import { consolidateToMap } from '@aws-ee/base-ui/dist/helpers/utils';
+import { updateMap } from '@aws-ee/base-ui/dist/helpers/utils';
 import { BaseStore } from '@aws-ee/base-ui/dist/models/BaseStore';
 
 import {
@@ -44,20 +45,7 @@ const filterNames = {
   TERMINATED: 'terminated',
 };
 
-// A map, with the key being the filter name and the value being the function that will be used to filter the workspace
-const filters = {
-  [filterNames.ALL]: () => true,
-  [filterNames.AVAILABLE]: env => env.status === 'COMPLETED' || env.status === 'TAINTED',
-  [filterNames.STOPPED]: env => env.status === 'STOPPED',
-  [filterNames.PENDING]: env =>
-    env.status === 'PENDING' || env.status === 'TERMINATING' || env.status === 'STARTING' || env.status === 'STOPPING',
-  [filterNames.ERRORED]: env =>
-    env.status === 'FAILED' ||
-    env.status === 'TERMINATING_FAILED' ||
-    env.status === 'STARTING_FAILED' ||
-    env.status === 'STOPPING_FAILED',
-  [filterNames.TERMINATED]: env => env.status === 'TERMINATED',
-};
+const API_LIMIT = 300;
 
 // ==================================================================
 // ScEnvironmentsStore
@@ -77,12 +65,31 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
 
     return {
       async doLoad() {
-        const environments = await getScEnvironments();
-        self.runInAction(() => {
-          consolidateToMap(self.environments, environments, (existing, newItem) => {
-            existing.setScEnvironment(newItem);
+        let offsetId;
+        const params = {
+          // Lock initial request parameters for this loop - only the offsetId can change.
+          limit: API_LIMIT,
+          since: self.since,
+        };
+        do {
+          const { result = [], offsetId: newOffsetId } = await getScEnvironments({ ...params, offsetId });
+
+          offsetId = newOffsetId;
+          self.runInAction(() => {
+            updateMap(self.environments, result, (existing, newItem) => {
+              existing.setScEnvironment(newItem);
+            });
+
+            // Remember last updated record's day, to get newer ones on next load loop instead of refreshing everything
+            const lastUpdated = _.last(
+              result
+                .map(env => env.updatedAt)
+                .filter(x => x)
+                .sort(),
+            );
+            self.since = !self.since || (self.since && lastUpdated > self.since) ? lastUpdated : self.since;
           });
-        });
+        } while (offsetId);
       },
 
       addScEnvironment(rawEnvironment) {
@@ -119,27 +126,27 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
       },
 
       async terminateScEnvironment(id) {
+        const env = self.getScEnvironment(id);
+        if (!env) return;
+        env.setStatus('TERMINATING');
         if (enableEgressStore) {
           await deleteEgressStore(id);
         }
         await deleteScEnvironment(id);
-        const env = self.getScEnvironment(id);
-        if (!env) return;
-        env.setStatus('TERMINATING');
       },
 
       async startScEnvironment(id) {
-        await startScEnvironment(id);
         const env = self.getScEnvironment(id);
         if (!env) return;
         env.setStatus('STARTING');
+        await startScEnvironment(id);
       },
 
       async stopScEnvironment(id) {
-        await stopScEnvironment(id);
         const env = self.getScEnvironment(id);
         if (!env) return;
         env.setStatus('STOPPING');
+        await stopScEnvironment(id);
       },
 
       getScEnvironmentStore(envId) {
@@ -194,13 +201,7 @@ const ScEnvironmentsStore = BaseStore.named('ScEnvironmentsStore')
     },
 
     get list() {
-      return _.orderBy(values(self.environments), ['createdAt', 'name'], ['desc', 'asc']);
-    },
-
-    filtered(filterName) {
-      const filter = filters[filterName] || (() => true);
-      const filtered = _.filter(values(self.environments), filter);
-      return _.orderBy(filtered, ['createdAt', 'name'], ['desc', 'asc']);
+      return values(self.environments);
     },
 
     getScEnvironment(id) {
@@ -227,4 +228,4 @@ function registerContextItems(appContext) {
   appContext.scEnvironmentsStore = ScEnvironmentsStore.create({}, appContext);
 }
 
-export { ScEnvironmentsStore, registerContextItems, filterNames };
+export { ScEnvironmentsStore, registerContextItems, filterNames, API_LIMIT };

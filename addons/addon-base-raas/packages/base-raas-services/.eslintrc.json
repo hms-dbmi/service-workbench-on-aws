@@ -22,5 +22,8 @@
   },
   "env": {
     "jest/globals": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020
   }
 }

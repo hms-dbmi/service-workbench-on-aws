@@ -42,6 +42,8 @@ async function configure(context) {
           credentialHandlingType: provider.config.type.config.credentialHandlingType,
           signInUri: provider.config.signInUri,
           signOutUri: provider.config.signOutUri,
+          customRegister: provider.config.customRegister || false,
+          appAlerts: provider.appAlerts,
         };
 
         if (provider.config.type.type !== cognitoAuthType) {
@@ -58,7 +60,6 @@ async function configure(context) {
             userPoolId: provider.config.userPoolId,
             clientId: provider.config.clientId,
             enableNativeUserPoolUsers: provider.config.enableNativeUserPoolUsers,
-            customRegister: provider.config.customRegister || false,
           };
 
           if (cognitoPublicInfo.enableNativeUserPoolUsers) {

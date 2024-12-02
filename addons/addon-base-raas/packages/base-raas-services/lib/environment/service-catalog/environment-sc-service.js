@@ -19,7 +19,7 @@ const { v4: uuid } = require('uuid');
 const Service = require('@aws-ee/base-services-container/lib/service');
 const { runAndCatch } = require('@aws-ee/base-services/lib/helpers/utils');
 const { getSystemRequestContext } = require('@aws-ee/base-services/lib/helpers/system-context');
-const { isAdmin, isCurrentUser } = require('@aws-ee/base-services/lib/authorization/authorization-utils');
+const { isAdmin } = require('@aws-ee/base-services/lib/authorization/authorization-utils');
 
 const createSchema = require('../../schema/create-environment-sc.json');
 const updateSchema = require('../../schema/update-environment-sc.json');
@@ -42,6 +42,31 @@ const workflowIds = {
   startSagemaker: 'wf-start-sagemaker-environment-sc',
 };
 
+const isoTimestamp = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/;
+
+const allowedFields = [
+  'id',
+  'name',
+  'desdcription',
+  'status',
+  'cidr',
+  'createdBy',
+  'rev',
+  'outputs',
+  'inWorkflow',
+  'createdAt',
+  'updatedBy',
+  'studyIds',
+  'updatedAt',
+  'provisionedProductId',
+  'indexId',
+  'studyRoles',
+  'envTypeConfigId',
+  'envTypeId',
+  'hasConnections',
+  'isAppStreamConfigured',
+];
+
 /**
  * Analytics environments management service for AWS Service Catalog based environments
  */
@@ -63,6 +88,8 @@ class EnvironmentScService extends Service {
       'indexesService',
       'studyService',
       'albService',
+      'envTypeService',
+      'envTypeConfigService',
     ]);
   }
 
@@ -82,26 +109,62 @@ class EnvironmentScService extends Service {
       environmentAuthzService.authorize(requestContext, { resource, action, effect, reason }, ...args);
   }
 
-  async list(requestContext, limit = 10000) {
+  async list(requestContext, params) {
+    const { limit, offsetId, since, fields = '' } = _.mapValues(params, decodeURIComponent);
+
     // Make sure the user has permissions to "list" environments
     // The following will result in checking permissions by calling the condition function "this._allowAuthorized" first
     await this.assertAuthorized(requestContext, { action: 'list-sc', conditions: [this._allowAuthorized] });
 
-    let envs = await this._scanner()
-      .limit(limit)
-      .scan()
-      .then(environments => {
-        if (isAdmin(requestContext)) {
-          return environments;
-        }
-        return environments.filter(env => isCurrentUser(requestContext, { uid: env.createdBy }));
-      });
+    let envs;
+    let scanner = this._scanner().limit(_.isNumber(Number(limit)) ? Number(limit) : 1000);
 
-    if (this.isAppStreamEnabled()) {
-      envs = await this.markAppStreamConfigured(requestContext, envs);
+    if (offsetId && /^[A-Za-z0-9-_ ]+$/.test(offsetId)) {
+      scanner = scanner.start({ id: offsetId });
     }
 
-    return this.augmentWithConnectionInfo(requestContext, envs);
+    const scannerFilters = [];
+    if (!isAdmin(requestContext)) {
+      const currentUser = _.get(requestContext, 'principalIdentifier.uid');
+      if (!currentUser) {
+        throw this.boom.badRequest(`Principal Identifier not found`, true);
+      }
+      scanner = await scanner.names({ '#c': 'createdBy' }).values({ ':c': currentUser });
+      scannerFilters.push('#c = :c');
+    }
+
+    if (since && isoTimestamp.test(since)) {
+      scanner = scanner.names({ '#u': 'updatedAt' }).values({ ':u': since });
+      scannerFilters.push('#u >= :u');
+    }
+
+    if (scannerFilters.length > 0) {
+      scanner = scanner.filter(scannerFilters.join(' and '));
+    }
+
+    // Only accept fields from a list of allowed db fields
+    const projectFields = JSON.stringify(fields) // force to string
+      .replace(/[^A-Za-z0-9,]/g, '') // strip not alpha numeric
+      .split(',')
+      .filter(field => allowedFields.includes(field));
+
+    if (projectFields.length > 0) {
+      const projection = projectFields.filter(field => !['hasConnections', 'isAppStreamConfigured'].includes(field));
+      scanner = scanner.projection(projection);
+    }
+
+    envs = await scanner.scan();
+    const newOffsetId = scanner.lastId();
+
+    // These enrichment steps will add properties to the env objects, so we need to make sure they're included in fields
+    if (this.isAppStreamEnabled() && (projectFields.length === 0 || projectFields.includes('isAppStreamConfigured'))) {
+      envs = await this.markAppStreamConfigured(requestContext, envs);
+    }
+    if (projectFields.length === 0 || projectFields.includes('hasConnections')) {
+      envs = await this.augmentWithConnectionInfo(requestContext, envs);
+    }
+
+    return { offsetId: newOffsetId, result: envs };
   }
 
   async listEnvWithStatus(requestContext, status, limit = 10000) {
@@ -439,10 +502,18 @@ class EnvironmentScService extends Service {
       );
     }
 
-    const [validationService, workflowTriggerService, projectService] = await this.service([
+    const [
+      validationService,
+      workflowTriggerService,
+      projectService,
+      envTypeService,
+      envTypeConfigService,
+    ] = await this.service([
       'jsonSchemaValidationService',
       'workflowTriggerService',
       'projectService',
+      'envTypeService',
+      'envTypeConfigService',
     ]);
 
     // Validate input
@@ -466,6 +537,19 @@ class EnvironmentScService extends Service {
 
     // const { name, envTypeId, envTypeConfigId, description, projectId, cidr, studyIds } = environment
     const { envTypeId, envTypeConfigId, projectId } = environment;
+
+    let instanceType = 'undefined';
+    try {
+      // Get instance type to save in env database for metrics reporting
+      const envType = await envTypeService.mustFind(requestContext, { id: envTypeId });
+      const listOfConfigs = await envTypeConfigService.getConfigsFromS3(envType.id);
+      const envConfigs = _.find(listOfConfigs, { id: envTypeConfigId });
+      instanceType = _.find(envConfigs.params, param => param.key === 'InstanceType')?.value;
+    } catch (e) {
+      const error = this.boom.internalError(`Error retrieving instance type for ${envTypeId}`).cause(e);
+      this.log.error(error);
+      throw error;
+    }
 
     // Lets find the index id, by looking at the project and then get the index id
     // The isAppStreamConfigured attribute value will be returned by project service. No other fields needed to be added
@@ -493,6 +577,7 @@ class EnvironmentScService extends Service {
       createdAt: date,
       updatedAt: date,
       inWorkflow: 'true',
+      instanceType,
     });
     const dbResult = await runAndCatch(
       async () => {
