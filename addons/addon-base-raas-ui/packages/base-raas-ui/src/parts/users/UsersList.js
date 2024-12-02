@@ -225,7 +225,7 @@ class UsersList extends React.Component {
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.aaAffiliation || '<<none>>';
+                return user.aaAffiliation || '';
               },
             },
             {
@@ -234,7 +234,7 @@ class UsersList extends React.Component {
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.piName || '<<none>>';
+                return user.piName || '';
               },
             },
             {
@@ -243,7 +243,7 @@ class UsersList extends React.Component {
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.projectName || '<<none>>';
+                return user.projectName || '';
               },
             },
             {
@@ -252,7 +252,7 @@ class UsersList extends React.Component {
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.studyAdmin.join(', ') || '<<none>>';
+                return user.studyAdmin.join(', ') || '';
               },
             },
             {
@@ -261,7 +261,7 @@ class UsersList extends React.Component {
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.studyReadWrite.join(', ') || '<<none>>';
+                return user.studyReadWrite.join(', ') || '';
               },
             },
             {
@@ -270,7 +270,7 @@ class UsersList extends React.Component {
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.studyRead.join(', ') || '<<none>>';
+                return user.studyRead.join(', ') || '';
               },
             },
             {
@@ -279,7 +279,7 @@ class UsersList extends React.Component {
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.dataSource || '<<none>>';
+                return user.dataSource || '';
               },
             },
             {
