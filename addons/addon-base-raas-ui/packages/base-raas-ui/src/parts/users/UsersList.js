@@ -166,11 +166,13 @@ class UsersList extends React.Component {
               Header: 'Name',
               accessor: 'displayName',
               width: 150,
+              fixed: 'left',
             },
             {
               Header: 'Email',
               accessor: 'email',
               width: 215,
+              fixed: 'left',
             },
             {
               Header: 'Identity Provider',
@@ -238,44 +240,26 @@ class UsersList extends React.Component {
               },
             },
             {
-              Header: 'Project Name',
-              accessor: 'projectName',
+              Header: 'AA PI Name',
+              accessor: 'piName',
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.projectName || '';
+                return user.piName || '';
               },
             },
             {
-              Header: 'Study Admin',
-              accessor: 'studyAdmin',
+              Header: 'AA Project ID',
+              accessor: 'aaProjectId',
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.studyAdmin.join(', ') || '';
+                return user.aaProjectId || '';
               },
             },
             {
-              Header: 'Study Read/Write',
-              accessor: 'studyReadWrite',
-              style: { whiteSpace: 'unset' },
-              Cell: row => {
-                const user = row.original;
-                return user.studyReadWrite.join(', ') || '';
-              },
-            },
-            {
-              Header: 'Study Read',
-              accessor: 'studyRead',
-              style: { whiteSpace: 'unset' },
-              Cell: row => {
-                const user = row.original;
-                return user.studyRead.join(', ') || '';
-              },
-            },
-            {
-              Header: 'Data Source',
-              accessor: 'dataSource',
+              Header: 'Data Sources',
+              accessor: 'dataSources',
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;

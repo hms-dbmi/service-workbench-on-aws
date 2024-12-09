@@ -112,6 +112,12 @@ class UpdateUser extends React.Component {
             <Table.Row>{toRow('firstName')}</Table.Row>
             <Table.Row>{toRow('lastName')}</Table.Row>
             <Table.Row>{toRow('email')}</Table.Row>
+            <Table.Row>{toRow('projectName')}</Table.Row>
+            <Table.Row>{toRow('aaAffiliation')}</Table.Row>
+            <Table.Row>{toRow('aaProjectName')}</Table.Row>
+            <Table.Row>{toRow('piName')}</Table.Row>
+            <Table.Row>{toRow('aaProjectId')}</Table.Row>
+            <Table.Row>{toRow('dataSources')}</Table.Row>
             <>
               <Table.Row>{toRow('userRole')}</Table.Row>
               <Table.Row>{toRow('identityProviderName')}</Table.Row>
@@ -201,15 +207,20 @@ class UpdateUser extends React.Component {
     const identityProviderNameField = form.$('identityProviderName');
     const userRoleField = form.$('userRole');
     const projectIdField = form.$('projectId');
+    const dataSourcesField = form.$('dataSources');
+    const aaAffiliationField = form.$('aaAffiliation');
+    const piNameField = form.$('piName');
+    const aaProjectIdField = form.$('aaProjectId');
     const statusField = form.$('status');
 
     const identityProviderOptions = this.getIdentityProviderOptions();
     const userRoleOptions = this.getUserRoleOptions();
-    const projectIdOptions = this.getProjectOptions();
+    //const projectIdOptions = this.getProjectOptions();
+    const dataSourceOptions = this.getDataSourceOptions();
 
     const isInternalUser = this.userRolesStore.isInternalUser(userRoleField.value);
     const isInternalGuest = this.userRolesStore.isInternalGuest(userRoleField.value);
-    const showProjectField = !_.isEmpty(projectIdOptions) && isInternalUser && !isInternalGuest;
+    const showDataSourcesField = !_.isEmpty(dataSourceOptions) && isInternalUser && !isInternalGuest;
 
     const isAdminMode = this.props.adminMode;
     return (
@@ -225,6 +236,10 @@ class UpdateUser extends React.Component {
               <Input field={firstNameField} disabled={processing} />
               <Input field={lastNameField} disabled={processing} />
               <Input field={emailField} disabled={processing} />
+              <Input field={aaAffiliationField} disabled={processing} />
+              <Input field={piNameField} disabled={processing} />
+              <Input field={aaProjectNameField} disabled={processing} />
+              <Input field={aaProjectIdField} disabled={processing} />
               <>
                 {isAdminMode && (
                   <DropDown
@@ -238,11 +253,10 @@ class UpdateUser extends React.Component {
                 {isAdminMode && (
                   <DropDown field={userRoleField} options={userRoleOptions} selection fluid disabled={processing} />
                 )}
-
-                {isAdminMode && showProjectField && (
+                {isAdminMode && showDataSourcesField && (
                   <DropDown
-                    field={projectIdField}
-                    options={projectIdOptions}
+                    field={dataSourcesField}
+                    options={dataSourceOptions}
                     multiple
                     selection
                     clearable
@@ -250,7 +264,6 @@ class UpdateUser extends React.Component {
                     disabled={processing}
                   />
                 )}
-
                 <YesNo field={statusField} disabled={processing} />
               </>
 
@@ -313,7 +326,7 @@ class UpdateUser extends React.Component {
       projectId = [];
     }
 
-    const { firstName, lastName, email, userRole, status } = values;
+    const { firstName, lastName, email, userRole, status, dataSources, aaAffiliation, piName, aaProjectId } = values;
     const isAdmin = userRole === 'admin';
     const identityProviderNameField = form.$('identityProviderName');
 
@@ -413,6 +426,15 @@ class UpdateUser extends React.Component {
 
   getProjectOptions() {
     return this.projectsStore.dropdownOptions;
+  }
+
+  getDataSourceOptions() {
+    return [
+      { key: 'ochin', value: 'ochin', text: 'OCHIN' },
+      { key: 'aws-open-data', value: 'aws-open-data', text: 'AWS Open Data' },
+      { key: 'byod', value: 'byod', text: 'Bring Your Own Data (BYOD)' },
+      { key: 'other', value: 'other', text: 'Other / Not Sure' },
+    ];
   }
 
   getCurrentUser() {
