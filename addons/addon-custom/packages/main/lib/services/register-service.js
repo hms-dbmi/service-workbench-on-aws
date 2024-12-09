@@ -64,7 +64,19 @@ class RegisterUserService extends Service {
     const authProviders = await authConfigService.getAuthenticationProviderConfigs();
     const providerConfig = authProviders[0].config;
 
-    const { lastName, firstName, email, acceptedTerms } = user;
+    const {
+      lastName,
+      firstName,
+      email,
+      acceptedTerms,
+      dataSources,
+      aaAffiliation,
+      piName,
+      projectName,
+      aaProjectId,
+      aaProjectName,
+    } = user;
+
     const identityProviderName =
       providerConfig.federatedIdentityProviders.length === 0
         ? providerConfig.title
@@ -85,6 +97,12 @@ class RegisterUserService extends Service {
       encryptedCreds: 'N/A',
       firstName,
       lastName,
+      projectName,
+      dataSources,
+      aaAffiliation,
+      piName,
+      aaProjectId,
+      aaProjectName,
       identityProviderName,
       authenticationProviderId,
       isAdmin: false,
