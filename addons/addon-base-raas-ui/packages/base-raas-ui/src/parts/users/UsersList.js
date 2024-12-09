@@ -231,12 +231,12 @@ class UsersList extends React.Component {
               },
             },
             {
-              Header: 'PI Name',
-              accessor: 'piName',
+              Header: 'AA Project Name',
+              accessor: 'aaProjectName',
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.piName || '';
+                return user.aaProjectName || '';
               },
             },
             {
