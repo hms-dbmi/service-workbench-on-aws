@@ -166,11 +166,13 @@ class UsersList extends React.Component {
               Header: 'Name',
               accessor: 'displayName',
               width: 150,
+              fixed: 'left',
             },
             {
               Header: 'Email',
               accessor: 'email',
               width: 215,
+              fixed: 'left',
             },
             {
               Header: 'Identity Provider',
@@ -217,6 +219,51 @@ class UsersList extends React.Component {
               filterMethod: (filter, row) => {
                 const projectString = row._original.projectId.join(', ') || 'none';
                 return projectString.indexOf(filter.value.toLowerCase()) >= 0;
+              },
+            },
+            {
+              Header: 'AA Affiliation',
+              accessor: 'aaAffiliation',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.aaAffiliation || '';
+              },
+            },
+            {
+              Header: 'AA Project Name',
+              accessor: 'aaProjectName',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.aaProjectName || '';
+              },
+            },
+            {
+              Header: 'AA PI Name',
+              accessor: 'piName',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.piName || '';
+              },
+            },
+            {
+              Header: 'AA Project ID',
+              accessor: 'aaProjectId',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.aaProjectId || '';
+              },
+            },
+            {
+              Header: 'Data Sources',
+              accessor: 'dataSources',
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.dataSource || '';
               },
             },
             {

@@ -15,6 +15,12 @@
 import _ from 'lodash';
 import validate from '@aws-ee/base-ui/dist/models/forms/Validate';
 
+// Add a custom validation rule for Sets
+validate.extend('set', {
+  validate: value => value instanceof Set || Array.isArray(value),
+  message: 'The :attribute must be a Set or Array',
+});
+
 const registerUserFormFields = {
   email: {
     label: 'Email',
@@ -36,6 +42,87 @@ const registerUserFormFields = {
     placeholder: 'Last Name',
     rules: 'string|required|between:1,500',
   },
+  affiliation: {
+    label: 'AIM-AHEAD Affiliation',
+    rules: 'string|required',
+    type: 'select',
+    help:
+      'Which AIM-AHEAD program do you belong to? If you are unsure about your AIM-AHEAD Affiliation, please contact your program coordinator.',
+    options: [
+      {
+        key: 'federated-research-network-hub',
+        value: 'federated-research-network-hub',
+        text: 'Federated Research Network Hub',
+      },
+      { key: 'research-fellowship', value: 'research-fellowship', text: 'Research Fellowship' },
+      { key: 'hub-specific-pilot-projects', value: 'hub-specific-pilot-projects', text: 'Hub-Specific Pilot Projects' },
+      {
+        key: 'consortium-development-project',
+        value: 'consortium-development-project',
+        text: 'Consortium Development Project',
+      },
+      {
+        key: 'ai-ml-in-biomedical-research',
+        value: 'ai-ml-in-biomedical-research',
+        text: 'AI/ML in Biomedical Research and Clinical',
+      },
+      {
+        key: 'practice-that-embodies-ethics',
+        value: 'practice-that-embodies-ethics',
+        text: 'Practice that Embodies Ethics and Equality (ABC-EE)',
+      },
+      {
+        key: 'public-private-partnership',
+        value: 'public-private-partnership',
+        text:
+          'Public-Private Partnership to Improve Population Health Using Artificial Intelligence and Machine Learning (P4)',
+      },
+      {
+        key: 'clinicians-leading-ingenuity',
+        value: 'clinicians-leading-ingenuity',
+        text: 'Clinicians Leading Ingenuity IN AI Quality (CLINIQ)',
+      },
+      {
+        key: 'data-infrastructure',
+        value: 'data-infrastructure',
+        text: 'Data Infrastructure and Capacity Building (DICB)',
+      },
+      { key: 'consortium-member', value: 'consortium-member', text: 'Consortium Member' },
+      { key: 'leadership-fellowship', value: 'leadership-fellowship', text: 'Leadership Fellowship' },
+      {
+        key: 'program-for-artifical-intelligence-readiness',
+        value: 'program-for-artifical-intelligence-readiness',
+        text: 'Program for Artificial Intelligence Readiness (PAIR)',
+      },
+      { key: 'other', value: 'other', text: 'Other / Not Sure' },
+    ],
+    placeholder: 'Select your affiliation',
+  },
+  projectName: {
+    label: 'Research Project Name',
+    placeholder: 'Research Project Name',
+    help: 'What is the name of your project? This should match the submitted title name in your infoready application.',
+    rules: 'string|required|between:1,500',
+  },
+  piName: {
+    label: 'Name of PI / Awardee for awarded research',
+    placeholder: 'Name of PI / Awardee',
+    help:
+      'Name of the Awardee - who is the program awardee? This may be the person who submitted the infoready application.',
+    rules: 'string|required|between:1,500',
+  },
+  dataSources: {
+    label: 'What Data Sources are you planning to use?',
+    help: 'Please select all that apply.',
+    rules: ['set'],
+    type: 'multiselect',
+    options: [
+      { key: 'ochin', value: 'ochin', text: 'OCHIN' },
+      { key: 'aws-open-data', value: 'aws-open-data', text: 'AWS Open Data' },
+      { key: 'byod', value: 'byod', text: 'Bring Your Own Data (BYOD)' },
+      { key: 'other', value: 'other', text: 'Other / Not Sure' },
+    ],
+  },
 };
 
 function getRegisterFormFields() {
@@ -51,9 +138,12 @@ async function formValidationErrors(data) {
     failed: validationResult.fails(),
   };
 
-  const fieldErrors = ['firstName', 'lastName', 'email']
+  const fieldErrors = ['firstName', 'lastName', 'email', 'affiliation', 'projectName', 'piName', 'dataSources']
     .filter(field => !_.isEmpty(validation.errors.get(field)))
-    .map(field => fields[field].placeholder);
+    .map(field => {
+      const fieldDef = fields[field];
+      return fieldDef.type === 'dropdown' ? `select ${fieldDef.label}` : fieldDef.placeholder;
+    });
 
   // Return a user friendly message with fields that have not passed validation
   if (fieldErrors.length > 0) {
