@@ -44,7 +44,7 @@ const User = types
     aaProjectId: types.maybeNull(types.string, ''),
     aaProjectName: types.maybeNull(types.string, ''),
     piName: types.maybeNull(types.string, ''),
-    dataSources: types.optional(types.set(types.string), new Set()),
+    dataSources: types.optional(types.array(types.string), []),
   })
   .actions(self => ({
     runInAction(fn) {
@@ -87,7 +87,7 @@ const User = types
       self.aaProjectId = rawUser.aaProjectId || self.aaProjectId || '';
       self.aaProjectName = rawUser.aaProjectName || self.aaProjectName || '';
       self.piName = rawUser.piName || self.piName || '';
-      self.dataSources = rawUser.dataSources || self.dataSources || new Set();
+      self.dataSources = rawUser.dataSources || self.dataSources || [];
       // we don't update the other fields because they are being populated by a separate store
     },
   }))
