@@ -277,7 +277,7 @@ class Register extends React.Component {
         aaAffiliation: this.user.affiliation,
         aaProjectName: this.user.projectName,
         piName: this.user.piName,
-        dataSources: new Set(this.user.dataSources),
+        dataSources: Array.from(this.user.dataSources),
         acceptedTerms,
       });
       // if we encounter an error then don't continue to process the form and instead display a message

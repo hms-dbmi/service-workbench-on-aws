@@ -15,12 +15,6 @@
 import _ from 'lodash';
 import validate from '@aws-ee/base-ui/dist/models/forms/Validate';
 
-// Add a custom validation rule for Sets
-validate.extend('set', {
-  validate: value => value instanceof Set || Array.isArray(value),
-  message: 'The :attribute must be a Set or Array',
-});
-
 const registerUserFormFields = {
   email: {
     label: 'Email',
@@ -114,7 +108,7 @@ const registerUserFormFields = {
   dataSources: {
     label: 'What Data Sources are you planning to use?',
     help: 'Please select all that apply.',
-    rules: ['set'],
+    rules: 'array|required',
     type: 'multiselect',
     options: [
       { key: 'ochin', value: 'ochin', text: 'OCHIN' },
