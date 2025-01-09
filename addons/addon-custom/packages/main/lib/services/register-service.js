@@ -99,7 +99,7 @@ class RegisterUserService extends Service {
       aaAffiliation,
       aaProjectName,
       piName,
-      dataSources,
+      dataSources: Array.from(dataSources),
     };
   }
 
