@@ -341,11 +341,32 @@ class UpdateUser extends React.Component {
       projectId = [];
     }
 
-    const { firstName, lastName, email, userRole, status } = values;
+    const {
+      firstName,
+      lastName,
+      email,
+      userRole,
+      aaAffiliation,
+      aaProjectName,
+      aaProjectId,
+      piName,
+      dataSources,
+      status,
+    } = values;
     const isAdmin = userRole === 'admin';
     const identityProviderNameField = form.$('identityProviderName');
 
-    let userToUpdate = { ...this.getCurrentUser(), firstName, lastName, email };
+    let userToUpdate = {
+      ...this.getCurrentUser(),
+      firstName,
+      lastName,
+      email,
+      aaAffiliation,
+      aaProjectName,
+      aaProjectId,
+      piName,
+      dataSources,
+    };
     if (this.props.adminMode) {
       userToUpdate = { ...userToUpdate, userRole, isAdmin, projectId, status };
     }
