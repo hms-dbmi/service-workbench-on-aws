@@ -61,6 +61,26 @@ function getUpdateUserConfigFormFields(existingUser) {
       explain: ' ',
       value: _.get(existingUser, 'applyReason', ''),
     },
+    dataSources: {
+      label: 'Data Sources',
+      value: _.get(existingUser, 'dataSources', []),
+    },
+    aaAffiliation: {
+      label: 'AA Affiliation',
+      value: _.get(existingUser, 'aaAffiliation', ''),
+    },
+    aaProjectId: {
+      label: 'AA Project ID',
+      value: _.get(existingUser, 'aaProjectId', ''),
+    },
+    aaProjectName: {
+      label: 'AA Project Name',
+      value: _.get(existingUser, 'aaProjectName', ''),
+    },
+    piName: {
+      label: 'PI Name',
+      value: _.get(existingUser, 'piName', ''),
+    },
     status: {
       label: 'User Status',
       extra: {
