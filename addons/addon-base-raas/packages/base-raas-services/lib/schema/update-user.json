@@ -61,6 +61,41 @@
       "type": "string",
       "default": "N/A"
     },
+    "aaAffiliation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^[A-Za-z0-9 .-]+$"
+    },
+    "aaProjectId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^[A-Za-z0-9 .-]+$"
+    },
+    "aaProjectName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^[A-Za-z0-9 .-]+$"
+    },
+    "piName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^[A-Za-z0-9 .-]+$"
+    },
+    "dataSources": {
+      "type": "array",
+      "items": [
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ],
+      "minItems": 1,
+      "uniqueItems": true
+    },
     "acceptedTerms": {
       "type": "string",
       "pattern": "^\\d\\d\\d\\d\\-[0-1]\\d\\-[0-3]\\d[Tt\\s](?:[0-2]\\d:[0-5]\\d:[0-5]\\d|23:59:60)(?:\\.\\d+)?(?:[Zz]|[+-]\\d\\d(?::?\\d\\d)?)?$"
