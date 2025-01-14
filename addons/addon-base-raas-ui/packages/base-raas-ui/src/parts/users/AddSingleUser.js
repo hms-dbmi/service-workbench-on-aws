@@ -85,10 +85,16 @@ class AddSingleUser extends React.Component {
     const userRoleField = form.$('userRole');
     const projectIdField = form.$('projectId');
     const statusField = form.$('status');
+    const aaAffiliationField = form.$('aaAffiliation');
+    const aaProjectNameField = form.$('aaProjectName');
+    const aaProjectIdField = form.$('aaProjectId');
+    const piNameField = form.$('piName');
+    const dataSourcesField = form.$('dataSources');
 
     const identityProviderOptions = this.getIdentityProviderOptions();
     const userRoleOptions = this.getUserRoleOptions();
     const projectIdOptions = this.getProjectOptions();
+    const dataSourcesOptions = this.getDataSourceOptions();
 
     const isInternalUser = this.userRolesStore.isInternalUser(userRoleField.value);
     const isInternalGuest = this.userRolesStore.isInternalGuest(userRoleField.value);
@@ -126,6 +132,20 @@ class AddSingleUser extends React.Component {
                 />
               )}
 
+              <Input field={aaAffiliationField} disabled={processing} />
+              <Input field={aaProjectNameField} disabled={processing} />
+              <Input field={aaProjectIdField} disabled={processing} />
+              <Input field={piNameField} disabled={processing} />
+              <DropDown
+                field={dataSourcesField}
+                options={dataSourcesOptions}
+                multiple
+                selection
+                clearable
+                fluid
+                disabled={processing}
+              />
+
               <YesNo field={statusField} disabled={processing} />
 
               <div className="mt3">
@@ -153,6 +173,15 @@ class AddSingleUser extends React.Component {
 
   getProjectOptions() {
     return this.projectsStore.dropdownOptions;
+  }
+
+  getDataSourceOptions() {
+    return [
+      { key: 'ochin', value: 'ochin', text: 'OCHIN' },
+      { key: 'aws-open-data', value: 'aws-open-data', text: 'AWS Open Data' },
+      { key: 'byod', value: 'byod', text: 'Bring Your Own Data (BYOD)' },
+      { key: 'other', value: 'other', text: 'Other / Not Sure' },
+    ];
   }
 
   // Private methods
