@@ -89,11 +89,9 @@
       "type": "array",
       "items": [
         {
-          "type": "string",
-          "minLength": 1
+          "type": "string"
         }
       ],
-      "minItems": 1,
       "uniqueItems": true
     },
     "acceptedTerms": {
