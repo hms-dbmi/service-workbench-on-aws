@@ -263,7 +263,7 @@ class UsersList extends React.Component {
               style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.dataSource || '';
+                return user.dataSources.join(', ') || '';
               },
             },
             {
