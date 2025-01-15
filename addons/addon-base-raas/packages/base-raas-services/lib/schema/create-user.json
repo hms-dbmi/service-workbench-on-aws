@@ -80,23 +80,19 @@
     },
     "aaAffiliation": {
       "type": "string",
-      "maxLength": 500,
-      "pattern": "^[A-Za-z0-9 .-]+$"
+      "maxLength": 500
     },
     "aaProjectId": {
       "type": "string",
-      "maxLength": 500,
-      "pattern": "^[A-Za-z0-9 .-]+$"
+      "maxLength": 500
     },
     "aaProjectName": {
       "type": "string",
-      "maxLength": 500,
-      "pattern": "^[A-Za-z0-9 .-]+$"
+      "maxLength": 500
     },
     "piName": {
       "type": "string",
-      "maxLength": 500,
-      "pattern": "^[A-Za-z0-9 .-]+$"
+      "maxLength": 500
     },
     "dataSources": {
       "type": "array",
