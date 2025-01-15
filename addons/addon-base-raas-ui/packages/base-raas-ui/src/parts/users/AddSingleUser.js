@@ -94,6 +94,7 @@ class AddSingleUser extends React.Component {
     const identityProviderOptions = this.getIdentityProviderOptions();
     const userRoleOptions = this.getUserRoleOptions();
     const projectIdOptions = this.getProjectOptions();
+    const aaAffiliationOptions = this.getAffiliationOptions();
     const dataSourcesOptions = this.getDataSourceOptions();
 
     const isInternalUser = this.userRolesStore.isInternalUser(userRoleField.value);
@@ -132,7 +133,15 @@ class AddSingleUser extends React.Component {
                 />
               )}
 
-              <Input field={aaAffiliationField} disabled={processing} />
+              <DropDown
+                field={aaAffiliationField}
+                options={aaAffiliationOptions}
+                multiple
+                selection
+                clearable
+                fluid
+                disabled={processing}
+              />
               <Input field={aaProjectNameField} disabled={processing} />
               <Input field={aaProjectIdField} disabled={processing} />
               <Input field={piNameField} disabled={processing} />
@@ -173,6 +182,57 @@ class AddSingleUser extends React.Component {
 
   getProjectOptions() {
     return this.projectsStore.dropdownOptions;
+  }
+
+  getAffiliationOptions() {
+    return [
+      {
+        key: 'federated-research-network-hub',
+        value: 'federated-research-network-hub',
+        text: 'Federated Research Network Hub',
+      },
+      { key: 'research-fellowship', value: 'research-fellowship', text: 'Research Fellowship' },
+      { key: 'hub-specific-pilot-projects', value: 'hub-specific-pilot-projects', text: 'Hub-Specific Pilot Projects' },
+      {
+        key: 'consortium-development-project',
+        value: 'consortium-development-project',
+        text: 'Consortium Development Project',
+      },
+      {
+        key: 'ai-ml-in-biomedical-research',
+        value: 'ai-ml-in-biomedical-research',
+        text: 'AI/ML in Biomedical Research and Clinical',
+      },
+      {
+        key: 'practice-that-embodies-ethics',
+        value: 'practice-that-embodies-ethics',
+        text: 'Practice that Embodies Ethics and Equality (ABC-EE)',
+      },
+      {
+        key: 'public-private-partnership',
+        value: 'public-private-partnership',
+        text:
+          'Public-Private Partnership to Improve Population Health Using Artificial Intelligence and Machine Learning (P4)',
+      },
+      {
+        key: 'clinicians-leading-ingenuity',
+        value: 'clinicians-leading-ingenuity',
+        text: 'Clinicians Leading Ingenuity IN AI Quality (CLINIQ)',
+      },
+      {
+        key: 'data-infrastructure',
+        value: 'data-infrastructure',
+        text: 'Data Infrastructure and Capacity Building (DICB)',
+      },
+      { key: 'consortium-member', value: 'consortium-member', text: 'Consortium Member' },
+      { key: 'leadership-fellowship', value: 'leadership-fellowship', text: 'Leadership Fellowship' },
+      {
+        key: 'program-for-artifical-intelligence-readiness',
+        value: 'program-for-artifical-intelligence-readiness',
+        text: 'Program for Artificial Intelligence Readiness (PAIR)',
+      },
+      { key: 'other', value: 'other', text: 'Other / Not Sure' },
+    ];
   }
 
   getDataSourceOptions() {
