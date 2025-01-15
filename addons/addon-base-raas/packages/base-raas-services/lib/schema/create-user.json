@@ -80,25 +80,21 @@
     },
     "aaAffiliation": {
       "type": "string",
-      "minLength": 1,
       "maxLength": 500,
       "pattern": "^[A-Za-z0-9 .-]+$"
     },
     "aaProjectId": {
       "type": "string",
-      "minLength": 1,
       "maxLength": 500,
       "pattern": "^[A-Za-z0-9 .-]+$"
     },
     "aaProjectName": {
       "type": "string",
-      "minLength": 1,
       "maxLength": 500,
       "pattern": "^[A-Za-z0-9 .-]+$"
     },
     "piName": {
       "type": "string",
-      "minLength": 1,
       "maxLength": 500,
       "pattern": "^[A-Za-z0-9 .-]+$"
     },
