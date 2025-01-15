@@ -34,6 +34,26 @@ const addUserFormFields = {
     label: 'UserRole',
     extra: { explain: "Select user's role" },
   },
+  aaAffiliation: {
+    label: 'Select AIM-AHEAD Affiliation',
+    extra: { explain: 'Which AIM-AHEAD program does the user belong to?' },
+  },
+  aaProjectId: {
+    label: 'AIM-AHEAD Project ID',
+    extra: { explain: 'Enter AIM-AHEAD project Id' },
+  },
+  aaProjectName: {
+    label: 'AIM-AHEAD Research Project Name',
+    extra: { explain: "This should match the submitted title name on the user's infoready application." },
+  },
+  piName: {
+    label: 'Name of PI / Awardee for awarded research',
+    extra: { explain: 'This may be the person who submitted the infoready application' },
+  },
+  dataSources: {
+    label: 'Data Sources',
+    extra: { explain: 'Data Sources is the user planning to use?' },
+  },
   status: {
     label: 'Status',
     extra: {

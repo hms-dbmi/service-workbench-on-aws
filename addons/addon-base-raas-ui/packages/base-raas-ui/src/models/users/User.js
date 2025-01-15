@@ -40,6 +40,11 @@ const User = types
     encryptedCreds: types.maybeNull(types.string),
     acceptedTerms: '1900-01-01T01:00:00.000Z',
     applyReason: 'N/A',
+    aaAffiliation: types.maybeNull(types.string, ''),
+    aaProjectId: types.maybeNull(types.string, ''),
+    aaProjectName: types.maybeNull(types.string, ''),
+    piName: types.maybeNull(types.string, ''),
+    dataSources: types.optional(types.array(types.string), []),
   })
   .actions(self => ({
     runInAction(fn) {
@@ -78,6 +83,11 @@ const User = types
       self.encryptedCreds = rawUser.encryptedCreds || self.encryptedCreds;
       self.applyReason = rawUser.applyReason || self.applyReason || '';
       self.acceptedTerms = rawUser.acceptedTerms || self.acceptedTerms || '';
+      self.aaAffiliation = rawUser.aaAffiliation || self.aaAffiliation || '';
+      self.aaProjectId = rawUser.aaProjectId || self.aaProjectId || '';
+      self.aaProjectName = rawUser.aaProjectName || self.aaProjectName || '';
+      self.piName = rawUser.piName || self.piName || '';
+      self.dataSources = rawUser.dataSources || self.dataSources || [];
       // we don't update the other fields because they are being populated by a separate store
     },
   }))

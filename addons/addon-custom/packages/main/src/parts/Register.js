@@ -3,7 +3,7 @@ import React from 'react';
 import { observable, action, decorate, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Container, Grid, Dimmer, Loader, Segment, Label, Icon } from 'semantic-ui-react';
+import { Form, Container, Grid, Dimmer, Loader, Segment, Label, Icon, Popup, Dropdown } from 'semantic-ui-react';
 
 import { gotoFn } from '@aws-ee/base-ui/dist/helpers/routing';
 import { branding } from '@aws-ee/base-ui/dist/helpers/settings';
@@ -41,25 +41,6 @@ class Register extends React.Component {
 
   goto = gotoFn(this);
 
-  renderField(name) {
-    const field = this.registerFormFields[name];
-    const error = !_.isEmpty(this.errors.validation.get(name));
-
-    const handleChange = action(event => {
-      this.user[name] = event.target.value;
-    });
-    return (
-      <Form.Input
-        fluid
-        label={field.label}
-        defaultValue=""
-        error={error}
-        placeholder={field.placeholder}
-        onChange={handleChange}
-      />
-    );
-  }
-
   setTerms(terms) {
     return () => {
       this.termsModalButton.focus();
@@ -67,6 +48,77 @@ class Register extends React.Component {
         this.terms = terms;
       });
     };
+  }
+
+  renderField(name) {
+    const field = this.registerFormFields[name];
+    const error = !_.isEmpty(this.errors.validation.get(name));
+
+    const labelWithHelp = (
+      <div>
+        {field.label}&nbsp;
+        {field.help && (
+          <Popup
+            trigger={<Icon name="info circle" color="blue" size="small" />}
+            content={field.help}
+            position="top center"
+          />
+        )}
+      </div>
+    );
+
+    if (field.type === 'multiselect') {
+      const handleMultiSelectChange = action((event, data) => {
+        this.user[name] = data.value;
+      });
+
+      return (
+        <Form.Field error={error}>
+          {labelWithHelp}
+          <Dropdown
+            placeholder={field.placeholder}
+            fluid
+            multiple
+            selection
+            options={field.options}
+            onChange={handleMultiSelectChange}
+          />
+        </Form.Field>
+      );
+    }
+
+    if (field.type === 'select') {
+      const handleDropdownChange = action((event, data) => {
+        this.user[name] = data.value;
+      });
+
+      return (
+        <Form.Select
+          fluid
+          label={labelWithHelp}
+          options={field.options}
+          placeholder={field.placeholder}
+          error={error}
+          onChange={handleDropdownChange}
+        />
+      );
+    }
+
+    const handleChange = action(event => {
+      this.user[name] = event.target.value;
+    });
+
+    return (
+      <Form.Input
+        fluid
+        label={labelWithHelp}
+        defaultValue=""
+        error={error}
+        type={field.type}
+        placeholder={field.placeholder}
+        onChange={handleChange}
+      />
+    );
   }
 
   renderTOS() {
@@ -102,13 +154,22 @@ class Register extends React.Component {
           <Dimmer active={this.formProcessing} inverted>
             <Loader inverted>Submitting registration</Loader>
           </Dimmer>
-          <div style={{ maxWidth: 450, margin: '0 auto' }}>
-            {this.renderField('firstName')}
-
-            {this.renderField('lastName')}
-
-            {this.renderField('email')}
+          <div style={{ maxWidth: 900, margin: '0 auto' }}>
+            <Grid columns={2}>
+              <Grid.Column>
+                {this.renderField('firstName')}
+                {this.renderField('lastName')}
+                {this.renderField('email')}
+              </Grid.Column>
+              <Grid.Column>
+                {this.renderField('affiliation')}
+                {this.renderField('piName')}
+                {this.renderField('projectName')}
+                {this.renderField('dataSources')}
+              </Grid.Column>
+            </Grid>
           </div>
+
           {branding.register.tosRequired && <div className="center mt2">{this.renderTOS()}</div>}
           <div className="center mt3">
             <div>
@@ -213,6 +274,10 @@ class Register extends React.Component {
         firstName: this.user.firstName,
         lastName: this.user.lastName,
         email: this.user.email,
+        aaAffiliation: this.user.affiliation,
+        aaProjectName: this.user.projectName,
+        piName: this.user.piName,
+        dataSources: Array.from(this.user.dataSources),
         acceptedTerms,
       });
       // if we encounter an error then don't continue to process the form and instead display a message

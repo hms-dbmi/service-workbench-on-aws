@@ -93,7 +93,8 @@ class UpdateUser extends React.Component {
     const getFieldLabel = fieldName => this.form.$(fieldName).label;
     const toRow = fieldName => {
       const value = _.get(this.getCurrentUser(), fieldName);
-      const displayValue = _.isArray(value) ? _.map(value, (v, k) => <Label key={k} content={v} />) : value;
+      const displayValue =
+        _.isArray(value) || _.isSet(value) ? _.map(value, (v, k) => <Label key={k} content={v} />) : value;
       return (
         <>
           <Table.Cell collapsing active>
@@ -112,6 +113,11 @@ class UpdateUser extends React.Component {
             <Table.Row>{toRow('firstName')}</Table.Row>
             <Table.Row>{toRow('lastName')}</Table.Row>
             <Table.Row>{toRow('email')}</Table.Row>
+            <Table.Row>{toRow('aaAffiliation')}</Table.Row>
+            <Table.Row>{toRow('aaProjectName')}</Table.Row>
+            <Table.Row>{toRow('aaProjectId')}</Table.Row>
+            <Table.Row>{toRow('piName')}</Table.Row>
+            <Table.Row>{toRow('dataSources')}</Table.Row>
             <>
               <Table.Row>{toRow('userRole')}</Table.Row>
               <Table.Row>{toRow('identityProviderName')}</Table.Row>
@@ -202,10 +208,16 @@ class UpdateUser extends React.Component {
     const userRoleField = form.$('userRole');
     const projectIdField = form.$('projectId');
     const statusField = form.$('status');
+    const aaAffiliationField = form.$('aaAffiliation');
+    const aaProjectNameField = form.$('aaProjectName');
+    const aaProjectIdField = form.$('aaProjectId');
+    const piNameField = form.$('piName');
+    const dataSourcesField = form.$('dataSources');
 
     const identityProviderOptions = this.getIdentityProviderOptions();
     const userRoleOptions = this.getUserRoleOptions();
     const projectIdOptions = this.getProjectOptions();
+    const dataSourcesOptions = this.getDataSourceOptions();
 
     const isInternalUser = this.userRolesStore.isInternalUser(userRoleField.value);
     const isInternalGuest = this.userRolesStore.isInternalGuest(userRoleField.value);
@@ -225,6 +237,10 @@ class UpdateUser extends React.Component {
               <Input field={firstNameField} disabled={processing} />
               <Input field={lastNameField} disabled={processing} />
               <Input field={emailField} disabled={processing} />
+              <Input field={aaAffiliationField} disabled={processing} />
+              <Input field={aaProjectNameField} disabled={processing} />
+              <Input field={aaProjectIdField} disabled={processing} />
+              <Input field={piNameField} disabled={processing} />
               <>
                 {isAdminMode && (
                   <DropDown
@@ -237,6 +253,18 @@ class UpdateUser extends React.Component {
                 )}
                 {isAdminMode && (
                   <DropDown field={userRoleField} options={userRoleOptions} selection fluid disabled={processing} />
+                )}
+
+                {isAdminMode && (
+                  <DropDown
+                    field={dataSourcesField}
+                    options={dataSourcesOptions}
+                    multiple
+                    selection
+                    clearable
+                    fluid
+                    disabled={processing}
+                  />
                 )}
 
                 {isAdminMode && showProjectField && (
@@ -313,11 +341,32 @@ class UpdateUser extends React.Component {
       projectId = [];
     }
 
-    const { firstName, lastName, email, userRole, status } = values;
+    const {
+      firstName,
+      lastName,
+      email,
+      userRole,
+      aaAffiliation,
+      aaProjectName,
+      aaProjectId,
+      piName,
+      dataSources,
+      status,
+    } = values;
     const isAdmin = userRole === 'admin';
     const identityProviderNameField = form.$('identityProviderName');
 
-    let userToUpdate = { ...this.getCurrentUser(), firstName, lastName, email };
+    let userToUpdate = {
+      ...this.getCurrentUser(),
+      firstName,
+      lastName,
+      email,
+      aaAffiliation,
+      aaProjectName,
+      aaProjectId,
+      piName,
+      dataSources,
+    };
     if (this.props.adminMode) {
       userToUpdate = { ...userToUpdate, userRole, isAdmin, projectId, status };
     }
@@ -413,6 +462,15 @@ class UpdateUser extends React.Component {
 
   getProjectOptions() {
     return this.projectsStore.dropdownOptions;
+  }
+
+  getDataSourceOptions() {
+    return [
+      { key: 'ochin', value: 'ochin', text: 'OCHIN' },
+      { key: 'aws-open-data', value: 'aws-open-data', text: 'AWS Open Data' },
+      { key: 'byod', value: 'byod', text: 'Bring Your Own Data (BYOD)' },
+      { key: 'other', value: 'other', text: 'Other / Not Sure' },
+    ];
   }
 
   getCurrentUser() {
