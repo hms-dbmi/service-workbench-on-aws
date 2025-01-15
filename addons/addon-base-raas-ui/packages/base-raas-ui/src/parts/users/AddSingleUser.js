@@ -136,7 +136,6 @@ class AddSingleUser extends React.Component {
               <DropDown
                 field={aaAffiliationField}
                 options={aaAffiliationOptions}
-                multiple
                 selection
                 clearable
                 fluid
