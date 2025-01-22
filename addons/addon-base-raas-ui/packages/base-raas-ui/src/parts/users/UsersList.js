@@ -175,50 +175,75 @@ class UsersList extends React.Component {
               fixed: 'left',
             },
             {
-              Header: 'Identity Provider',
-              accessor: 'identityProviderName',
-              Cell: row => {
-                const user = row.original;
-                return user.identityProviderName || 'internal';
-              },
-            },
-            {
-              Header: 'Type',
-              accessor: 'isExternalUser',
-              width: 80,
-              Cell: row => {
-                const user = row.original;
-                return user.isExternalUser ? 'External' : 'Internal';
-              },
-              filterMethod: (filter, row) => {
-                const type = row._original.isExternalUser ? 'external' : 'internal';
-                return type.indexOf(filter.value.toLowerCase()) === 0;
-              },
-            },
-            {
-              Header: 'Role',
-              accessor: 'userRole',
+              Header: 'Status',
+              accessor: 'status',
               width: 100,
-              style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                return user.userRole || 'N/A';
+                let lable = null;
+                if (user.status === 'active') {
+                  lable = (
+                    <span>
+                      <Label color="green">
+                        <i className="check circle outline icon" />
+                        Active
+                      </Label>
+                    </span>
+                  );
+                } else if (user.status === 'inactive') {
+                  lable = (
+                    <span>
+                      <Label color="red">
+                        <i className="circle icon" />
+                        Inactive
+                      </Label>
+                    </span>
+                  );
+                } else {
+                  lable = (
+                    <span>
+                      <Label color="orange">
+                        <i className="exclamation icon" />
+                        Pending
+                      </Label>
+                    </span>
+                  );
+                }
+                return lable;
+              },
+              sortMethod: (a, b) => {
+                return statusSortOrder[a] - statusSortOrder[b];
               },
               filterMethod: (filter, row) => {
-                const user = row._original.userRole || 'n/a';
-                return user.indexOf(filter.value.toLowerCase()) === 0;
+                return row._original.status.indexOf(filter.value.toLowerCase()) === 0;
               },
             },
             {
-              Header: 'Project',
-              style: { whiteSpace: 'unset' },
-              Cell: row => {
-                const user = row.original;
-                return user.projectId.join(', ') || '<<none>>';
-              },
-              filterMethod: (filter, row) => {
-                const projectString = row._original.projectId.join(', ') || 'none';
-                return projectString.indexOf(filter.value.toLowerCase()) >= 0;
+              Header: '',
+              filterable: false,
+              sortable: false,
+              Cell: cell => {
+                const user = cell.original;
+                return (
+                  <div style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                    <span>
+                      <Popup
+                        content="View User Detail"
+                        trigger={
+                          <UpdateUser
+                            user={user}
+                            adminMode
+                            userStore={this.props.userStore}
+                            usersStore={this.props.usersStore}
+                            userRolesStore={this.props.userRolesStore}
+                            awsAccountsStore={this.props.awsAccountsStore}
+                            projectsStore={this.props.projectsStore}
+                          />
+                        }
+                      />
+                    </span>
+                  </div>
+                );
               },
             },
             {
@@ -267,47 +292,50 @@ class UsersList extends React.Component {
               },
             },
             {
-              Header: 'Status',
-              accessor: 'status',
-              width: 100,
+              Header: 'Project',
+              style: { whiteSpace: 'unset' },
               Cell: row => {
                 const user = row.original;
-                let lable = null;
-                if (user.status === 'active') {
-                  lable = (
-                    <span>
-                      <Label color="green">
-                        <i className="check circle outline icon" />
-                        Active
-                      </Label>
-                    </span>
-                  );
-                } else if (user.status === 'inactive') {
-                  lable = (
-                    <span>
-                      <Label color="red">
-                        <i className="circle icon" />
-                        Inactive
-                      </Label>
-                    </span>
-                  );
-                } else {
-                  lable = (
-                    <span>
-                      <Label color="orange">
-                        <i className="exclamation icon" />
-                        Pending
-                      </Label>
-                    </span>
-                  );
-                }
-                return lable;
-              },
-              sortMethod: (a, b) => {
-                return statusSortOrder[a] - statusSortOrder[b];
+                return user.projectId.join(', ') || '<<none>>';
               },
               filterMethod: (filter, row) => {
-                return row._original.status.indexOf(filter.value.toLowerCase()) === 0;
+                const projectString = row._original.projectId.join(', ') || 'none';
+                return projectString.indexOf(filter.value.toLowerCase()) >= 0;
+              },
+            },
+            {
+              Header: 'Role',
+              accessor: 'userRole',
+              width: 100,
+              style: { whiteSpace: 'unset' },
+              Cell: row => {
+                const user = row.original;
+                return user.userRole || 'N/A';
+              },
+              filterMethod: (filter, row) => {
+                const user = row._original.userRole || 'n/a';
+                return user.indexOf(filter.value.toLowerCase()) === 0;
+              },
+            },
+            {
+              Header: 'Type',
+              accessor: 'isExternalUser',
+              width: 80,
+              Cell: row => {
+                const user = row.original;
+                return user.isExternalUser ? 'External' : 'Internal';
+              },
+              filterMethod: (filter, row) => {
+                const type = row._original.isExternalUser ? 'external' : 'internal';
+                return type.indexOf(filter.value.toLowerCase()) === 0;
+              },
+            },
+            {
+              Header: 'Identity Provider',
+              accessor: 'identityProviderName',
+              Cell: row => {
+                const user = row.original;
+                return user.identityProviderName || 'internal';
               },
             },
             {
@@ -317,34 +345,6 @@ class UsersList extends React.Component {
               Cell: row => {
                 const created = row.original.createdAt;
                 return <TimeAgo date={created} />;
-              },
-            },
-            {
-              Header: '',
-              filterable: false,
-              sortable: false,
-              Cell: cell => {
-                const user = cell.original;
-                return (
-                  <div style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                    <span>
-                      <Popup
-                        content="View User Detail"
-                        trigger={
-                          <UpdateUser
-                            user={user}
-                            adminMode
-                            userStore={this.props.userStore}
-                            usersStore={this.props.usersStore}
-                            userRolesStore={this.props.userRolesStore}
-                            awsAccountsStore={this.props.awsAccountsStore}
-                            projectsStore={this.props.projectsStore}
-                          />
-                        }
-                      />
-                    </span>
-                  </div>
-                );
               },
             },
           ]}
