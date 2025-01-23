@@ -133,8 +133,8 @@ class UsersList extends React.Component {
 
     const store = this.getStore();
     const usersList = store.list;
-    const pageSize = usersList.length;
-    const showPagination = usersList.length > pageSize;
+    const pageSize = usersList.length >= 10 ? 10 : usersList.length;
+    const showPagination = usersList.length >= pageSize;
     const processing = this.formProcessing;
 
     return (
@@ -154,6 +154,8 @@ class UsersList extends React.Component {
           ]}
           showPagination={showPagination}
           defaultPageSize={pageSize}
+          showPageSizeOptions={showPagination}
+          pageSizeOptions={[5, 10, 20, 25, 50, 100]}
           className="-striped -highlight"
           filterable
           defaultFilterMethod={(filter, row) => {
