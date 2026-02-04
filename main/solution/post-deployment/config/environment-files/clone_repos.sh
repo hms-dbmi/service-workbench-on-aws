@@ -7,7 +7,7 @@ return_dir=$(pwd)
 
 chown_user="ec2-user"
 repo_dir="/home/ec2-user/example_workflows"
-branch="dev"
+branch="main"
 
 GIT_TERMINAL_PROMPT=0
 if [ -d "/home/rstudio-user" ]
@@ -42,8 +42,9 @@ sudo chown -R $chown_user $repo_dir
 if [ -d "/home/ec2-user/sample-notebooks" ]
 then
     # None of the sample notebooks work, so get rid of them and add our own
-    sudo rm -rf /home/ec2-user/sample-notebooks/*
-    sudo cp -r $repo_dir/* /home/ec2-user/sample-notebooks/
+    sudo rm -rf /home/ec2-user/sample-notebooks
+    sudo cp -r $repo_dir /home/ec2-user/sample-notebooks
+    chmod -w -R /home/ec2-user/sample-notebooks
 fi
 cd $return_dir
 
