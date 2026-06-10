@@ -39,6 +39,7 @@ custom:
   deploymentBucket:
     policy: ${self:custom.settings.deploymentBucketPolicy}
     versioning: true
+    blockPublicAccess: true
   serverless-offline:
     port: 4000
   webpack:

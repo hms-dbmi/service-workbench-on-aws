@@ -31,6 +31,7 @@ custom:
   deploymentBucket:
     policy: ${self:custom.settings.deploymentBucketPolicy}
     versioning: true
+    blockPublicAccess: true
   webpack:
     webpackConfig: ./config/build/webpack.config.js
     packager: pnpm
