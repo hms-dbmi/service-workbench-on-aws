@@ -17,6 +17,7 @@ custom:
   deploymentBucket:
     policy: ${self:custom.settings.deploymentBucketPolicy}
     versioning: true
+    blockPublicAccess: true
 
 resources:
   - Description: Service-Workbench-on-AWS ${self:custom.settings.version} ${self:custom.settings.solutionName} ${self:custom.settings.envName} UI

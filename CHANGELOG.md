@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. As our fork has diverged from AWS SWB mainline branch, we are noting the SWB version and the lab version together, as <swb version>\_<lab version>, starting from SWB mainline, 5.0.0.
 
+## [5.0.0_1.4.3](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.4.2...v5.0.0_1.4.3) (06/05/2026)
+- Update artifact bucket to enable block public access policy.
+- Add RHEL support.
+
 ## [5.0.0_1.4.2](https://github.com/hms-dbmi/service-workbench-on-aws/compare/v5.0.0_1.4.1...v5.0.0_1.4.2) (03/14/2024)
 - Emergency change to add login-blocking warning and system wide application warnings.
 
